@@ -1,0 +1,29 @@
+\section{Debugging and testing}
+
+\subsection{Assertions}
+Assert can be used to check pre and post conditions for example.\\
+It ensures that code is correct and also documents code.\\
+Assert has absolutely no impact on performances when code is compiled
+with -DNDEBUG.\\
+
+For example:
+\begin{algorithm}[H]
+\#include <cassert> \\
+ \\
+int f(int n) \{ \\
+\codeindent{1}assert(n>3); \\
+\codeindent{1}const int result = g(n); \\
+ \\
+\codeindent{1}assert(result>=6); \\
+\codeindent{1}return result; \\
+\}
+\end{algorithm}
+
+\subsection{Memory leaks}
+{\bf Valgrind} is a very helpful tool suite to debug programs (to
+check memory leaks, to assess performance, ...).\\
+It is highly recommended to check memory accesses of your program
+using valgrind {\bf memcheck} tool.\\
+See page on Valgrind
+page~\footnote{http://www.cprogramming.com/debugging/valgrind.html}
+for more information.

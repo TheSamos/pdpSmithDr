@@ -1,0 +1,48 @@
+Algo
+====
+Au choix : dans une bibliothèque statique ou sous forme de plugin.
+--> Même base commune. Pour plugin, une méthode registerPlugin en plus.
+
+On définit une classe template qui dérive de ImageViewAlgorithm ou ComputedImageViewAlgorithm
+  --> constructeur, destructeur
+  --> méthodes name, clone, run
+
+Utilisation de 3 champs de type AlgorithmInfo, à passer à la classe mère :
+  --> noeuds d'entrée
+  --> paramètres
+  --> noeuds de sortie (pour BlackBoxAlgorithm)
+
+La méthode run :
+  --> vérifie le nb de (noeuds) parents du noeud correpondant à l'algo
+  --> récupère les parents
+  --> récupère les paramètres
+  --> si ImageViewAlgorithm:
+      --> signale au parent que la vue entrante est la vue de base (setBaseView)
+  --> OU si ComputedImageViewAlgorithm:
+      --> crée donnée résultante, et la signale au parent (setResult)
+      --> effectue le calcul (initialise la donnée résultante)
+  --> retourne vrai si succès, faux sinon
+
+
+Utilisation
+===========
+--> demande les algos (typés) disponibles pour un nom donné : queryAlgorithm
+--> Optionnel, filtre suivant le type : withSameTypeAs
+--> crée une instance de l'algo : create
+--> vérifier la création de l'instance
+--> initialiser les noeuds d'entrée : setInputNodes
+--> initialiser les paramètres : setParams
+--> lancer l'algo : run
+--> vérifier le succès de l'exécution
+--> traiter les noeuds de sortie  (pour BlackBoxAlgorithm)
+
+
+Fonctionnement interne
+======================
+--> queryAlgorithm : crée une liste des prototypes disponibles
+--> withSameTypeAs : filtre suivant le type d'objet (image, mesh...) ET le type de donnée (int, float...)
+--> create : clone le premier prototype de la liste
+--> setInputNodes : vérifie le nombre et le type des noeuds (champ AlgorithmInfo), et met à jour le graphe (relie le noeud courant à ses parents)
+--> setParams : initialise un ou plusieurs paramètres
+
+Note: pas besoin de détruire les algos s'ils apparaissent en tant que noeuds du graphe
