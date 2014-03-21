@@ -5,6 +5,25 @@ find_package(Qt4 REQUIRED)
 find_package(OpenGL REQUIRED)
 find_package(GLEW REQUIRED)
 
+set(QT_USE_QTOPENGL TRUE) 
+include(${QT_USE_FILE})
+set(CMAKE_PACKAGE_QTGUI TRUE)
+#############"
+set(QT_USE_QTXML TRUE)
+set(QT_USE_QTXMLPATTERNS TRUE)
+set(QT_USE_QTWEBKIT TRUE)
+################
+
+add_definitions(-DUNICODE)
+# Les Q_ASSERT, Q_ASSERT_X, ... sont désactivés en mode Release
+if(CMAKE_BUILD_TYPE STREQUAL "Release") 
+    add_definitions(-DQT_NO_DEBUG)
+endif()
+# Include utilisé par Qt (du style include (UseQt4))
+include(${QT_USE_FILE})
+# Ajoute les définitions propres à Qt (suivant les modules ajoutés)
+add_definitions(${QT_DEFINITIONS})
+
 include_directories(${QT_INCLUDES} ${OPENGL_INCLUDE_DIR} ${GLEW_INCLUDE_DIR})
 
 set(QT_USE_QTOPENGL TRUE)

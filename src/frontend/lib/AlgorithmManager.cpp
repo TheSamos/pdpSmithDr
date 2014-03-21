@@ -30,6 +30,11 @@ sd::frontend::registerAlgorithm(Algorithm* obj) {
   AlgorithmManager::instance().addObject(obj);
 }
 
+void sd::frontend::registerAlgorithm(Algorithm* obj, std::string parameters){
+  obj->initialize(parameters);
+  AlgorithmManager::instance().addObject(obj);
+}
+
 void
 sd::frontend::registerAlgorithm(Algorithm* obj, const ParameterList& parameters) {
   obj->initialize(parameters);

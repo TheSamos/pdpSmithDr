@@ -30,6 +30,8 @@ RESTORE_CONTEXT()
 #include <frontend/lib/Query.hpp>
 #include <frontend/lib/Algorithm.hpp>
 #include <frontend/lib/ViewManager.hpp>
+#include <frontend/libqt/QtXMLParamParser.hpp>
+#include <frontend/lib/Parameter.hpp>
 
 #include "AlgorithmConfiguratorDialog.hpp"
 

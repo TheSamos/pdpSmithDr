@@ -64,6 +64,17 @@ namespace sd {
     {
     }
 
+    Algorithm::Algorithm(const AlgorithmInfo& out,
+       const AlgorithmInfo& in,
+       std::string parameters)
+      : m_parameters_0(), m_parameters_1(), m_parameters_2(), m_parameters_3(),
+  m_parameters_4(), m_parameters_5(), m_parameters_6(), m_parameters_7(),
+  m_input(in), m_output(out), m_defaultXmlParam(parameters)
+    {
+    }
+
+
+
     Algorithm::~Algorithm()
     {
 #ifdef DEBUG
@@ -89,10 +100,25 @@ namespace sd {
       return m_expectedParameters;
     }
 
+
+    std::string Algorithm::getXmlString() const{
+      return m_defaultXmlParam;
+    }
+
+
+
+
+
     void
     Algorithm::initialize(const ParameterList& parameters)
     {
       m_expectedParameters = parameters;
+    }
+
+    void
+    Algorithm::initialize(std::string defaultXmlParam)
+    {
+      m_defaultXmlParam = defaultXmlParam;
     }
 
     void

@@ -49,6 +49,7 @@ namespace sd {
 
     void registerAlgorithm(Algorithm* obj);
     void registerAlgorithm(Algorithm* obj, const ParameterList& parameters);
+    void registerAlgorithm(Algorithm* obj, std::string parameters);
 
     Query<Algorithm> queryAlgorithm(const std::string& name);
 

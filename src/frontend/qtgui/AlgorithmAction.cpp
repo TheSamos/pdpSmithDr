@@ -34,6 +34,8 @@ RESTORE_CONTEXT()
 
 #include "GraphicViewsManager.hpp"
 
+#include <frontend/libqt/QtXMLParamParser.hpp>
+
 namespace sd {
   namespace qtgui {
 
@@ -63,9 +65,17 @@ namespace sd {
 	connect(m_dialog, SIGNAL(previewOnOff()), this, SLOT(previewOnOff()));
 	
 	m_dialog->addInputs(getCompatibleAlgorithms(), m_inputViews);
-	
+
+	std::string toto = m_prototypes.first()->getXmlString();
+	sd::libqt::QtXMLParamParser defaultParamParser(toto);
+	sd::frontend::ParameterList p = defaultParamParser.getParameterList();
+	for(int i = 0; i < p.size(); i++)
+		std::cout << "param :" << p[i] << std::endl;
+
+
 	// add a selector for each parameter (int, float...)
-	m_dialog->addParameters(m_prototypes.first()->expectedParameters());
+	//m_dialog->addParameters(m_prototypes.first()->expectedParameters());
+	m_dialog->addParameters(p);
       }
     }
 

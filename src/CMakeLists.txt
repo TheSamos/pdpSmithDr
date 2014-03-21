@@ -37,6 +37,7 @@ set(smithdr_link_libs
   sdimageprocessing
   sdmeshprocessing
   sdfrontendlib
+  sdfrontendlibqt
 )
 
 #link_directories(${CMAKE_BINARY_DIR}/lib)

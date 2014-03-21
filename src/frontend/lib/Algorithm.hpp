@@ -129,8 +129,10 @@ namespace sd {
       const AlgorithmInfo& input() const;
       const AlgorithmInfo& output() const;
       const ParameterList& expectedParameters() const;
+      std::string getXmlString() const;
       
       void initialize(const ParameterList&); // set expectedParameters
+      void initialize(std::string defaultXmlParam);
       
       void setParams(const std::vector<frontend::ParameterList>&);
       
@@ -139,6 +141,10 @@ namespace sd {
       Algorithm(const AlgorithmInfo& output,
 		const AlgorithmInfo& input,
 		const ParameterList& parameters);
+
+      Algorithm(const AlgorithmInfo& out,
+       const AlgorithmInfo& in,
+       std::string parameters);
       
     private:
       
@@ -204,6 +210,7 @@ namespace sd {
       AlgorithmInfo m_input;
       AlgorithmInfo m_output;
       ParameterList m_expectedParameters;
+      std::string m_defaultXmlParam;
 
     };
 
