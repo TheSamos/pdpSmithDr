@@ -3,7 +3,12 @@
 
 #include <QtXml>
 #include <QXmlSchema>
+#include <frontend/lib/Parameter.hpp>
 
+namespace sd {
+  
+  namespace libqt {
+    
 static const std::string schema_file_location;
 static const bool namespace_processing = true;
 
@@ -16,12 +21,14 @@ class QtXMLParamParser
 public:
     QtXMLParamParser(std::string xml_string);
     /*QtXMLParamParser(QFile input_file);*/
+    ~QtXMLParamParser();
 
-    void getParameterList();
-    void getParameter();
+    sd::frontend::ParameterList getParameterList();
+    void getParameter(std::string name);
 
-    void parseSimpleParameter(QDomElement simple_param);
-    void parseComplexParameter(QDomElement complex_param);
+    sd::frontend::Parameter parseSimpleParameter(QDomElement simple_param);
+    sd::frontend::Parameter parseComplexParameter(QDomElement complex_param);
+
 
 private:
     int initialize();
@@ -38,5 +45,7 @@ private:
     QString *m_error_msg;
 
 };
+}
+}
 
 #endif // QTXMLPARAMPARSER_HPP
