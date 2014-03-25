@@ -7,6 +7,10 @@
 
 #include "parameterTmp.h"
 
+namespace sd {
+  
+  namespace libqt {
+
 class QtXMLValueGenerator {
 
 public:
@@ -16,5 +20,8 @@ public:
 private:
     QDomDocument m_xml;
 };
+
+}
+}
 
 #endif //QTXMLVALUEGENERATOR_HPP

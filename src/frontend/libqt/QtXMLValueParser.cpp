@@ -1,5 +1,9 @@
 #include "QtXMLValueParser.hpp"
 
+namespace sd {
+  
+  namespace libqt {
+
 QtXMLValueParser::QtXMLValueParser(std::string xml_string) : m_xmlstring(xml_string)
 {
     initialize();
@@ -44,6 +48,8 @@ parameterTmp QtXMLValueParser::parseSimpleParameter()
     return p;
 
 }
+
+}}
 
 
 parameterTmp QtXMLValueParser::parseComplexParameter() {}

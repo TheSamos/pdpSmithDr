@@ -6,6 +6,10 @@
 
 static const bool namespace_processing = true;
 
+namespace sd {
+  
+  namespace libqt {
+
 class QtXMLValueParser
 {
 
@@ -29,5 +33,7 @@ private:
     QString *m_error_msg;
 
 };
+
+}}
 
 #endif // QTXMLVALUEPARSER_HPP

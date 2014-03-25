@@ -1,5 +1,9 @@
 #include "QtXMLValueGenerator.hpp"
 
+namespace sd {
+  
+  namespace libqt {
+
 std::string
 QtXMLValueGenerator::simpleXMLValue(parameterTmp param){
     m_xml.clear();
@@ -31,4 +35,7 @@ QtXMLValueGenerator::intToQString(int n){
     sValue = ssValue.str();
     qsValue = QString(sValue.c_str());
     return qsValue;
+}
+
+}
 }
