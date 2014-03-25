@@ -2,6 +2,7 @@
 #define QTXMLVALUEPARSER_HPP
 
 #include <QtXml>
+#include <iostream>
 #include <frontend/libqt/Parameter.hpp>
 
 static const bool namespace_processing = true;

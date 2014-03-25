@@ -25,6 +25,7 @@
 #include <frontend/lib/AlgorithmManager.hpp>
 #include <frontend/lib/AlgorithmInfo.hpp>
 #include <frontend/lib/Parameter.hpp>
+//#include <frontend/libqt/SimpleParameter.hpp>
 #include <PluginDefs.hpp>
 #include <Types.hpp>
 
@@ -148,8 +149,10 @@ SMITHDR_PLUGIN_API
 void
 registerPlugin()
 {
-  sd::frontend::ParameterList parameters;
-  parameters.push_back(sd::frontend::Parameter("alpha", 0.5, 0., 1.));
+  //sd::frontend::ParameterList parameters;
+  //parameters.push_back(sd::frontend::Parameter("alpha", 0.5, 0., 1.));
+
+  std::string parameters = "<parameters><parameter name=\"alpha\" type=\"int\"><default>10</default><min>2</min><max>20</max></parameter></parameters>";
 
   sd::frontend::registerAlgorithm(new ImageMixPlugin<sd::UINT8>, parameters);
   sd::frontend::registerAlgorithm(new ImageMixPlugin<sd::INT8>, parameters);

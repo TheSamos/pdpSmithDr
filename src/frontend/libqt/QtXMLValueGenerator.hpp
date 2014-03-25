@@ -14,7 +14,7 @@ namespace sd {
 class QtXMLValueGenerator {
 
 public:
-    std::string simpleXMLValue(parameterTmp);
+    std::string simpleXMLValue(Parameter *param);
     QString intToQString(int n);
 
 private:

@@ -51,12 +51,14 @@ sd::libqt::Parameter *QtXMLValueParser::parseSimpleParameter()
 
 }
 
-}}
-
-
 sd::libqt::Parameter *QtXMLValueParser::parseComplexParameter() 
 {
     return nullptr;
 }
+
+}}
+
+
+
 
 
