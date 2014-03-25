@@ -2,6 +2,7 @@
 #define PARAMETER_HPP
 
 #include <string>
+#include <vector>
 
 namespace sd {
 
@@ -9,6 +10,7 @@ namespace sd {
 
 class Parameter
 {
+
     enum Type {Simple, Complex, Undefined};
     Type type = Undefined;
 
@@ -28,6 +30,8 @@ protected:
     std::string m_name;
     std::string m_widget_name;
 };
+
+    typedef std::vector<Parameter*> ParameterList;
 
   }
 }

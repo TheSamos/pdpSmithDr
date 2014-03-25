@@ -66,16 +66,19 @@ namespace sd {
 	
 	m_dialog->addInputs(getCompatibleAlgorithms(), m_inputViews);
 
-	std::string toto = m_prototypes.first()->getXmlString();
-	sd::libqt::QtXMLParamParser defaultParamParser(toto);
-	sd::frontend::ParameterList p = defaultParamParser.getParameterList();
+	std::string xml = m_prototypes.first()->getXmlString();
+
+	sd::libqt::QtXMLParamParser defaultParamParser(xml);
+	sd::libqt::ParameterList p = defaultParamParser.getParameterList();
+
+
 	for(int i = 0; i < p.size(); i++)
-		std::cout << "param :" << p[i] << std::endl;
+		p[i]->print();
 
 
-	// add a selector for each parameter (int, float...)
-	//m_dialog->addParameters(m_prototypes.first()->expectedParameters());
-	m_dialog->addParameters(p);
+		// add a selector for each parameter (int, float...)
+		//m_dialog->addParameters(m_prototypes.first()->expectedParameters());
+		//m_dialog->addParameters(p);
       }
     }
 

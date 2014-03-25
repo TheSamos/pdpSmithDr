@@ -5,7 +5,7 @@
 #include <QString>
 #include <sstream>
 
-#include "parameterTmp.h"
+#include <frontend/libqt/Parameter.hpp>
 
 namespace sd {
   

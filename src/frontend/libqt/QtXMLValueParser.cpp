@@ -1,5 +1,7 @@
 #include "QtXMLValueParser.hpp"
 
+#include <frontend/libqt/SimpleParameter.hpp>
+
 namespace sd {
   
   namespace libqt {
@@ -31,7 +33,7 @@ int QtXMLValueParser::initialize()
 
 }
 
-parameterTmp QtXMLValueParser::parseSimpleParameter()
+sd::libqt::Parameter *QtXMLValueParser::parseSimpleParameter()
 {
     int value;
     QDomElement param_root = m_qdoc.firstChildElement("parameter");
@@ -43,8 +45,8 @@ parameterTmp QtXMLValueParser::parseSimpleParameter()
 
     value = param_elem.text().toInt();
 
-    parameterTmp p(name, type, 0, 0, 0, value);
-    p.toString();
+    sd::libqt::Parameter *p = new SimpleIntParameter(name, 0, 0, 0);
+    //p.toString();
     return p;
 
 }
@@ -52,6 +54,9 @@ parameterTmp QtXMLValueParser::parseSimpleParameter()
 }}
 
 
-parameterTmp QtXMLValueParser::parseComplexParameter() {}
+sd::libqt::Parameter *QtXMLValueParser::parseComplexParameter() 
+{
+    return nullptr;
+}
 
 

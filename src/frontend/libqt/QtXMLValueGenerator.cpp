@@ -1,12 +1,14 @@
 #include "QtXMLValueGenerator.hpp"
 
+#include <frontend/libqt/SimpleParameter.hpp>
+
 namespace sd {
   
   namespace libqt {
 
 std::string
-QtXMLValueGenerator::simpleXMLValue(parameterTmp param){
-    m_xml.clear();
+QtXMLValueGenerator::simpleXMLValue(Parameter *param){
+    /*m_xml.clear();
 
     QDomElement root = m_xml.createElement("parameter");
     QDomElement valueNode = m_xml.createElement("value");
@@ -22,7 +24,8 @@ QtXMLValueGenerator::simpleXMLValue(parameterTmp param){
     value.setNodeValue(this->intToQString(param.getVal()));
     value.setData(this->intToQString(param.getVal()));
 
-    return m_xml.toString().toStdString();
+    return m_xml.toString().toStdString();*/
+    return "nothing";
 }
 
 QString

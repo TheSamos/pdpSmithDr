@@ -1,5 +1,6 @@
 #include "QtXMLParamParser.hpp"
-#include "parameterTmp.hpp"
+
+#include <frontend/libqt/SimpleParameter.hpp>
 
 
 #include <iostream>
@@ -52,9 +53,9 @@ bool QtXMLParamParser::loadXSD()
     return true;
 }
 
-sd::frontend::ParameterList QtXMLParamParser::getParameterList()
+sd::libqt::ParameterList QtXMLParamParser::getParameterList()
 {
-    sd::frontend::ParameterList parameters;
+    sd::libqt::ParameterList parameters;
   
     QDomElement param_root = m_qdoc.firstChildElement("parameters");
     QDomElement param = param_root.firstChildElement("parameter");
@@ -77,33 +78,36 @@ sd::frontend::ParameterList QtXMLParamParser::getParameterList()
 
 void QtXMLParamParser::getParameter(std::string name){}
 
-sd::frontend::Parameter QtXMLParamParser::parseSimpleParameter(QDomElement param)
+sd::libqt::Parameter *QtXMLParamParser::parseSimpleParameter(QDomElement param)
 {
     QDomAttr param_type = param.attributeNode("type");
     std::string name = param.attributeNode("name").value().toStdString();
     std::string type = param.attributeNode("type").value().toStdString();
-    int min, max, default_val;
-    //std::cout << "simple parameter: ";
-    //std::cout << " name: " << (param.attributeNode("name").value().toStdString());
-    //std::cout << ", ẗype: " << (param.attributeNode("type").value().toStdString()) << std::endl;
 
     QDomElement param_elem = param.firstChildElement();
 
-    default_val = param_elem.text().toInt();
-    param_elem = param_elem.nextSiblingElement();
-    min = param_elem.text().toInt();
-    param_elem = param_elem.nextSiblingElement();
-    max = param_elem.text().toInt();
+    int min, max, default_val;
 
-    sd::frontend::Parameter p(name, (double)default_val, (double)min, (double)max);
-    //parameterTmp p(name, type, min, max, default_val);
-    //p.toString();
+    Parameter *p;
+
+    if(type == "int")
+    {
+        default_val = param_elem.text().toInt();
+        param_elem = param_elem.nextSiblingElement();
+
+        min = param_elem.text().toInt();
+        param_elem = param_elem.nextSiblingElement();
+
+        max = param_elem.text().toInt();
+        p = new SimpleIntParameter(name, min, max, default_val);
+    }
+
     return p;
-
 }
 
 
-sd::frontend::Parameter QtXMLParamParser::parseComplexParameter(QDomElement complex_param) {}
+sd::libqt::Parameter *QtXMLParamParser::parseComplexParameter(QDomElement complex_param) { return nullptr; }
+
 }
 }
 
