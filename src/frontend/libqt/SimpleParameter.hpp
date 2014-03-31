@@ -15,13 +15,7 @@
   
   namespace libqt {
 
-    enum DataType {Int=0, Double, Float, Undefined};
-std::map<DataType, std::string> typenames = {
-        {Int, "int"},
-        {Double, "double"},
-        {Float, "float"},
-        {Undefined, "undefined"}
-    };
+
 
 template <typename T, int DataType_>
 class SimpleParameter : public SDRParameter

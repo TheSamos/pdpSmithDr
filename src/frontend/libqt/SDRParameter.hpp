@@ -10,12 +10,22 @@ namespace sd {
 
     enum Type {Simple, Complex, Undefined_};
 
+    enum DataType {Int=0, Double, Float, Undefined};
+
+
 class SDRParameter
 {
     //enum Type {Simple, Complex, Undefined};
     Type m_type; // = Undefined;
 
 public:
+
+    std::map<DataType, std::string> typenames = {
+        {Int, "int"},
+        {Double, "double"},
+        {Float, "float"},
+        {Undefined, "undefined"}
+    };
 
     virtual ~SDRParameter() {}
 
@@ -31,6 +41,8 @@ public:
     void setWidgetName(std::string widgetName) { this->m_widget_name = widgetName; }
 
     virtual void print() = 0;
+
+    virtual DataType getDataType() = 0;
 
     typedef std::vector<SDRParameter> ParameterList;
 
