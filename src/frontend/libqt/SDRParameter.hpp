@@ -2,21 +2,24 @@
 #define PARAMETER_HPP
 
 #include <string>
+#include <vector>
 
 namespace sd {
   
   namespace libqt {
 
+    enum Type {Simple, Complex, Undefined_};
+
 class SDRParameter
 {
-    enum Type {Simple, Complex, Undefined};
+    //enum Type {Simple, Complex, Undefined};
     Type m_type; // = Undefined;
 
 public:
 
     virtual ~SDRParameter() {}
 
-    SDRParameter() : m_type(Undefined) {};
+    SDRParameter() : m_type(Undefined_) {};
     SDRParameter(std::string name) : m_name(name) {}
 
     Type getType() { return m_type; }
