@@ -1,3 +1,0 @@
-Revoir qualité de nuage de point...
-Qualité de maillage
-Recherche calcul de courbure sur nuage de points
