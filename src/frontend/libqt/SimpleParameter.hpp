@@ -49,9 +49,9 @@ public:
 
     void setValue(T value) { m_value = value; } 
 
-  std::string dataTypeToString() { return typenames[DataType(DataType_)]; }
+  std::string dataTypeToString() { return typenames[sd::libqt::DataType(DataType_)]; }
 
-  DataType getDataType() { return DataType_; }
+  sd::libqt::DataType getDataType() { return (sd::libqt::DataType)DataType_; }
   
 
     void print()

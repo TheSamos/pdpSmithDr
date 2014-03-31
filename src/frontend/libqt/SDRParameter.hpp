@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+#include <map>
 
 namespace sd {
   
@@ -44,12 +45,14 @@ public:
 
     virtual DataType getDataType() = 0;
 
-    typedef std::vector<SDRParameter> ParameterList;
+    
 
 protected:
     std::string m_name;
     std::string m_widget_name;
 };
+
+typedef std::vector<SDRParameter*> ParameterList;
 
 }
 }

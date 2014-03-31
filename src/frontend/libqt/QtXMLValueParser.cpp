@@ -1,4 +1,5 @@
 #include "QtXMLValueParser.hpp"
+#include "SimpleParameter.hpp"
 
 
 namespace sd {
@@ -32,25 +33,60 @@ int QtXMLValueParser::initialize()
 
 }
 
-frontend::Parameter QtXMLValueParser::parseSimpleParameter()
+SDRParameter* QtXMLValueParser::parseSimpleParameter()
 {
-    int value;
+
+    SDRParameter* pfake = new SimpleIntParameter(6);
     std::cout << "parsing value" << std::endl;
     QDomElement param_root = m_qdoc.firstChildElement("parameter");
     std::string name = param_root.attributeNode("name").value().toStdString();
     std::string type = param_root.attributeNode("type").value().toStdString();
 
-    std::cout << "after toto" << std::endl;
-    QDomElement param_elem = param_root.firstChildElement();
+    if(type == "int"){
+        int value;
+        QDomElement param_elem = param_root.firstChildElement();
 
-    value = param_elem.text().toInt();
+        value = param_elem.text().toFloat();
 
-    frontend::Parameter p;
-    p = value;
-    //p.toString();
-    std::cout << "before return" << std::endl;
-    std::cout << "p = " << p.getInteger() << std::endl;
-    return p;
+        SDRParameter* p = new SimpleIntParameter(value);
+        //p = value;
+        return p;
+
+    }
+
+        if(type == "float"){
+        float value;
+        QDomElement param_elem = param_root.firstChildElement();
+
+        value = param_elem.text().toFloat();
+
+        SDRParameter* p = new SimpleFloatParameter(value);
+        //p = value;
+        return p;
+
+    }
+
+
+        /*if(type == "boolean"){
+            std::string value;
+            QDomElement param_elem = param_root.firstChildElement();
+
+            value = param_elem.text().toStdString();
+            if(value == "true"){
+                std::cout << "it's true" << std::endl;
+                frontend::Parameter p(name, true);
+                return p;
+        }
+            else{
+                frontend::Parameter p(name, false);
+                return p;
+            }
+
+
+
+    }*/
+
+    return pfake;
 
 }
 

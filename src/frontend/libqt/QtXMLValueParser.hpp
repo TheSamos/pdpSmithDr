@@ -3,7 +3,9 @@
 
 
 #include <iostream>
-#include <frontend/lib/Parameter.hpp>
+//#include <frontend/lib/Parameter.hpp>
+#include "SDRParameter.hpp"
+
 #include <QtXml>
 
 
@@ -20,7 +22,7 @@ public:
     QtXMLValueParser(std::string xml_string);
     ~QtXMLValueParser();
 
-    frontend::Parameter parseSimpleParameter();
+    SDRParameter* parseSimpleParameter();
     //frontend::Parameter parseComplexParameter();
 
 

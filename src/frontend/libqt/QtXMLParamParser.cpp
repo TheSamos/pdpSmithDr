@@ -1,7 +1,7 @@
 #include "QtXMLParamParser.hpp"
-
+#include "SimpleParameter.hpp"
 //#include <frontend/libqt/SimpleParameter.hpp>
-#include <frontend/lib/Parameter.hpp>
+//#include <frontend/lib/Parameter.hpp>
 
 #include <iostream>
 namespace sd {
@@ -53,9 +53,9 @@ bool QtXMLParamParser::loadXSD()
     return true;
 }
 
-frontend::ParameterList QtXMLParamParser::getParameterList()
+sd::libqt::ParameterList QtXMLParamParser::getParameterList()
 {
-    frontend::ParameterList parameters;
+    sd::libqt::ParameterList parameters;
   
     QDomElement param_root = m_qdoc.firstChildElement("parameters");
     QDomElement param = param_root.firstChildElement("parameter");
@@ -78,7 +78,7 @@ frontend::ParameterList QtXMLParamParser::getParameterList()
 
 void QtXMLParamParser::getParameter(std::string name){}
 
-frontend::Parameter QtXMLParamParser::parseSimpleParameter(QDomElement param)
+SDRParameter* QtXMLParamParser::parseSimpleParameter(QDomElement param)
 {
     QDomAttr param_type = param.attributeNode("type");
     std::string name = param.attributeNode("name").value().toStdString();
@@ -87,8 +87,8 @@ frontend::Parameter QtXMLParamParser::parseSimpleParameter(QDomElement param)
     QDomElement param_elem = param.firstChildElement();
 
     int min, max, default_val;
-
-    frontend::Parameter pfake("");
+    sd::libqt::SDRParameter* pfake = new SimpleIntParameter(6);
+    //frontend::Parameter pfake("");
 
     if(type == "int")
     {
@@ -99,11 +99,43 @@ frontend::Parameter QtXMLParamParser::parseSimpleParameter(QDomElement param)
         param_elem = param_elem.nextSiblingElement();
 
         max = param_elem.text().toInt();
-        //p = new SimpleIntParameter(name, min, max, default_val);
-        frontend::Parameter p(name, default_val, min, max);
+        SDRParameter* p = new SimpleIntParameter(name,default_val, min, max);
+        //frontend::Parameter p(name, default_val, min, max);
         return p;
         
     }
+
+
+    if(type == "double" || type == "float")
+    {
+        double default_val = param_elem.text().toDouble();
+        param_elem = param_elem.nextSiblingElement();
+
+        double min = param_elem.text().toDouble();
+        param_elem = param_elem.nextSiblingElement();
+
+        double max = param_elem.text().toDouble();
+        //p = new SimpleIntParameter(name, min, max, default_val);
+        SDRParameter* p = new SimpleFloatParameter(name,default_val, min, max);
+        //frontend::Parameter p(name, default_val, min, max);
+        return p;
+        
+    }
+
+
+        /*if(type == "bool")
+    {
+        std::string boolean = param_elem.text().toStdString();
+        if(boolean == "true"){
+            frontend::Parameter p(name, true);
+            return p;
+        }
+
+        else {
+            frontend::Parameter p(name, false);
+            return p;
+        }
+    }*/
 
     return pfake;
 }

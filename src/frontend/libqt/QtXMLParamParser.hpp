@@ -3,7 +3,9 @@
 
 #include <QtXml>
 #include <QXmlSchema>
-#include <frontend/lib/Parameter.hpp>
+//#include <frontend/lib/Parameter.hpp>
+#include "SDRParameter.hpp"
+
 
 namespace sd {
   
@@ -23,10 +25,10 @@ public:
     /*QtXMLParamParser(QFile input_file);*/
     ~QtXMLParamParser();
 
-    frontend::ParameterList getParameterList();
+    sd::libqt::ParameterList getParameterList();
     void getParameter(std::string name);
 
-    frontend::Parameter parseSimpleParameter(QDomElement simple_param);
+    SDRParameter* parseSimpleParameter(QDomElement simple_param);
     //frontend::Parameter *parseComplexParameter(QDomElement complex_param);
 
 

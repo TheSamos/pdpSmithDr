@@ -5,7 +5,8 @@
 #include <QString>
 #include <sstream>
 
-#include <frontend/lib/Parameter.hpp>
+//#include <frontend/lib/Parameter.hpp>
+#include "SDRParameter.hpp"
 
 namespace sd {
   
@@ -17,7 +18,7 @@ class QtXMLValueGenerator
 public:
 	QtXMLValueGenerator(): m_xml() {}
 
-    std::string simpleXMLValue(frontend::Parameter& param);
+    std::string simpleXMLValue(SDRParameter* param);
 
 private:
     QDomDocument m_xml;
