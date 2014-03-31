@@ -159,17 +159,17 @@ AlgorithmParameterizer::~AlgorithmParameterizer()
 QWidget *
 AlgorithmParameterizer::buildListWidget(size_t listNo)
 {
-    /*QVBoxLayout *pageLayout = new QVBoxLayout(this);
+    QVBoxLayout *pageLayout = new QVBoxLayout(this);
 
     auto it = m_parameters[listNo].begin();
     auto itEnd = m_parameters[listNo].end();
     for ( ; it != itEnd; ++it)
     {
-        frontend::Parameter &p = *it;
-        std::string pName = p.name();
+        sd::libqt::SDRParameter *p = *it;
+        std::string pName = p-> getName();
 
         std::cout << pName << std::endl;
-        std::cout << "Minimum:" << p.getMin<int>() << std::endl;
+        //std::cout << "Minimum:" << p.getMin<int>() << std::endl;
 
         WidgetList &wList = m_widgets[listNo];
         if (wList[pName])
@@ -181,8 +181,8 @@ AlgorithmParameterizer::buildListWidget(size_t listNo)
     QWidget *page = new QWidget;
     page->setLayout(pageLayout);
 
-    return page;*/
-    return nullptr;
+    return page;
+    //return nullptr;
 }
 
 /*std::vector<ParameterList>

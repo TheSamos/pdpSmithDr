@@ -24,7 +24,8 @@
 #include <frontend/lib/ParametrizationWidgetFactory.hpp>
 #include <frontend/lib/ParametrizationWidgetFactoryManager.hpp>
 
-#include <frontend/lib/Parameter.hpp>
+#include <frontend/libqt/SDRParameter.hpp>
+#include <frontend/libqt/SimpleParameter.hpp>
 #include <PluginDefs.hpp>
 
 #include <SmithDRDefs.hpp>
@@ -37,58 +38,67 @@ RESTORE_CONTEXT()
 
 #include <string>
 
-class QtWidgetExample : public sd::libqt::QtParametrizationWidget {
+class QtWidgetExample : public sd::libqt::QtParametrizationWidget
+{
 
 public:
 
-  QtWidgetExample(sd::frontend::Parameter& p) : sd::libqt::QtParametrizationWidget(p) {}
+    QtWidgetExample(sd::libqt::SDRParameter* p) : sd::libqt::QtParametrizationWidget(p) {}
 
-  virtual ~QtWidgetExample() {}
+    virtual ~QtWidgetExample() {}
 
-  virtual void
-  build(QWidget* parameterizer) {
-    // build appropriate widget
-    m_widget = new QDateTimeEdit(QDate::fromString(m_p.getAs<std::string>().c_str()));
-    QObject::connect(m_widget, SIGNAL(dateChanged(const QDate&)),
-		     parameterizer, SIGNAL(parametersChanged()));
+    virtual void
+    build(QWidget *parameterizer)
+    {
+        // build appropriate widget
+        sd::libqt::SimpleStringParameter *date_p = static_cast<sd::libqt::SimpleStringParameter *>(m_p);
+        m_widget = new QDateTimeEdit(QDate::fromString(date_p->getDefault().c_str()));
+        QObject::connect(m_widget, SIGNAL(dateChanged(const QDate &)),
+                         parameterizer, SIGNAL(parametersChanged()));
 
-    // build the widget layout
-    m_layout = new QHBoxLayout;
-    m_layout->addWidget(new QLabel(m_p.name().c_str()));
-    m_layout->addWidget(m_widget);
-  }
+        // build the widget layout
+        m_layout = new QHBoxLayout;
+        m_layout->addWidget(new QLabel(date_p->getName().c_str()));
+        m_layout->addWidget(m_widget);
+    }
 
-  virtual void
-  updateParameter() {
-    // here insert code to modify m_p using m_widget "value"
-    m_p = ((QDateTimeEdit*) m_widget)->date().toString().toStdString();
-    std::cout << "Modified parameter:" << m_p << std::endl;
-  }
+    virtual void
+    updateParameter()
+    {
+        // here insert code to modify m_p using m_widget "value"
+        //m_p = ((QDateTimeEdit *) m_widget)->date().toString().toStdString();
+        //std::cout << "Modified parameter:" << m_p << std::endl;
+        std::cout << "Modified parameter:" << std::endl;
+        m_p->print();
+    }
 
 };
 
-class QtWidgetExampleFactory : public sd::frontend::ParametrizationWidgetFactory {
+class QtWidgetExampleFactory : public sd::frontend::ParametrizationWidgetFactory
+{
 
 public:
 
-  QtWidgetExampleFactory()
-    : sd::frontend::ParametrizationWidgetFactory() {}
+    QtWidgetExampleFactory()
+        : sd::frontend::ParametrizationWidgetFactory() {}
 
-  virtual ~QtWidgetExampleFactory() {}
+    virtual ~QtWidgetExampleFactory() {}
 
-  virtual const std::string&
-  name() const {
-    return m_name;
-  }
+    virtual const std::string &
+    name() const
+    {
+        return m_name;
+    }
 
-  virtual QtWidgetExample*
-  createWidget(sd::frontend::Parameter& p) const {
-    return new QtWidgetExample(p);
-  }
+    virtual QtWidgetExample *
+    createWidget(sd::libqt::SDRParameter* p) const
+    {
+        return new QtWidgetExample(p);
+    }
 
 private:
 
-  static const std::string m_name;
+    static const std::string m_name;
 
 };
 
@@ -100,5 +110,5 @@ SMITHDR_PLUGIN_API
 void
 registerPlugin()
 {
-  sd::frontend::registerWidgetFactory(new QtWidgetExampleFactory);
+    sd::frontend::registerWidgetFactory(new QtWidgetExampleFactory);
 }

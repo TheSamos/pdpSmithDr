@@ -24,7 +24,7 @@
 #include <frontend/lib/ParametrizationWidgetFactory.hpp>
 #include <frontend/lib/ParametrizationWidgetFactoryManager.hpp>
 
-#include <frontend/lib/Parameter.hpp>
+#include <frontend/libqt/SDRParameter.hpp>
 #include <PluginDefs.hpp>
 
 #include <SmithDRDefs.hpp>
@@ -38,44 +38,48 @@ RESTORE_CONTEXT()
 
 #include "OpenFileButtonPlugin.hpp"
 
-namespace sd {
-  namespace plugins {
-    namespace widgets {
-      namespace qt {
+namespace sd
+{
+namespace plugins
+{
+namespace widgets
+{
+namespace qt
+{
 
-	OpenFileDialog::OpenFileDialog(const QString& filename, QWidget* p)
-	  : QWidget(), m_button(0), m_parameterizer(p)
-	{
-	  m_button = new QPushButton(filename);
-	  QObject::connect(m_button, SIGNAL(clicked()), this, SLOT(selectFile()));
+OpenFileDialog::OpenFileDialog(const QString &filename, QWidget *p)
+    : QWidget(), m_button(0), m_parameterizer(p)
+{
+    m_button = new QPushButton(filename);
+    QObject::connect(m_button, SIGNAL(clicked()), this, SLOT(selectFile()));
 
-	  QHBoxLayout* widgetLayout = new QHBoxLayout;
-	  widgetLayout->addWidget(m_button);
-	  setLayout(widgetLayout);
-	}
+    QHBoxLayout *widgetLayout = new QHBoxLayout;
+    widgetLayout->addWidget(m_button);
+    setLayout(widgetLayout);
+}
 
-	static QString currentPath;
+static QString currentPath;
 
-	void
-	OpenFileDialog::selectFile()
-	{
-	  currentPath = QFileDialog::getOpenFileName(NULL,
-						     QObject::tr("Open file"),
-						     currentPath, "*");
+void
+OpenFileDialog::selectFile()
+{
+    currentPath = QFileDialog::getOpenFileName(NULL,
+                  QObject::tr("Open file"),
+                  currentPath, "*");
 
-	  m_button->setText(currentPath);
-	  update();
-	}
+    m_button->setText(currentPath);
+    update();
+}
 
-	std::string
-	OpenFileDialog::getFilename() const
-	{
-	  return m_button->text().toStdString();
-	}
+std::string
+OpenFileDialog::getFilename() const
+{
+    return m_button->text().toStdString();
+}
 
-      }
-    }
-  }
+}
+}
+}
 }
 
 class OpenFileButton : public sd::libqt::QtParametrizationWidget
@@ -83,50 +87,55 @@ class OpenFileButton : public sd::libqt::QtParametrizationWidget
 
 public:
 
-  OpenFileButton(sd::frontend::Parameter& p) : sd::libqt::QtParametrizationWidget(p) {}
+    OpenFileButton(sd::libqt::SDRParameter* p) : sd::libqt::QtParametrizationWidget(p) {}
 
-  virtual ~OpenFileButton() {}
+    virtual ~OpenFileButton() {}
 
-  virtual void
-  build(QWidget* parameterizer) {
-    std::string filename = m_p.getString();
-    m_widget = new sd::plugins::widgets::qt::OpenFileDialog(filename.c_str(), parameterizer);
-    QObject::connect(m_widget, SIGNAL(update()), parameterizer, SIGNAL(parametersChanged()));
+    virtual void
+    build(QWidget *parameterizer)
+    {
+        //std::string filename = m_p.getString();
+        /*m_widget = new sd::plugins::widgets::qt::OpenFileDialog(filename.c_str(), parameterizer);
+        QObject::connect(m_widget, SIGNAL(update()), parameterizer, SIGNAL(parametersChanged()));
 
-    // build the widget layout
-    m_layout = new QHBoxLayout;
-    m_layout->addWidget(new QLabel(m_p.name().c_str()));
-    m_layout->addWidget(m_widget);
-  }
+        // build the widget layout
+        m_layout = new QHBoxLayout;
+        m_layout->addWidget(new QLabel(m_p.name().c_str()));
+        m_layout->addWidget(m_widget);*/
+    }
 
-  virtual void
-  updateParameter() {
-    m_p = ((sd::plugins::widgets::qt::OpenFileDialog*) m_widget)->getFilename();
-  }
+    virtual void
+    updateParameter()
+    {
+        //m_p = ((sd::plugins::widgets::qt::OpenFileDialog *) m_widget)->getFilename();
+    }
 
 };
 
-class OpenFileButtonFactory : public sd::frontend::ParametrizationWidgetFactory {
+class OpenFileButtonFactory : public sd::frontend::ParametrizationWidgetFactory
+{
 
 public:
 
-  OpenFileButtonFactory() : sd::frontend::ParametrizationWidgetFactory() {}
+    OpenFileButtonFactory() : sd::frontend::ParametrizationWidgetFactory() {}
 
-  virtual ~OpenFileButtonFactory() {}
+    virtual ~OpenFileButtonFactory() {}
 
-  virtual const std::string&
-  name() const {
-    return m_name;
-  }
+    virtual const std::string &
+    name() const
+    {
+        return m_name;
+    }
 
-  virtual OpenFileButton*
-  createWidget(sd::frontend::Parameter& p) const {
-    return new OpenFileButton(p);
-  }
+    virtual OpenFileButton *
+    createWidget(sd::libqt::SDRParameter* p) const
+    {
+        return new OpenFileButton(p);
+    }
 
 private:
 
-  static const std::string m_name;
+    static const std::string m_name;
 
 };
 
@@ -138,5 +147,5 @@ SMITHDR_PLUGIN_API
 void
 registerPlugin()
 {
-  sd::frontend::registerWidgetFactory(new OpenFileButtonFactory);
+    sd::frontend::registerWidgetFactory(new OpenFileButtonFactory);
 }

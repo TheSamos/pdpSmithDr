@@ -20,7 +20,11 @@
 
 #include <frontend/lib/ComputedImageViewAlgorithm.hpp>
 #include <frontend/lib/AlgorithmManager.hpp>
+#include <frontend/libqt/SDRParameter.hpp>
+#include <frontend/libqt/SimpleParameter.hpp>
 #include <PluginDefs.hpp>
+
+#include <string>
 
 #include <iostream>
 
@@ -71,7 +75,9 @@ registerPlugin() {
   sd::frontend::Parameter p("date", "");
   p.setWidgetFactoryName("QtWidgetExamplePlugin");
   parameters.push_back(p);*/
+  sd::libqt::SimpleStringParameter* spldble = new sd::libqt::SimpleStringParameter("hello");
 
-  /*sd::frontend::registerAlgorithm(new AlgoExamplePlugin<double>, parameters);
-  sd::frontend::registerAlgorithm(new AlgoExamplePlugin<float>, parameters);*/
+  std::string parameters = "<parameters><parameter name=\"date\" type=\"string\"><default>31/04/2014</default><min>00/00/00</min><max>100/100/100</max><widget>QtWidgetExamplePlugin</widget></parameter></parameters>";
+  sd::frontend::registerAlgorithm(new AlgoExamplePlugin<double>, parameters);
+  sd::frontend::registerAlgorithm(new AlgoExamplePlugin<float>, parameters);
 }

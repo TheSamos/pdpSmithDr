@@ -24,7 +24,7 @@
 #include <frontend/lib/ComputedImageViewAlgorithm.hpp>
 #include <frontend/lib/AlgorithmManager.hpp>
 #include <frontend/lib/AlgorithmInfo.hpp>
-#include <frontend/lib/Parameter.hpp>
+#include <frontend/libqt/SDRParameter.hpp>
 //#include <frontend/libqt/SimpleParameter.hpp>
 #include <PluginDefs.hpp>
 #include <Types.hpp>

@@ -90,6 +90,31 @@ SDRParameter* QtXMLParamParser::parseSimpleParameter(QDomElement param)
     sd::libqt::SDRParameter* pfake = new SimpleIntParameter(6);
     //frontend::Parameter pfake("");
 
+    if(type == "string")
+    {
+        std::cout << "String param" << std::endl;
+
+        std::string default_val = param_elem.text().toStdString();
+        param_elem = param_elem.nextSiblingElement();
+
+        std::string min = param_elem.text().toStdString();
+        param_elem = param_elem.nextSiblingElement();
+
+        std::string max = param_elem.text().toStdString();
+
+        param_elem = param_elem.nextSiblingElement();
+        std::string widget = "";
+
+        if(!param_elem.isNull())
+            widget = param_elem.text().toStdString();
+
+
+        SDRParameter* p = new SimpleStringParameter(name, default_val, min, max, widget );
+        p->print();
+        //frontend::Parameter p(name, default_val, min, max);
+        return p;
+    }
+
     if(type == "int")
     {
         default_val = param_elem.text().toInt();

@@ -38,10 +38,10 @@ EQUALS = =
 CMAKE_EDIT_COMMAND = /usr/bin/ccmake
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /autofs/netapp/account/cremi/sbassett/cours/PDP/final/pdpSmithDr
+CMAKE_SOURCE_DIR = /home/sam/cours/PDP/git_final/pdpSmithDr
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /autofs/netapp/account/cremi/sbassett/cours/PDP/final/pdpSmithDr/build
+CMAKE_BINARY_DIR = /home/sam/cours/PDP/git_final/pdpSmithDr/build
 
 # Utility rule file for uninstall.
 
@@ -49,7 +49,7 @@ CMAKE_BINARY_DIR = /autofs/netapp/account/cremi/sbassett/cours/PDP/final/pdpSmit
 include CMakeFiles/uninstall.dir/progress.make
 
 CMakeFiles/uninstall:
-	/usr/bin/cmake -P /autofs/netapp/account/cremi/sbassett/cours/PDP/final/pdpSmithDr/build/cmake_uninstall.cmake
+	/usr/bin/cmake -P /home/sam/cours/PDP/git_final/pdpSmithDr/build/cmake_uninstall.cmake
 
 uninstall: CMakeFiles/uninstall
 uninstall: CMakeFiles/uninstall.dir/build.make
@@ -64,6 +64,6 @@ CMakeFiles/uninstall.dir/clean:
 .PHONY : CMakeFiles/uninstall.dir/clean
 
 CMakeFiles/uninstall.dir/depend:
-	cd /autofs/netapp/account/cremi/sbassett/cours/PDP/final/pdpSmithDr/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /autofs/netapp/account/cremi/sbassett/cours/PDP/final/pdpSmithDr /autofs/netapp/account/cremi/sbassett/cours/PDP/final/pdpSmithDr /autofs/netapp/account/cremi/sbassett/cours/PDP/final/pdpSmithDr/build /autofs/netapp/account/cremi/sbassett/cours/PDP/final/pdpSmithDr/build /autofs/netapp/account/cremi/sbassett/cours/PDP/final/pdpSmithDr/build/CMakeFiles/uninstall.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/sam/cours/PDP/git_final/pdpSmithDr/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/sam/cours/PDP/git_final/pdpSmithDr /home/sam/cours/PDP/git_final/pdpSmithDr /home/sam/cours/PDP/git_final/pdpSmithDr/build /home/sam/cours/PDP/git_final/pdpSmithDr/build /home/sam/cours/PDP/git_final/pdpSmithDr/build/CMakeFiles/uninstall.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/uninstall.dir/depend
 
