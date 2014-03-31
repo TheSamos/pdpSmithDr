@@ -1,0 +1,54 @@
+\section{Naming conventions}
+
+\subsection{Identifiers}
+Use clear and informative names for identifiers (classes, members,
+parameters, variables).\\
+Clear and informative names are one of the best tools for creating
+easily understandable code. The name of any identifier should
+succinctly describe the purpose of that identifier.\\
+
+Identifiers names must be a mixture of upper and lowercase letters to
+delineate individual words.
+\begin{itemize}
+\item[$\bullet$] Each word in a class name must begin with a capital
+  letter, e.g. {\bf class RandomProcess;}
+\item[$\bullet$] In a function name, use upper case letters as word
+  separators, and lower case for the rest of a word, e.g. {\bf void getDescription();}
+\item[$\bullet$] For macros, enumeration constants and global
+  constants, words are capitalized and separated by underscores,
+  e.g. {\bf DATA\_VALID}, {\bf const int MIN\_WIDTH = 1}.
+\item[$\bullet$] Typedef names use the same naming policy as
+  for a class.
+\end{itemize}
+\ \\
+Class names will generally consist of nouns or noun combinations.\\
+Function names will generally begin with a verb as they describe actions.\\
+\ \\
+Method argument names follow the same rules as function names.\\
+Class members should be prefixed with {\bf m\_} (letter {\it m}
+followed by an undescore). The rest of the name is similar to method
+argument names (including the beginning lower case letter).
+
+\subsection{Class organization}
+\begin{itemize}
+\item[$\bullet$] In general there will be one class declaration per
+  header file. In some cases, smaller related classes may be grouped
+  into one header file.
+\item[$\bullet$] public, protected and private sections in the class
+  declaration should be ordered so that the public section comes
+  first, then the protected section, and lastly the private section.
+\item[$\bullet$] Within each section, member functions and member data
+  should not be mixed.
+\end{itemize}
+
+\subsection{Files}
+\label{file_extension}
+A file must have the same name as the class it contains.
+\begin{itemize}
+\item[$\bullet$] C++ header file names should have the extension ".hpp".
+\item[$\bullet$] C++ source file names should have the extension ".cpp".
+\end{itemize}
+\ \\ Use special ".hxx" extension for files containing the definition
+of template classes or inline functions (see
+sections~\ref{sec::templates}~and~\ref{sec::inline} for further
+details).

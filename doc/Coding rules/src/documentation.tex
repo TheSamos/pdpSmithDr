@@ -1,0 +1,62 @@
+\section{Documentation}
+
+\subsection{Code comments}
+Comments must be in English.\\
+You may write a short description of your classes and member
+functions. Describing arguments is really useful everytime you can
+raise a critical question, e.g. ``Who owns the data? Who is
+responsible for memory free?''. Don't be shy, tell other people.\\
+
+If an algorithm is described in a paper, it is a good idea to add a
+reference to a paper, or better an equation number in a paper, or
+explanations of differences with the paper.\\
+It is recommanded to use Doxygen to document your code.
+
+\subsection{Gotchas}
+Embed special keywords in your code comments so that an automatic
+process can establish a maintenance report. There is a list of these
+gotchas:
+\begin{itemize}
+\item[$\bullet$] {\bf $:$TODO$:$ topic} \\ Means there is more to do
+  there, don't forget.
+\item[$\bullet$] {\bf $:$BUG$:$ [bugid] topic} \\ Means there is a {\it
+  known} bug here; explain it and optionnaly give a bug id.
+\item[$\bullet$] {\bf $:$GLITCH$:$} \\ Means there is a {\it suspected}
+  bug here, need more debug to confirm.
+\item[$\bullet$] {\bf $:$COMMENT$:$} \\ Add a specific note you want to be
+  reported to others, e.g. to raise a warning.
+\item[$\bullet$] {\bf $:$TRICKY$:$} \\ Tells somebody that the following
+  code is very tricky so don't go changing it without thinking.
+\item[$\bullet$] {\bf $:$KLUDGE$:$} \\ When you've done something ugly (Do
+  you? Really?), say so and explain how you would do it differently
+  next time if you had more time.
+\item[$\bullet$] {\bf $:$OPTIM$:$} \\ An optimization may be possible
+  or needed here.
+\item[$\bullet$] {\bf $:$PARALLEL$:$} \\ Comment relative to possible
+  parallelization.
+\end{itemize}
+\ \\
+Gotchas comment may consist of several lines, but the first line should be a self-containing, meaningful summary, respecting the following line format:
+\begin{center}
+  {\bf $:$GOTCHA$:$ author date$:$ summary}
+\end{center}
+Date must be in the form {\it yymmdd}.\\
+
+For example:
+\begin{algorithm}[H]
+// $:$TODO$:$ tom 091127$:$ implement case of missing data. \\
+// We should read incomplete datasets and fill missing parts \\
+// with a predefined default value.
+\end{algorithm}
+
+\subsection{Project documentation}
+It is mandatory to have a {\bf README.txt} file at the root of your
+project that explains how to compile your code (and thus on which
+other libraries/programs it depends), how to execute your code and
+what your code does. You may also add the publications where
+algorithms are described.\\ It is very useful to have an explanation
+of all the parameters and the range of validity for their value. It is
+also very interesting to know which parameters must be modified first
+to improve the results.\\ It is a good practice to have good default
+values for all parameters, and a simple help that may be displayed
+when the program is run (a {\bf -h} option for example).

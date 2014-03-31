@@ -1,0 +1,113 @@
+core
+====
+- [image] gestion taille des canaux (1/8/16/24/32 bits)
+- [image] gestion transparence
+- [image] format Raw
+- gestion des paramètres additionnels (dépendant du format de données). Exemple : slope/intercept
+
+
+imageprocessing
+===============
+- filtres 3d
+- filtres sur image multicanaux
+- histogrammes
+- watermarking
+
+
+meshprocessing
+==============
+- distances : euclidienne, géodésique
+- courbures
+- ICP (Auto Trimmed ICP)
+- subdivisions (schémas approximatifs et interpolatifs)
+
+
+segmentation
+============
+- seuillage simple/multiple manuel
+- seuillage simple/multiple sur histogramme (Otsu)
+- watershed
+- division/fusion
+- modèles déformables
+
+
+analyse
+=======
+- mesures 1d, 1d géodésique, 2d, 3d (+ périmètres, diamètres, centres...)
+- extraction de caractéristiques géométriques (courbures...)
+- extraction de caractéristiques topologiques (nb de Betti)
+- ROI
+
+
+extraction de surface
+=====================
+- marching cubes
+- HMH surface
+
+
+Frontend
+========
+- système de paramétrisation graphique pour plugins (xml)
+- plugins framework : plugins C/C++, système pour compilation dissociée de SmithDR (autres OS, autres compilateurs)
+
+
+GUI
+===
+- screenshots
+- undo/redo + historique
+- simplifier IHM : docs, labels (watches), sliders/comboboxes cachés, boutons souris, menus
+- watches cliquables (mode info, sélection, affichage si plusieurs watches connectés)
+- mode affichage (zoom, translation, contraste) et mode sélection (valeurs/infos pixels/ROI)
+- construction/modification manuelle du graphe de traitement
+- système de préférences
+- picking 3d (images et maillages)
+- graphe de scène : cliquer sur une image pour lancer un algo
+- bibliothèque de widgets pour plugins
+- toolbar
+
+
+visu
+====
+- volume rendering
+- gestion de plusieurs objets (volumes, maillages, plans de coupe)
+- gestion de la couleur et de la transparence des objets
+- système de layers (données, axes+légendes, grille, textures, picking/info). Exemple : maillage + plans de coupe + masques + couleurs/alpha + infos textuelles
+- édition d'image, ROI
+
+
+plugins
+=======
+- [IO] Dicom (utilisation dcmtk)
+- [IO] image formats usuels (png, bmp, jpg, gif...)
+- [IO] raw image 2d/3d
+- [IO] images : format vff
+- [IO] maillages : pgn, vrml, off, stl, ply, obj
+- [IO] tomo
+- [IO] images : ouvrir un répertoire (n images 2d --> 1 image 3d)
+- [algo] simulateur tomo
+- [algo] algorithme HDR imaging
+- [algo] recalage d'images
+
+
+tests
+=====
+
+
+utils
+=====
+- conversions de formats entre images
+- conversions de formats entre maillages
+
+
+doc
+===
+- règles de codage
+- utilisation de svn
+- procédure d'installation, dépendances
+- requirements.txt
+- manipulation des données : IO, affichage (ordre des voxels, repère 3d)
+- construction des menus
+- formats de fichiers reconnus
+- filtres : liste, examples d'utilisation et d'ajout
+- plugins : liste, examples d'utilisation et d'ajout
+
