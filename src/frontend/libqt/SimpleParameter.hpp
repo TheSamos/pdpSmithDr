@@ -37,13 +37,23 @@ public:
         m_default_val = default_val;
     }
 
+    SimpleParameter(T value)
+    {
+        m_value = value;
+    }
+
     T getMin() { return m_min; }
     T getMax() { return m_max; }
     T getDefault() { return m_default_val; }
 
+    T getValue() { return m_value; }
+    
+
     void setMin(T min) { m_min = min; }
     void setMax(T max) { m_max = max; }
     void setDefault(T default_val) { m_default_val = default_val; }
+
+    void setValue(T value) { m_value = value; } 
 
   std::string dataTypeToString() { return typenames[DataType(DataType_)]; }
 
@@ -61,7 +71,8 @@ private:
     T m_max;
     T m_default_val;
 
-  //DataType m_datatype = Undefined;
+    T m_value;
+
 };
 
 

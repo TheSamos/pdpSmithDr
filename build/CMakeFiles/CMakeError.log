@@ -1,12 +1,12 @@
 Performing C++ SOURCE FILE Test HAVE_CPP0X_SHARED_PTR failed with the following output:
 Change Dir: /autofs/netapp/account/cremi/sbassett/cours/PDP/final/pdpSmithDr/build/CMakeFiles/CMakeTmp
 
-Run Build Command:/usr/bin/make "cmTryCompileExec1726221384/fast"
-/usr/bin/make -f CMakeFiles/cmTryCompileExec1726221384.dir/build.make CMakeFiles/cmTryCompileExec1726221384.dir/build
+Run Build Command:/usr/bin/make "cmTryCompileExec2587903138/fast"
+/usr/bin/make -f CMakeFiles/cmTryCompileExec2587903138.dir/build.make CMakeFiles/cmTryCompileExec2587903138.dir/build
 make[1]: entrant dans le répertoire « /autofs/netapp/account/cremi/sbassett/cours/PDP/final/pdpSmithDr/build/CMakeFiles/CMakeTmp »
 /usr/bin/cmake -E cmake_progress_report /autofs/netapp/account/cremi/sbassett/cours/PDP/final/pdpSmithDr/build/CMakeFiles/CMakeTmp/CMakeFiles 1
-Building CXX object CMakeFiles/cmTryCompileExec1726221384.dir/src.cxx.o
-/usr/bin/c++    -DHAVE_CPP0X_SHARED_PTR   -o CMakeFiles/cmTryCompileExec1726221384.dir/src.cxx.o -c /autofs/netapp/account/cremi/sbassett/cours/PDP/final/pdpSmithDr/build/CMakeFiles/CMakeTmp/src.cxx
+Building CXX object CMakeFiles/cmTryCompileExec2587903138.dir/src.cxx.o
+/usr/bin/c++    -DHAVE_CPP0X_SHARED_PTR   -o CMakeFiles/cmTryCompileExec2587903138.dir/src.cxx.o -c /autofs/netapp/account/cremi/sbassett/cours/PDP/final/pdpSmithDr/build/CMakeFiles/CMakeTmp/src.cxx
 /autofs/netapp/account/cremi/sbassett/cours/PDP/final/pdpSmithDr/build/CMakeFiles/CMakeTmp/src.cxx: In function ‘int main()’:
 /autofs/netapp/account/cremi/sbassett/cours/PDP/final/pdpSmithDr/build/CMakeFiles/CMakeTmp/src.cxx:4:13: error: ‘shared_ptr’ is not a member of ‘std’
              std::shared_ptr<int> ptr;
@@ -15,9 +15,9 @@ Building CXX object CMakeFiles/cmTryCompileExec1726221384.dir/src.cxx.o
              std::shared_ptr<int> ptr;
                              ^
 /autofs/netapp/account/cremi/sbassett/cours/PDP/final/pdpSmithDr/build/CMakeFiles/CMakeTmp/src.cxx:4:29: error: expected ‘;’ before ‘int’
-make[1]: *** [CMakeFiles/cmTryCompileExec1726221384.dir/src.cxx.o] Erreur 1
+make[1]: *** [CMakeFiles/cmTryCompileExec2587903138.dir/src.cxx.o] Erreur 1
 make[1]: quittant le répertoire « /autofs/netapp/account/cremi/sbassett/cours/PDP/final/pdpSmithDr/build/CMakeFiles/CMakeTmp »
-make: *** [cmTryCompileExec1726221384/fast] Erreur 2
+make: *** [cmTryCompileExec2587903138/fast] Erreur 2
 
 Source file was:
 
@@ -30,19 +30,19 @@ Source file was:
 Determining if the Q_WS_WIN exist failed with the following output:
 Change Dir: /autofs/netapp/account/cremi/sbassett/cours/PDP/final/pdpSmithDr/build/CMakeFiles/CMakeTmp
 
-Run Build Command:/usr/bin/make "cmTryCompileExec4025224302/fast"
-/usr/bin/make -f CMakeFiles/cmTryCompileExec4025224302.dir/build.make CMakeFiles/cmTryCompileExec4025224302.dir/build
+Run Build Command:/usr/bin/make "cmTryCompileExec716607020/fast"
+/usr/bin/make -f CMakeFiles/cmTryCompileExec716607020.dir/build.make CMakeFiles/cmTryCompileExec716607020.dir/build
 make[1]: entrant dans le répertoire « /autofs/netapp/account/cremi/sbassett/cours/PDP/final/pdpSmithDr/build/CMakeFiles/CMakeTmp »
 /usr/bin/cmake -E cmake_progress_report /autofs/netapp/account/cremi/sbassett/cours/PDP/final/pdpSmithDr/build/CMakeFiles/CMakeTmp/CMakeFiles 1
-Building CXX object CMakeFiles/cmTryCompileExec4025224302.dir/CheckSymbolExists.cxx.o
-/usr/bin/c++    -I/usr/include/qt4    -o CMakeFiles/cmTryCompileExec4025224302.dir/CheckSymbolExists.cxx.o -c /autofs/netapp/account/cremi/sbassett/cours/PDP/final/pdpSmithDr/build/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx
+Building CXX object CMakeFiles/cmTryCompileExec716607020.dir/CheckSymbolExists.cxx.o
+/usr/bin/c++    -I/usr/include/qt4    -o CMakeFiles/cmTryCompileExec716607020.dir/CheckSymbolExists.cxx.o -c /autofs/netapp/account/cremi/sbassett/cours/PDP/final/pdpSmithDr/build/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx
 /autofs/netapp/account/cremi/sbassett/cours/PDP/final/pdpSmithDr/build/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx: In function ‘int main(int, char**)’:
 /autofs/netapp/account/cremi/sbassett/cours/PDP/final/pdpSmithDr/build/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx:8:19: error: ‘Q_WS_WIN’ was not declared in this scope
    return ((int*)(&Q_WS_WIN))[argc];
                    ^
-make[1]: *** [CMakeFiles/cmTryCompileExec4025224302.dir/CheckSymbolExists.cxx.o] Erreur 1
 make[1]: quittant le répertoire « /autofs/netapp/account/cremi/sbassett/cours/PDP/final/pdpSmithDr/build/CMakeFiles/CMakeTmp »
-make: *** [cmTryCompileExec4025224302/fast] Erreur 2
+make[1]: *** [CMakeFiles/cmTryCompileExec716607020.dir/CheckSymbolExists.cxx.o] Erreur 1
+make: *** [cmTryCompileExec716607020/fast] Erreur 2
 
 File /autofs/netapp/account/cremi/sbassett/cours/PDP/final/pdpSmithDr/build/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx:
 /* */
@@ -62,19 +62,19 @@ int main(int argc, char** argv)
 Determining if the Q_WS_QWS exist failed with the following output:
 Change Dir: /autofs/netapp/account/cremi/sbassett/cours/PDP/final/pdpSmithDr/build/CMakeFiles/CMakeTmp
 
-Run Build Command:/usr/bin/make "cmTryCompileExec2497982796/fast"
-/usr/bin/make -f CMakeFiles/cmTryCompileExec2497982796.dir/build.make CMakeFiles/cmTryCompileExec2497982796.dir/build
+Run Build Command:/usr/bin/make "cmTryCompileExec3190889383/fast"
+/usr/bin/make -f CMakeFiles/cmTryCompileExec3190889383.dir/build.make CMakeFiles/cmTryCompileExec3190889383.dir/build
 make[1]: entrant dans le répertoire « /autofs/netapp/account/cremi/sbassett/cours/PDP/final/pdpSmithDr/build/CMakeFiles/CMakeTmp »
 /usr/bin/cmake -E cmake_progress_report /autofs/netapp/account/cremi/sbassett/cours/PDP/final/pdpSmithDr/build/CMakeFiles/CMakeTmp/CMakeFiles 1
-Building CXX object CMakeFiles/cmTryCompileExec2497982796.dir/CheckSymbolExists.cxx.o
-/usr/bin/c++    -I/usr/include/qt4    -o CMakeFiles/cmTryCompileExec2497982796.dir/CheckSymbolExists.cxx.o -c /autofs/netapp/account/cremi/sbassett/cours/PDP/final/pdpSmithDr/build/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx
+Building CXX object CMakeFiles/cmTryCompileExec3190889383.dir/CheckSymbolExists.cxx.o
+/usr/bin/c++    -I/usr/include/qt4    -o CMakeFiles/cmTryCompileExec3190889383.dir/CheckSymbolExists.cxx.o -c /autofs/netapp/account/cremi/sbassett/cours/PDP/final/pdpSmithDr/build/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx
 /autofs/netapp/account/cremi/sbassett/cours/PDP/final/pdpSmithDr/build/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx: In function ‘int main(int, char**)’:
 /autofs/netapp/account/cremi/sbassett/cours/PDP/final/pdpSmithDr/build/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx:8:19: error: ‘Q_WS_QWS’ was not declared in this scope
    return ((int*)(&Q_WS_QWS))[argc];
                    ^
-make[1]: *** [CMakeFiles/cmTryCompileExec2497982796.dir/CheckSymbolExists.cxx.o] Erreur 1
+make[1]: *** [CMakeFiles/cmTryCompileExec3190889383.dir/CheckSymbolExists.cxx.o] Erreur 1
 make[1]: quittant le répertoire « /autofs/netapp/account/cremi/sbassett/cours/PDP/final/pdpSmithDr/build/CMakeFiles/CMakeTmp »
-make: *** [cmTryCompileExec2497982796/fast] Erreur 2
+make: *** [cmTryCompileExec3190889383/fast] Erreur 2
 
 File /autofs/netapp/account/cremi/sbassett/cours/PDP/final/pdpSmithDr/build/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx:
 /* */
@@ -94,19 +94,19 @@ int main(int argc, char** argv)
 Determining if the Q_WS_MAC exist failed with the following output:
 Change Dir: /autofs/netapp/account/cremi/sbassett/cours/PDP/final/pdpSmithDr/build/CMakeFiles/CMakeTmp
 
-Run Build Command:/usr/bin/make "cmTryCompileExec3436180085/fast"
-/usr/bin/make -f CMakeFiles/cmTryCompileExec3436180085.dir/build.make CMakeFiles/cmTryCompileExec3436180085.dir/build
+Run Build Command:/usr/bin/make "cmTryCompileExec1397274419/fast"
+/usr/bin/make -f CMakeFiles/cmTryCompileExec1397274419.dir/build.make CMakeFiles/cmTryCompileExec1397274419.dir/build
 make[1]: entrant dans le répertoire « /autofs/netapp/account/cremi/sbassett/cours/PDP/final/pdpSmithDr/build/CMakeFiles/CMakeTmp »
 /usr/bin/cmake -E cmake_progress_report /autofs/netapp/account/cremi/sbassett/cours/PDP/final/pdpSmithDr/build/CMakeFiles/CMakeTmp/CMakeFiles 1
-Building CXX object CMakeFiles/cmTryCompileExec3436180085.dir/CheckSymbolExists.cxx.o
-/usr/bin/c++    -I/usr/include/qt4    -o CMakeFiles/cmTryCompileExec3436180085.dir/CheckSymbolExists.cxx.o -c /autofs/netapp/account/cremi/sbassett/cours/PDP/final/pdpSmithDr/build/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx
+Building CXX object CMakeFiles/cmTryCompileExec1397274419.dir/CheckSymbolExists.cxx.o
+/usr/bin/c++    -I/usr/include/qt4    -o CMakeFiles/cmTryCompileExec1397274419.dir/CheckSymbolExists.cxx.o -c /autofs/netapp/account/cremi/sbassett/cours/PDP/final/pdpSmithDr/build/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx
 /autofs/netapp/account/cremi/sbassett/cours/PDP/final/pdpSmithDr/build/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx: In function ‘int main(int, char**)’:
 /autofs/netapp/account/cremi/sbassett/cours/PDP/final/pdpSmithDr/build/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx:8:19: error: ‘Q_WS_MAC’ was not declared in this scope
    return ((int*)(&Q_WS_MAC))[argc];
                    ^
-make[1]: *** [CMakeFiles/cmTryCompileExec3436180085.dir/CheckSymbolExists.cxx.o] Erreur 1
+make[1]: *** [CMakeFiles/cmTryCompileExec1397274419.dir/CheckSymbolExists.cxx.o] Erreur 1
 make[1]: quittant le répertoire « /autofs/netapp/account/cremi/sbassett/cours/PDP/final/pdpSmithDr/build/CMakeFiles/CMakeTmp »
-make: *** [cmTryCompileExec3436180085/fast] Erreur 2
+make: *** [cmTryCompileExec1397274419/fast] Erreur 2
 
 File /autofs/netapp/account/cremi/sbassett/cours/PDP/final/pdpSmithDr/build/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx:
 /* */

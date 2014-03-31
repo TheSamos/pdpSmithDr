@@ -19,10 +19,13 @@ public:
     SDRParameter() : m_type(Undefined) {};
     SDRParameter(std::string name) : m_name(name) {}
 
-    Type getType()
-    {
-        return m_type;
-    }
+    Type getType() { return m_type; }
+
+    std::string getName() { return m_name; }
+    std::string getWidgetName() { return m_widget_name; }
+
+    void setName(std::string name) { this->m_name = name; }
+    void setWidgetName(std::string widgetName) { this->m_widget_name = widgetName; }
 
     virtual void print() = 0;
 
