@@ -55,9 +55,9 @@ namespace
 {
 
 libqt::QtParametrizationWidget *
-buildEditor(frontend::Parameter &p, QWidget *parameterizer)
+buildEditor(sd::libqt::SDRParameter *p, QWidget *parameterizer)
 {
-    std::string widgetFactoryName = p.getWidgetFactoryName();
+    std::string widgetFactoryName = p->getWidgetName();
     bool useSpecificWidget = !(widgetFactoryName.empty());
     if (useSpecificWidget)
     {
@@ -84,7 +84,7 @@ buildEditor(frontend::Parameter &p, QWidget *parameterizer)
 
     // default widgets
     libqt::QtParametrizationWidget *widget = NULL;
-    if (p.hasPredefinedValues())
+    /*if (p.hasPredefinedValues())
     {
         widget = new nativewidgets::UnmodifiableListWidget(p);
     }
@@ -97,7 +97,7 @@ buildEditor(frontend::Parameter &p, QWidget *parameterizer)
         widget = new nativewidgets::MultipleValuesWidget(p);
     }
     else
-        assert(!"Should never get here!");
+        assert(!"Should never get here!");*/
 
     assert(widget != NULL);
     widget->build(parameterizer);
@@ -109,7 +109,7 @@ buildEditor(frontend::Parameter &p, QWidget *parameterizer)
 /*
  * AlgorithmParameterizer
  */
-AlgorithmParameterizer::AlgorithmParameterizer(std::vector<frontend::ParameterList> &parameters, QWidget *p)
+/*AlgorithmParameterizer::AlgorithmParameterizer(std::vector<frontend::ParameterList> &parameters, QWidget *p)
     : QTabWidget(p), m_parameters(parameters), m_widgets()
 {
     m_widgets.resize(parameters.size());
@@ -120,17 +120,17 @@ AlgorithmParameterizer::AlgorithmParameterizer(std::vector<frontend::ParameterLi
             addTab(buildListWidget(i), tr("Parameters set ") + QString("#%1").arg(i));
         }
     }
-}
+}*/
 
 AlgorithmParameterizer::AlgorithmParameterizer(const std::string& xml_parameters, QWidget* parent) 
-    : QTabWidget(parent),m_parameters(), m_widgets()
+    : QTabWidget(parent), /*m_parameters(),*/ m_widgets()
     {
 
       std::cout << "Before parsing" << std::endl;
 
       sd::libqt::QtXMLParamParser defaultParamParser(xml_parameters);
-      frontend::ParameterList p = defaultParamParser.getParameterList();
-      std::cout << "Before parsing" << p[0].name() << std::endl;
+      sd::libqt::ParameterList p = defaultParamParser.getParameterList();
+      std::cout << "Before parsing" << p[0]->getName() << std::endl;
 
 
 
@@ -159,7 +159,7 @@ AlgorithmParameterizer::~AlgorithmParameterizer()
 QWidget *
 AlgorithmParameterizer::buildListWidget(size_t listNo)
 {
-    QVBoxLayout *pageLayout = new QVBoxLayout(this);
+    /*QVBoxLayout *pageLayout = new QVBoxLayout(this);
 
     auto it = m_parameters[listNo].begin();
     auto itEnd = m_parameters[listNo].end();
@@ -181,10 +181,11 @@ AlgorithmParameterizer::buildListWidget(size_t listNo)
     QWidget *page = new QWidget;
     page->setLayout(pageLayout);
 
-    return page;
+    return page;*/
+    return nullptr;
 }
 
-std::vector<frontend::ParameterList>
+/*std::vector<ParameterList>
 AlgorithmParameterizer::getModifiedParameters()
 {
     for (size_t i = 0; i < m_parameters.size(); ++i)
@@ -200,7 +201,7 @@ AlgorithmParameterizer::getModifiedParameters()
     }
 
     return m_parameters;
-}
+}*/
 
 std::map<std::string, std::string>
 AlgorithmParameterizer::getModifiedXMLParameters()
@@ -213,11 +214,11 @@ AlgorithmParameterizer::getModifiedXMLParameters()
         {
             for (auto itr = m_parameters[i].begin(); itr != m_parameters[i].end(); ++itr)
             {
-                std::string pName = itr->name();
-                frontend::Parameter& tmp_param = m_widgets[i][pName]->updateXMLParameter();
+                /*std::string pName = itr->getName();
+                sd::libqt::SDRParameter *tmp_param = m_widgets[i][pName]->updateXMLParameter();
                 mapXml[pName] = valueGenerator.simpleXMLValue(tmp_param);
 
-                std::cout << "Param return " << mapXml[pName] << std::endl;
+                std::cout << "Param return " << mapXml[pName] << std::endl;*/
             }
         }
     }

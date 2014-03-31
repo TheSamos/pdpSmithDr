@@ -134,7 +134,7 @@ namespace sd {
       const AlgorithmInfo& output() const;
       //const ParameterList& expectedParameters() const;
       
-      const std::string getXmlString() const;
+      const std::string& getXMLString() const;
       sd::libqt::SDRParameter *getXMLParams(std::string name);
       
       //void initialize(const ParameterList&); // set expectedParameters
@@ -219,7 +219,7 @@ namespace sd {
       AlgorithmInfo m_output;
       //ParameterList m_expectedParameters;
 
-      std::string m_defaultXmlParam;
+      std::string m_defaultXmlParams;
       std::map<std::string, std::string> m_xml_parameters;
 
     };

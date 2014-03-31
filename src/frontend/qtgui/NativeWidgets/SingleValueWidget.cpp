@@ -38,9 +38,9 @@ namespace sd {
       namespace {
 
 	QWidget*
-	buildEditor(const frontend::Parameter& p, QWidget* parameterizer)
+	buildEditor(const sd::libqt::SDRParameter* p, QWidget* parameterizer)
 	{
-	  if (p.isBoolean()) {
+	  /*if (p.isBoolean()) {
 	    return buildBooleanEditor(p.getAs<bool>(), parameterizer);
 	  }
 	  else if (p.isInteger()) {
@@ -58,12 +58,12 @@ namespace sd {
 	  }
 
 	  assert(!"Should never get here!");
-	  return NULL;
+	  return NULL;*/
 	}
 
       }
 
-      SingleValueWidget::SingleValueWidget(frontend::Parameter& p)
+      SingleValueWidget::SingleValueWidget(sd::libqt::SDRParameter* p)
 	: QtParametrizationWidget(p)
       {
       }
@@ -78,14 +78,14 @@ namespace sd {
 	m_widget = buildEditor(m_p, parameterizer);
 
 	m_layout = new QHBoxLayout;
-	m_layout->addWidget(new QLabel(m_p.name().c_str()));
+	//m_layout->addWidget(new QLabel(m_p.name().c_str()));
 	m_layout->addWidget(m_widget);
       }
 
       void
       SingleValueWidget::updateParameter()
       {
-	if (m_p.isBoolean()) {
+	/*if (m_p.isBoolean()) {
 	  m_p = booleanReader(m_widget);
 	}
 	else if (m_p.isInteger()) {
@@ -98,13 +98,13 @@ namespace sd {
 	  m_p = stringReader(m_widget);
 	}
 	else
-	  assert(!"Should never get here!");
+	  assert(!"Should never get here!");*/
     }
 
-          frontend::Parameter&
+          sd::libqt::SDRParameter*
       SingleValueWidget::updateXMLParameter()
       {
-	if (m_p.isBoolean()) {
+	/*if (m_p.isBoolean()) {
 	  m_p = booleanReader(m_widget);
 	  return m_p;
 	}
@@ -121,7 +121,7 @@ namespace sd {
 	  return m_p;
 	}
 	else
-	  assert(!"Should never get here!");
+	  assert(!"Should never get here!");*/
     }
 
     }

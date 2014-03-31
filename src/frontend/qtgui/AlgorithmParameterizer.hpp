@@ -27,7 +27,9 @@ NO_QT_WARNINGS()
 RESTORE_CONTEXT()
 
 #include <frontend/lib/Algorithm.hpp>
-#include <frontend/lib/Parameter.hpp>
+//#include <frontend/lib/Parameter.hpp>
+#include <frontend/libqt/SDRParameter.hpp>
+
 #include <frontend/libqt/QtParametrizationWidget.hpp>
 
 #include <string>
@@ -48,15 +50,15 @@ namespace sd {
 
       public:
 
-      AlgorithmParameterizer(std::vector<frontend::ParameterList>& parameters,
-			     QWidget* parent);
+      /*AlgorithmParameterizer(std::vector<ParameterList>& parameters,
+			     QWidget* parent);*/
 
       AlgorithmParameterizer(const std::string& xml_parameters,
            QWidget* parent);
 
       ~AlgorithmParameterizer();
 
-      std::vector<frontend::ParameterList> getModifiedParameters();
+      //std::vector<frontend::ParameterList> getModifiedParameters();
       std::map<std::string, std::string> getModifiedXMLParameters();
 
     signals:
@@ -65,13 +67,13 @@ namespace sd {
 
     private:
 
-      void populateList(size_t listNo, const frontend::ParameterList& pl);
+      void populateList(size_t listNo, const sd::libqt::ParameterList pl);
 
       QWidget* buildListWidget(size_t listNo);
 
     private:
 
-      std::vector<frontend::ParameterList> m_parameters;
+      std::vector<sd::libqt::ParameterList> m_parameters;
 
       std::vector<WidgetList> m_widgets;
 

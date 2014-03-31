@@ -22,7 +22,8 @@
 #define SD_QTGUI_NATIVE_WIDGETS_MULTIPLE_VALUES_WIDGET_HPP
 
 #include <frontend/libqt/QtParametrizationWidget.hpp>
-#include <frontend/lib/Parameter.hpp>
+//#include <frontend/lib/Parameter.hpp>
+#include <frontend/libqt/SDRParameter.hpp>
 
 #include <SmithDRDefs.hpp>
 NO_QT_WARNINGS()
@@ -42,14 +43,14 @@ namespace sd {
 
       public:
 
-	MultipleValuesWidget(frontend::Parameter& p);
+	MultipleValuesWidget(sd::libqt::SDRParameter* p);
 
 	virtual ~MultipleValuesWidget();
 
 	virtual void build(QWidget* parameterizer);
 
 	virtual void updateParameter();
-  virtual frontend::Parameter& updateXMLParameter();
+  virtual sd::libqt::SDRParameter* updateXMLParameter();
 
       };
 

@@ -19,7 +19,7 @@
 */
 
 #include "UnmodifiableListWidget.hpp"
- 
+
 #include <SmithDRDefs.hpp>
 NO_QT_WARNINGS()
 #include <QLabel>
@@ -32,116 +32,139 @@ RESTORE_CONTEXT()
 
 // :GLITCH: Using default Qt objects, all integrals are int and all floating points are double --> may change Parameter type (such as long-->int or short-->int)
 
-namespace sd {
-  
-  namespace qtgui {
-    
-    namespace nativewidgets {
+namespace sd
+{
 
-      namespace {
+namespace qtgui
+{
 
-	QWidget*
-	buildSelector(const frontend::Parameter& p, QWidget* parameterizer) {
-	  QComboBox* comboBox = new QComboBox(parameterizer);
-	  int currentIndex = 0;
-	  int index = 0;
-	  if (p.isInteger()) {
-	    int value = p.getInteger();
-	    const std::vector<int>& values = p.getPredefinedValuesAsVectorOf<int>();
-	    for (auto it = values.begin(); it != values.end(); ++it, ++index) {
-	      comboBox->addItem(QString::number(*it));
-	      if (*it == value)
-		currentIndex = index;
-	    }
-	  }
-	  else if (p.isFloat()) {
-	    double value = p.getFloat();
-	    const std::vector<double>& values = p.getPredefinedValuesAsVectorOf<double>();
-	    for (auto it = values.begin(); it != values.end(); ++it, ++index) {
-	      comboBox->addItem(QString::number(*it));
-	      if (*it == value)
-		currentIndex = index;
-	    }
-	  }
-	  else if (p.isBoolean()) {
-	    // Does it make sense?
-	    bool value = p.getBoolean();
-	    const std::vector<bool>& values = p.getPredefinedValuesAsVectorOf<bool>();
-	    for (auto it = values.begin(); it != values.end(); ++it, ++index) {
-	      comboBox->addItem(QString::fromAscii(*it ? "true" : "false"));
-	      if (*it == value)
-		currentIndex = index;
-	    }
-	  }
-	  else if (p.isString()) {
-	    std::string value = p.getString();
-	    const std::vector<std::string>& values = p.getPredefinedValuesAsVectorOf<std::string>();
-	    for (auto it = values.begin(); it != values.end(); ++it, ++index) {
-	      comboBox->addItem(QString::fromStdString(*it));
-	      if (*it == value)
-		currentIndex = index;
-	    }
-	  }
-	  else
-	    assert(!"Should never get here!");
+namespace nativewidgets
+{
 
-	  comboBox->setCurrentIndex(currentIndex);
-	  QObject::connect(comboBox, SIGNAL(currentIndexChanged(QString)),
-			   parameterizer, SIGNAL(parametersChanged()));
-	  return comboBox;
-	}
+namespace
+{
 
-      }
-
-      UnmodifiableListWidget::UnmodifiableListWidget(frontend::Parameter& p)
-	: QtParametrizationWidget(p) {}
-
-      UnmodifiableListWidget::~UnmodifiableListWidget() {}
-
-      void
-      UnmodifiableListWidget::build(QWidget* parameterizer) {
-	m_widget = buildSelector(m_p, parameterizer);
-
-	m_layout = new QHBoxLayout;
-	m_layout->addWidget(new QLabel(m_p.name().c_str()));
-	m_layout->addWidget(m_widget);
-      }
-
-      namespace {
-
-	void
-	selectorReader(QWidget* w, frontend::Parameter& p) {
-	  QComboBox* comboBox = dynamic_cast<QComboBox*>(w);
-	  QString currentText = comboBox->currentText();
-	  if (p.isBoolean()) {
-	    p = (currentText.compare("true") == 0);
-	  }
-	  else if (p.isInteger()) {
-	    p = currentText.toInt();
-	  }
-	  else if (p.isFloat()) {
-	    p = currentText.toDouble();
-	  }
-	  else if (p.isString()) {
-	    p = currentText.toStdString();
-	  }
-	  else
-	    assert(!"Should never get here!");
-	}
-
-      }
-
-      void
-      UnmodifiableListWidget::updateParameter() {
-	selectorReader(m_widget, m_p);
-      }
-
-      frontend::Parameter& UnmodifiableListWidget::updateXMLParameter() {
-      	return m_p;
-      }
-
+QWidget *
+buildSelector(const sd::libqt::SDRParameter* p, QWidget *parameterizer)
+{
+    /*QComboBox *comboBox = new QComboBox(parameterizer);
+    int currentIndex = 0;
+    int index = 0;
+    if (p.isInteger())
+    {
+        int value = p.getInteger();
+        const std::vector<int> &values = p.getPredefinedValuesAsVectorOf<int>();
+        for (auto it = values.begin(); it != values.end(); ++it, ++index)
+        {
+            comboBox->addItem(QString::number(*it));
+            if (*it == value)
+                currentIndex = index;
+        }
     }
-    
-  }
-  
+    else if (p.isFloat())
+    {
+        double value = p.getFloat();
+        const std::vector<double> &values = p.getPredefinedValuesAsVectorOf<double>();
+        for (auto it = values.begin(); it != values.end(); ++it, ++index)
+        {
+            comboBox->addItem(QString::number(*it));
+            if (*it == value)
+                currentIndex = index;
+        }
+    }
+    else if (p.isBoolean())
+    {
+        // Does it make sense?
+        bool value = p.getBoolean();
+        const std::vector<bool> &values = p.getPredefinedValuesAsVectorOf<bool>();
+        for (auto it = values.begin(); it != values.end(); ++it, ++index)
+        {
+            comboBox->addItem(QString::fromAscii(*it ? "true" : "false"));
+            if (*it == value)
+                currentIndex = index;
+        }
+    }
+    else if (p.isString())
+    {
+        std::string value = p.getString();
+        const std::vector<std::string> &values = p.getPredefinedValuesAsVectorOf<std::string>();
+        for (auto it = values.begin(); it != values.end(); ++it, ++index)
+        {
+            comboBox->addItem(QString::fromStdString(*it));
+            if (*it == value)
+                currentIndex = index;
+        }
+    }
+    else
+        assert(!"Should never get here!");
+
+    comboBox->setCurrentIndex(currentIndex);
+    QObject::connect(comboBox, SIGNAL(currentIndexChanged(QString)),
+                     parameterizer, SIGNAL(parametersChanged()));
+    return comboBox;*/
+return nullptr;
+}
+
+}
+
+UnmodifiableListWidget::UnmodifiableListWidget(sd::libqt::SDRParameter*p)
+    : QtParametrizationWidget(p) {}
+
+UnmodifiableListWidget::~UnmodifiableListWidget() {}
+
+void
+UnmodifiableListWidget::build(QWidget *parameterizer)
+{
+    m_widget = buildSelector(m_p, parameterizer);
+
+    m_layout = new QHBoxLayout;
+    //m_layout->addWidget(new QLabel(m_p.name().c_str()));
+    m_layout->addWidget(m_widget);
+}
+
+namespace
+{
+
+void
+selectorReader(QWidget *w, sd::libqt::SDRParameter*p)
+{
+    /*QComboBox *comboBox = dynamic_cast<QComboBox *>(w);
+    QString currentText = comboBox->currentText();
+    if (p.isBoolean())
+    {
+        p = (currentText.compare("true") == 0);
+    }
+    else if (p.isInteger())
+    {
+        p = currentText.toInt();
+    }
+    else if (p.isFloat())
+    {
+        p = currentText.toDouble();
+    }
+    else if (p.isString())
+    {
+        p = currentText.toStdString();
+    }
+    else
+        assert(!"Should never get here!");*/
+}
+
+}
+
+void
+UnmodifiableListWidget::updateParameter()
+{
+    selectorReader(m_widget, m_p);
+}
+
+sd::libqt::SDRParameter* UnmodifiableListWidget::updateXMLParameter()
+{
+    return m_p;
+}
+
+}
+
+}
+
 }

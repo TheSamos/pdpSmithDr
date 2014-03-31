@@ -22,7 +22,7 @@
 #define SD_LIBQT_QT_PARAMETRIZATION_WIDGET_HPP
 
 #include <frontend/lib/ParametrizationWidget.hpp>
-#include <frontend/lib/Parameter.hpp>
+#include <frontend/libqt/SDRParameter.hpp>
 
 #include <SmithDRDefs.hpp>
 NO_QT_WARNINGS()
@@ -47,7 +47,7 @@ namespace sd {
 
     protected:
 
-      inline QtParametrizationWidget(frontend::Parameter& p);
+      inline QtParametrizationWidget(sd::libqt::SDRParameter* p);
 
     protected:
 

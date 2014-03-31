@@ -24,6 +24,8 @@
 #include <SmithDRDefs.hpp>
 #include <string>
 
+#include <frontend/libqt/SDRParameter.hpp>
+
 namespace sd {
   namespace frontend {
 
@@ -39,7 +41,7 @@ namespace sd {
 
       virtual const std::string& name() const = 0;
 
-      virtual ParametrizationWidget* createWidget(Parameter& p) const = 0;
+      virtual ParametrizationWidget* createWidget(sd::libqt::SDRParameter* p) const = 0;
 
     protected:
 

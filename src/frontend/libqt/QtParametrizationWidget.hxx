@@ -24,7 +24,7 @@
 namespace sd {
   namespace libqt {
 
-    QtParametrizationWidget::QtParametrizationWidget(frontend::Parameter& p)
+    QtParametrizationWidget::QtParametrizationWidget(sd::libqt::SDRParameter* p)
       : frontend::ParametrizationWidget(p),
 	m_widget(0), m_layout(0)
     {

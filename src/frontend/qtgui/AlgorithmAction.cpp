@@ -75,7 +75,7 @@ namespace sd {
 
 		// add a selector for each parameter (int, float...)
 		//m_dialog->addParameters(m_prototypes.first()->expectedParameters());
-		m_dialog->addParameters(m_prototypes.first()->getXmlString());
+		m_dialog->addParameters(m_prototypes.first()->getXMLString());
       }
     }
 

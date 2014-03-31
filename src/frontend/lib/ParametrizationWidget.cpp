@@ -24,7 +24,7 @@
 namespace sd {
   namespace frontend {
 
-    ParametrizationWidget::ParametrizationWidget(Parameter& p)
+    ParametrizationWidget::ParametrizationWidget(sd::libqt::SDRParameter* p)
       : m_p(p)
     {
     }

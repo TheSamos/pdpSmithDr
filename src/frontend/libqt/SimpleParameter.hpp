@@ -49,9 +49,9 @@ public:
 
     void setValue(T value) { m_value = value; } 
 
-  std::string dataTypeToString() { return typenames[sd::libqt::DataType(DataType_)]; }
+    std::string dataTypeToString() { return typenames[sd::libqt::DataType(DataType_)]; }
 
-  sd::libqt::DataType getDataType() { return (sd::libqt::DataType)DataType_; }
+    sd::libqt::DataType getDataType() { return (sd::libqt::DataType)DataType_; }
   
 
     void print()
@@ -68,8 +68,6 @@ private:
     T m_value;
 
 };
-
-
 
 typedef SimpleParameter<int, Int> SimpleIntParameter;
 typedef SimpleParameter<double, Double> SimpleDoubleParameter;

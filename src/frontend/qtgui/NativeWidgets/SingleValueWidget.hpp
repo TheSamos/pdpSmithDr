@@ -39,14 +39,14 @@ namespace sd {
 
       public:
 
-	SingleValueWidget(frontend::Parameter& p);
+	SingleValueWidget(sd::libqt::SDRParameter* p);
 
 	virtual ~SingleValueWidget();
 
 	virtual void build(QWidget* parameterizer);
 
 	virtual void updateParameter();
-  virtual frontend::Parameter& updateXMLParameter();
+  virtual sd::libqt::SDRParameter* updateXMLParameter();
 
 
       };

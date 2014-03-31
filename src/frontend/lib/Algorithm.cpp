@@ -73,7 +73,7 @@ Algorithm::Algorithm(const AlgorithmInfo &out,
                      std::string parameters)
     : /*m_parameters_0(), m_parameters_1(), m_parameters_2(), m_parameters_3(),
       m_parameters_4(), m_parameters_5(), m_parameters_6(), m_parameters_7(),
-      m_input(in), m_output(out), m_expectedParameters(),*/ m_defaultXmlParam(parameters), m_xml_parameters()
+      m_input(in), m_output(out), m_expectedParameters(),*/ m_defaultXmlParams(parameters), m_xml_parameters()
 {
 
 }
@@ -106,9 +106,9 @@ Algorithm::expectedParameters() const
 }*/
 
 
-const std::string Algorithm::getXmlString() const
+const std::string& Algorithm::getXMLString() const
 {
-    return m_defaultXmlParam;
+    return m_defaultXmlParams;
 }
 
 
@@ -125,7 +125,7 @@ void
 Algorithm::initialize(std::string defaultXmlParam)
 {
     //m_expectedParameters = ParameterList();
-    m_defaultXmlParam = defaultXmlParam;
+    m_defaultXmlParams = defaultXmlParam;
 }
 
 /*void

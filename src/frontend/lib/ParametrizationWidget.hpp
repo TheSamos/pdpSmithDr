@@ -21,10 +21,12 @@
 #ifndef SD_FRONTEND_PARAMETRIZATION_WIDGET_HPP
 #define SD_FRONTEND_PARAMETRIZATION_WIDGET_HPP
 
+#include <frontend/libqt/SDRParameter.hpp>
+  
 namespace sd {
   namespace frontend {
 
-    class Parameter;
+    //class Parameter;
 
     class ParametrizationWidget
     {
@@ -34,15 +36,15 @@ namespace sd {
       virtual ~ParametrizationWidget();
 
       virtual void updateParameter() = 0;
-      virtual frontend::Parameter& updateXMLParameter() { return m_p; }
+      virtual sd::libqt::SDRParameter* updateXMLParameter() { return m_p; }
 
     protected:
 
-      ParametrizationWidget(Parameter& p);
+      ParametrizationWidget(sd::libqt::SDRParameter* p);
 
     protected:
 
-      Parameter& m_p;
+      sd::libqt::SDRParameter* m_p;
 
     };
 
