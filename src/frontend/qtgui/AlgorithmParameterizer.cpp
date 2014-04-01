@@ -166,10 +166,10 @@ AlgorithmParameterizer::buildListWidget(size_t listNo)
     for ( ; it != itEnd; ++it)
     {
         sd::libqt::SDRParameter *p = *it;
-        std::string pName = p-> getName();
+        std::string pName = p->getName();
 
         std::cout << pName << std::endl;
-        //std::cout << "Minimum:" << p.getMin<int>() << std::endl;
+        std::cout << "pName:" << pName << std::endl;
 
         WidgetList &wList = m_widgets[listNo];
         if (wList[pName])
@@ -214,11 +214,14 @@ AlgorithmParameterizer::getModifiedXMLParameters()
         {
             for (auto itr = m_parameters[i].begin(); itr != m_parameters[i].end(); ++itr)
             {
-                /*std::string pName = itr->getName();
+                std::cout << "Updating" << std::endl;
+                std::string pName = (*itr)->getName();
+                std::cout << "Updating after name" << std::endl;
                 sd::libqt::SDRParameter *tmp_param = m_widgets[i][pName]->updateXMLParameter();
+                std::cout << "Updating after updateXMLParameter" << std::endl;
                 mapXml[pName] = valueGenerator.simpleXMLValue(tmp_param);
 
-                std::cout << "Param return " << mapXml[pName] << std::endl;*/
+                std::cout << "Param return " << mapXml[pName] << std::endl;
             }
         }
     }

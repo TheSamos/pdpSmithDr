@@ -11,13 +11,13 @@ namespace sd {
 
     enum Type {Simple, Complex, Undefined_};
 
-    enum DataType {Int=0, Double, Float, Undefined};
+    enum DataType {Int=0, Double, Float, String, Undefined};
 
 
 class SDRParameter
 {
     //enum Type {Simple, Complex, Undefined};
-    Type m_type; // = Undefined;
+     // = Undefined;
 
 public:
 
@@ -25,6 +25,7 @@ public:
         {Int, "int"},
         {Double, "double"},
         {Float, "float"},
+        {String, "string"}, 
         {Undefined, "undefined"}
     };
 
@@ -50,6 +51,8 @@ public:
 protected:
     std::string m_name;
     std::string m_widget_name;
+
+    Type m_type;
 };
 
 typedef std::vector<SDRParameter*> ParameterList;

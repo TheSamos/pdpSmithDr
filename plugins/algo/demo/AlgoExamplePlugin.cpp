@@ -57,6 +57,8 @@ public:
 #ifdef DEBUG
     std::cout << "Running " << m_name << std::endl;
 #endif
+    
+    std::cout << "Running " << m_name << std::endl;
     return true;
   }
 
@@ -75,7 +77,6 @@ registerPlugin() {
   sd::frontend::Parameter p("date", "");
   p.setWidgetFactoryName("QtWidgetExamplePlugin");
   parameters.push_back(p);*/
-  sd::libqt::SimpleStringParameter* spldble = new sd::libqt::SimpleStringParameter("hello");
 
   std::string parameters = "<parameters><parameter name=\"date\" type=\"string\"><default>31/04/2014</default><min>00/00/00</min><max>100/100/100</max><widget>QtWidgetExamplePlugin</widget></parameter></parameters>";
   sd::frontend::registerAlgorithm(new AlgoExamplePlugin<double>, parameters);

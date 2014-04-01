@@ -66,7 +66,8 @@ public:
     updateParameter()
     {
         // here insert code to modify m_p using m_widget "value"
-        //m_p = ((QDateTimeEdit *) m_widget)->date().toString().toStdString();
+        sd::libqt::SimpleStringParameter *date_p = static_cast<sd::libqt::SimpleStringParameter *>(m_p);
+        date_p->setValue(((QDateTimeEdit *) m_widget)->date().toString().toStdString());
         //std::cout << "Modified parameter:" << m_p << std::endl;
         std::cout << "Modified parameter:" << std::endl;
         m_p->print();

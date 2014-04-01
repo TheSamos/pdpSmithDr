@@ -23,14 +23,16 @@ class SimpleParameter : public SDRParameter
 
 public:
 
-
-    SimpleParameter(std::string name, T min, T max, T default_val,   std::string widgetName)
+    
+    SimpleParameter(std::string name, T min, T max, T default_val, std::string widgetName)
     {
         m_name = name;
         m_widget_name = widgetName;
         m_min = min;
         m_max = max;
         m_default_val = default_val;
+
+        m_type = sd::libqt::Simple;
     }
 
     SimpleParameter(std::string name, T min, T max, T default_val)
@@ -82,7 +84,7 @@ private:
 typedef SimpleParameter<int, Int> SimpleIntParameter;
 typedef SimpleParameter<double, Double> SimpleDoubleParameter;
 typedef SimpleParameter<float, Float> SimpleFloatParameter;
-typedef SimpleParameter<std::string, Float> SimpleStringParameter;
+typedef SimpleParameter<std::string, String> SimpleStringParameter;
 
 }
 }

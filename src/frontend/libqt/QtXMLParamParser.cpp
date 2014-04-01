@@ -109,7 +109,7 @@ SDRParameter* QtXMLParamParser::parseSimpleParameter(QDomElement param)
             widget = param_elem.text().toStdString();
 
 
-        SDRParameter* p = new SimpleStringParameter(name, default_val, min, max, widget );
+        SDRParameter* p = new SimpleStringParameter(name, default_val, min, max, widget);
         p->print();
         //frontend::Parameter p(name, default_val, min, max);
         return p;
