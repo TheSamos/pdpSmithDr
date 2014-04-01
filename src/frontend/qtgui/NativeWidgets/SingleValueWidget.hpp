@@ -22,7 +22,10 @@
 #define SD_QTGUI_NATIVE_WIDGETS_SINGLE_VALUE_WIDGET_HPP
 
 #include <frontend/libqt/QtParametrizationWidget.hpp>
-#include <frontend/lib/Parameter.hpp>
+//#include <frontend/lib/Parameter.hpp>
+
+
+
 
 #include <SmithDRDefs.hpp>
 NO_QT_WARNINGS()

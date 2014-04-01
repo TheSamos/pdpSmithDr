@@ -22,6 +22,8 @@
 #include "SingleValueAccessor.hpp"
 
 #include <SmithDRDefs.hpp>
+#include <frontend/libqt/SimpleParameter.hpp>
+
 NO_QT_WARNINGS()
 #include <QLabel>
 #include <QHBoxLayout>
@@ -38,27 +40,35 @@ namespace sd {
       namespace {
 
 	QWidget*
-	buildEditor(const sd::libqt::SDRParameter* p, QWidget* parameterizer)
+	buildEditor(sd::libqt::SDRParameter* p, QWidget* parameterizer)
 	{
-	  /*if (p.isBoolean()) {
+	  /*if (p.getDataType() == {
 	    return buildBooleanEditor(p.getAs<bool>(), parameterizer);
 	  }
-	  else if (p.isInteger()) {
-	    int mini = p.isMinDefined() ? p.getMin<int>() : -UNDEFINED_VAL;
-	    int maxi = p.isMaxDefined() ? p.getMax<int>() : +UNDEFINED_VAL;
-	    return buildIntegerEditor(p.getAs<int>(), mini, maxi, parameterizer);
+	  else*/
+	  std::string name = p->getName();
+	   if (p->getDataType() == sd::libqt::Int) {
+	  	sd::libqt::SimpleIntParameter* param = static_cast<sd::libqt::SimpleIntParameter*>(p);
+	    /*int mini = p.isMinDefined() ? p.getMin<int>() : -UNDEFINED_VAL;
+	    int maxi = p.isMaxDefined() ? p.getMax<int>() : +UNDEFINED_VAL;*/
+	    int mini = param->getMin();
+	    int maxi = param->getMax();
+	    return buildIntegerEditor(param->getDefault(), mini, maxi, parameterizer);
 	  }
-	  else if (p.isFloat()) {
-	    double mini = p.isMinDefined() ? p.getMin<double>() : -UNDEFINED_VAL;
-	    double maxi = p.isMaxDefined() ? p.getMax<double>() : +UNDEFINED_VAL;
-	    return buildFloatEditor(p.getAs<double>(), mini, maxi, parameterizer);
-	  }
+	  else if (p->getDataType() == sd::libqt::Float) {
+	  	sd::libqt::SimpleFloatParameter* param = static_cast<sd::libqt::SimpleFloatParameter*>(p);
+	    /*double mini = p.isMinDefined() ? p.getMin<double>() : -UNDEFINED_VAL;
+	    double maxi = p.isMaxDefined() ? p.getMax<double>() : +UNDEFINED_VAL;*/
+	    float mini = param->getMin();
+	    float maxi = param->getMax();
+	    return buildFloatEditor(param->getDefault(), mini, maxi, parameterizer);
+	  }/*
 	  else if (p.isString()) {
 	    return buildStringEditor(p.getAs<std::string>(), parameterizer);
-	  }
+	  }*/
 
 	  assert(!"Should never get here!");
-	  return NULL;*/
+	  return NULL;
 	}
 
       }

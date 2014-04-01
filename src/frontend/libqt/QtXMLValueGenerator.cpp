@@ -1,6 +1,6 @@
 #include "QtXMLValueGenerator.hpp"
 #include "SimpleParameter.hpp"
-#include <frontend/libqt/SimpleParameter.hpp>
+//#include <frontend/libqt/SimpleParameter.hpp>
 
 namespace sd {
   

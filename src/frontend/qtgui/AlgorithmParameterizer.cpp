@@ -99,6 +99,7 @@ buildEditor(sd::libqt::SDRParameter *p, QWidget *parameterizer)
     else
         assert(!"Should never get here!");*/
 
+    widget = new nativewidgets::SingleValueWidget(p);
     assert(widget != NULL);
     widget->build(parameterizer);
     return widget;

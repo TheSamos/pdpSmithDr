@@ -3,6 +3,7 @@ add_subdirectory(lib)
 add_subdirectory(libqt)
 add_subdirectory(qtgui)
 
+
 # When frontend is ready to be built as a lib+gui, uncomment the two above alines and remove all the following lines.
 
 # set(_smithdr "SmithDR")

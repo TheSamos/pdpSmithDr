@@ -1,5 +1,5 @@
-#ifndef PARAMETER_HPP
-#define PARAMETER_HPP
+#ifndef SDRPARAMETER_HPP
+#define SDRPARAMETER_HPP
 
 #include <string>
 #include <vector>
@@ -60,5 +60,5 @@ typedef std::vector<SDRParameter*> ParameterList;
 }
 }
 
-#endif // PARAMETER_HPP
+#endif // SDRPARAMETER_HPP
 

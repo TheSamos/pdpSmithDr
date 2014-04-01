@@ -6,8 +6,8 @@ SET(CMAKE_DEPENDS_LANGUAGES
 # Preprocessor definitions for this target.
 SET(CMAKE_TARGET_DEFINITIONS
   "HAVE_ZLIB"
-  "PLUGIN_DIR=\"/home/sam/cours/PDP/git_final/pdpSmithDr/build/lib\""
-  "SD_ICON_PATH=\"/home/sam/cours/PDP/git_final/pdpSmithDr/resources/icons\""
+  "PLUGIN_DIR=\"/autofs/netapp/account/cremi/ysenel/tmp/smithDrFork/pdpSmithDr/build/lib\""
+  "SD_ICON_PATH=\"/autofs/netapp/account/cremi/ysenel/tmp/smithDrFork/pdpSmithDr/resources/icons\""
   )
 
 # Targets to which this target links.
