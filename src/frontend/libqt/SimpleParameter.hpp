@@ -48,6 +48,8 @@ public:
         m_value = value;
     }
 
+    SimpleParameter() {}
+
     T getMin() { return m_min; }
     T getMax() { return m_max; }
     T getDefault() { return m_default_val; }
@@ -60,6 +62,22 @@ public:
     void setDefault(T default_val) { m_default_val = default_val; }
 
     void setValue(T value) { m_value = value; } 
+
+    void setAttributFromName(std::string name, T value)
+    {
+        if(name == "max")
+            m_max = value;
+        else if(name == "min")
+            m_min = value;
+        else if(name == "default")
+            m_default_val = value;
+        else if(name == "name")
+            m_name = value;
+        else if(name == "value")
+            m_value = value;
+        else
+            std::cout << "Unknown attribut name" << std::endl;
+    }
 
     std::string dataTypeToString() { return typenames[sd::libqt::DataType(DataType_)]; }
 

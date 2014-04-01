@@ -9,9 +9,8 @@ namespace sd {
   
   namespace libqt {
 
-    enum Type {Simple, Complex, Undefined_};
-
-    enum DataType {Int=0, Double, Float, String, Undefined};
+enum Type {Simple, Complex, Undefined_};
+enum DataType {Int=0, Double, Float, String, Undefined};
 
 
 class SDRParameter
@@ -45,6 +44,8 @@ public:
     virtual void print() = 0;
 
     virtual DataType getDataType() = 0;
+
+    //virtual void setAttributFromName(std::string name, T value) = 0;
 
     
 

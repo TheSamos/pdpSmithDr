@@ -24,7 +24,8 @@
 #include <frontend/lib/LoaderManager.hpp>
 
 #include <frontend/lib/AlgorithmInfo.hpp>
-#include <frontend/lib/Parameter.hpp>
+//#include <frontend/lib/Parameter.hpp>
+#include <frontend/libqt/SDRParameter.hpp>
 #include <PluginDefs.hpp>
 #include <Types.hpp>
 #include <utils/sdTypeUtils.hpp>
@@ -103,7 +104,7 @@ public:
     {
         /*std::string filename = "";
         sd::frontend::Parameter p;
-        this->getParams("filename", p);
+        this->getXMLParams("filename", p);
         if (p.isString())
           filename = p.getAs<std::string>();
         if (filename.empty())
@@ -128,7 +129,7 @@ private:
 template<typename T> const std::string ImageLoaderQtPlugin<T>::m_name = "ImageLoaderQtPlugin";
 template<typename T> const sd::frontend::AlgorithmInfo ImageLoaderQtPlugin<T>::m_output = sd::frontend::make_info(sd::core::ObjectDescription::ImageView(sd::core::DataType_<T>()));
 //template<typename T> const sd::frontend::ParameterList ImageLoaderQtPlugin<T>::m_parameters = sd::frontend::make_parameter_list("filename", "");
-template<typename T> const std::string ImageLoaderQtPlugin<T>::m_parameters = "filename";
+template<typename T> const std::string ImageLoaderQtPlugin<T>::m_parameters = "<parameters><parameter name=\"filename\" type=\"string\"><default></default><min></min><max></max><widget>ImageLoaderQtPlugin</widget></parameter></parameters>";
 
 // Register our plugin
 extern "C"

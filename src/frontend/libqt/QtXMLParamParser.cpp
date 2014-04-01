@@ -1,33 +1,35 @@
 #include "QtXMLParamParser.hpp"
-#include "SimpleParameter.hpp"
+//#include "SimpleParameter.hpp"
 //#include <frontend/libqt/SimpleParameter.hpp>
 //#include <frontend/lib/Parameter.hpp>
 
 #include <iostream>
-namespace sd {
-  
-  namespace libqt {
+namespace sd
+{
+
+namespace libqt
+{
 
 QtXMLParamParser::QtXMLParamParser(std::string xml_string) : m_xmlstring(xml_string)
 {
     initialize();
 }
 
-QtXMLParamParser::~QtXMLParamParser(){}
+QtXMLParamParser::~QtXMLParamParser() {}
 
 /*QtXMLParamParser::QtXMLParamParser(QFile input_file)
 {
 
 }*/
 
-int QtXMLParamParser::initialize() 
+int QtXMLParamParser::initialize()
 {
     //loadXSD();
 
     bool hasParsed = m_qdoc.setContent(QString::fromStdString(m_xmlstring), namespace_processing,
-                      m_error_msg, m_err_line, m_err_column);
+                                       m_error_msg, m_err_line, m_err_column);
 
-    if(!hasParsed)
+    if (!hasParsed)
     {
         std::cout << "Parser failed line " << m_err_line << ", column " << m_err_column << " : ";
         std::cout << m_error_msg->toStdString() << std::endl;
@@ -56,18 +58,18 @@ bool QtXMLParamParser::loadXSD()
 sd::libqt::ParameterList QtXMLParamParser::getParameterList()
 {
     sd::libqt::ParameterList parameters;
-  
+
     QDomElement param_root = m_qdoc.firstChildElement("parameters");
     QDomElement param = param_root.firstChildElement("parameter");
 
-    for(; !param.isNull(); param = param.nextSiblingElement("parameter"))
+    for (; !param.isNull(); param = param.nextSiblingElement("parameter"))
     {
         QDomAttr param_type = param.attributeNode("type");
 
         //if(param_type.value() == "simple")
-            //parameters.push_back(parseComplexParameter(param));
+        //parameters.push_back(parseComplexParameter(param));
         //else
-            parameters.push_back(parseSimpleParameter(param));
+        parameters.push_back(parseSimpleParameter(param));
 
     }
 
@@ -76,9 +78,34 @@ sd::libqt::ParameterList QtXMLParamParser::getParameterList()
 
 }
 
-void QtXMLParamParser::getParameter(std::string name){}
+void QtXMLParamParser::getParameter(std::string name) {}
 
-SDRParameter* QtXMLParamParser::parseSimpleParameter(QDomElement param)
+void QtXMLParamParser::paramFromMap(std::map<std::string, QDomElement>& elements, std::string type)
+{
+    //SimpleParameter *p = static_cast<SimpleParameter *>(param);
+
+    /*if(param.getDataType() == Int)
+        SimpleIntParameter *p = static_cast<SimpleIntParameter *>(param);    */    
+
+    QDomElement element;
+    for (unsigned int i = 0; i < m_element_names.size(); i++)
+    {
+        element = elements[m_element_names[i]];
+        if (!element.isNull())
+        {  
+            if(p->getDataType() == String)
+                p->setAttributFromName(m_element_names[i], element.text().toStdString());
+            else if(p->getDataType() == Int)
+                p->setAttributFromName(m_element_names[i], element.text().toInt());
+            else
+                std::cout << "Error" << std::endl;
+
+        }
+
+    }
+}
+
+SDRParameter *QtXMLParamParser::parseSimpleParameter(QDomElement param)
 {
     QDomAttr param_type = param.attributeNode("type");
     std::string name = param.attributeNode("name").value().toStdString();
@@ -86,52 +113,64 @@ SDRParameter* QtXMLParamParser::parseSimpleParameter(QDomElement param)
 
     QDomElement param_elem = param.firstChildElement();
 
-    int min, max, default_val;
-    sd::libqt::SDRParameter* pfake = new SimpleIntParameter(6);
-    //frontend::Parameter pfake("");
+    std::map<std::string, QDomElement> elements;
+
+    QDomElement element;
+    for (unsigned int i = 0; i < element_names.size(); i++)
+    {
+        element = param_elem.nextSiblingElement(QString::fromStdString(element_names[i]));
+        elements[element_names[i]] = element;
+    }
+
+    std::cout << "Printing simple parameter !!" << std::endl;
+    SDRParameter *param;
+
 
     if(type == "string")
     {
-        std::cout << "String param" << std::endl;
-
-        std::string default_val = param_elem.text().toStdString();
-        param_elem = param_elem.nextSiblingElement();
-
-        std::string min = param_elem.text().toStdString();
-        param_elem = param_elem.nextSiblingElement();
-
-        std::string max = param_elem.text().toStdString();
-
-        param_elem = param_elem.nextSiblingElement();
-        std::string widget = "";
-
-        if(!param_elem.isNull())
-            widget = param_elem.text().toStdString();
-
-
-        SDRParameter* p = new SimpleStringParameter(name, default_val, min, max, widget);
+        //param = new SimpleStringParameter();
+        fillSimpleParamFromMap(elements, p);
         p->print();
-        //frontend::Parameter p(name, default_val, min, max);
-        return p;
     }
-
-    if(type == "int")
+    else if (type == "int")
     {
-        default_val = param_elem.text().toInt();
-        param_elem = param_elem.nextSiblingElement();
-
-        min = param_elem.text().toInt();
-        param_elem = param_elem.nextSiblingElement();
-
-        max = param_elem.text().toInt();
-        SDRParameter* p = new SimpleIntParameter(name,default_val, min, max);
-        //frontend::Parameter p(name, default_val, min, max);
-        return p;
-        
+        //param = new SimpleIntParameter();
+        fillSimpleParamFromMap(elements, p);
+        p->print();
+    }
+    else if (type == "double")
+    {
+        //param = new SimpleDoubleParameter();
+        fillSimpleParamFromMap(elements, p);
+        p->print();
+    }
+    else
+    {
+        std::cout << "Error: QtXMLParamParser: parseSimpleParameter, unknown type while parsing XML" << std::endl;
     }
 
+    
+    
 
-    if(type == "double" || type == "float")
+    return ;
+
+    /* if(type == "int")
+     {
+         default_val = param_elem.text().toInt();
+         param_elem = param_elem.nextSiblingElement();
+
+         min = param_elem.text().toInt();
+         param_elem = param_elem.nextSiblingElement();
+
+         max = param_elem.text().toInt();
+         SDRParameter* p = new SimpleIntParameter(name,default_val, min, max);
+         //frontend::Parameter p(name, default_val, min, max);
+         return p;
+
+     }*/
+
+
+    /*if(type == "double" || type == "float")
     {
         double default_val = param_elem.text().toDouble();
         param_elem = param_elem.nextSiblingElement();
@@ -144,25 +183,25 @@ SDRParameter* QtXMLParamParser::parseSimpleParameter(QDomElement param)
         SDRParameter* p = new SimpleFloatParameter(name,default_val, min, max);
         //frontend::Parameter p(name, default_val, min, max);
         return p;
-        
-    }
 
-
-        /*if(type == "bool")
-    {
-        std::string boolean = param_elem.text().toStdString();
-        if(boolean == "true"){
-            frontend::Parameter p(name, true);
-            return p;
-        }
-
-        else {
-            frontend::Parameter p(name, false);
-            return p;
-        }
     }*/
 
-    return pfake;
+
+    /*if(type == "bool")
+    {
+    std::string boolean = param_elem.text().toStdString();
+    if(boolean == "true"){
+        frontend::Parameter p(name, true);
+        return p;
+    }
+
+    else {
+        frontend::Parameter p(name, false);
+        return p;
+    }
+    }*/
+
+    //return pfake;
 }
 
 

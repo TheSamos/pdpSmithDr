@@ -3,8 +3,11 @@
 
 #include <QtXml>
 #include <QXmlSchema>
+#include <map>
+#include <vector>
 //#include <frontend/lib/Parameter.hpp>
 #include "SDRParameter.hpp"
+#include "SimpleParameter.hpp"
 
 
 namespace sd {
@@ -36,8 +39,12 @@ private:
     int initialize();
     bool loadXSD();
 
+    void fillSimpleParamFromMap(std::map<std::string, QDomElement>& elements, SDRParameter *param);
+
 
 private:
+    std::vector<std::string> m_element_names = {"min", "max", "default", "widget"};
+
     std::string m_xmlstring;
     QDomDocument m_qdoc;
     QXmlSchema m_schema;
