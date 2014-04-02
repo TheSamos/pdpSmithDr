@@ -1,23 +1,19 @@
 Performing C++ SOURCE FILE Test HAVE_CPP0X_SHARED_PTR failed with the following output:
-Change Dir: /autofs/netapp/account/cremi/sbassett/cours/PDP/final/pdpSmithDr/build/CMakeFiles/CMakeTmp
+Change Dir: /home/sam/cours/PDP/git_final/pdpSmithDr/build/CMakeFiles/CMakeTmp
 
-Run Build Command:/usr/bin/make "cmTryCompileExec3406440158/fast"
-/usr/bin/make -f CMakeFiles/cmTryCompileExec3406440158.dir/build.make CMakeFiles/cmTryCompileExec3406440158.dir/build
-make[1]: entrant dans le répertoire « /autofs/netapp/account/cremi/sbassett/cours/PDP/final/pdpSmithDr/build/CMakeFiles/CMakeTmp »
-/usr/bin/cmake -E cmake_progress_report /autofs/netapp/account/cremi/sbassett/cours/PDP/final/pdpSmithDr/build/CMakeFiles/CMakeTmp/CMakeFiles 1
-Building CXX object CMakeFiles/cmTryCompileExec3406440158.dir/src.cxx.o
-/usr/bin/c++    -DHAVE_CPP0X_SHARED_PTR   -o CMakeFiles/cmTryCompileExec3406440158.dir/src.cxx.o -c /autofs/netapp/account/cremi/sbassett/cours/PDP/final/pdpSmithDr/build/CMakeFiles/CMakeTmp/src.cxx
-/autofs/netapp/account/cremi/sbassett/cours/PDP/final/pdpSmithDr/build/CMakeFiles/CMakeTmp/src.cxx: In function ‘int main()’:
-/autofs/netapp/account/cremi/sbassett/cours/PDP/final/pdpSmithDr/build/CMakeFiles/CMakeTmp/src.cxx:4:13: error: ‘shared_ptr’ is not a member of ‘std’
-             std::shared_ptr<int> ptr;
-             ^
-/autofs/netapp/account/cremi/sbassett/cours/PDP/final/pdpSmithDr/build/CMakeFiles/CMakeTmp/src.cxx:4:29: error: expected primary-expression before ‘int’
-             std::shared_ptr<int> ptr;
-                             ^
-/autofs/netapp/account/cremi/sbassett/cours/PDP/final/pdpSmithDr/build/CMakeFiles/CMakeTmp/src.cxx:4:29: error: expected ‘;’ before ‘int’
-make[1]: *** [CMakeFiles/cmTryCompileExec3406440158.dir/src.cxx.o] Erreur 1
-make[1]: quittant le répertoire « /autofs/netapp/account/cremi/sbassett/cours/PDP/final/pdpSmithDr/build/CMakeFiles/CMakeTmp »
-make: *** [cmTryCompileExec3406440158/fast] Erreur 2
+Run Build Command:/usr/bin/gmake "cmTryCompileExec3568974529/fast"
+/usr/bin/gmake -f CMakeFiles/cmTryCompileExec3568974529.dir/build.make CMakeFiles/cmTryCompileExec3568974529.dir/build
+gmake[1]: Entering directory `/home/sam/cours/PDP/git_final/pdpSmithDr/build/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/sam/cours/PDP/git_final/pdpSmithDr/build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building CXX object CMakeFiles/cmTryCompileExec3568974529.dir/src.cxx.o
+/usr/bin/c++    -DHAVE_CPP0X_SHARED_PTR   -o CMakeFiles/cmTryCompileExec3568974529.dir/src.cxx.o -c /home/sam/cours/PDP/git_final/pdpSmithDr/build/CMakeFiles/CMakeTmp/src.cxx
+/home/sam/cours/PDP/git_final/pdpSmithDr/build/CMakeFiles/CMakeTmp/src.cxx: In function ‘int main()’:
+/home/sam/cours/PDP/git_final/pdpSmithDr/build/CMakeFiles/CMakeTmp/src.cxx:4:13: error: ‘shared_ptr’ is not a member of ‘std’
+/home/sam/cours/PDP/git_final/pdpSmithDr/build/CMakeFiles/CMakeTmp/src.cxx:4:29: error: expected primary-expression before ‘int’
+/home/sam/cours/PDP/git_final/pdpSmithDr/build/CMakeFiles/CMakeTmp/src.cxx:4:29: error: expected ‘;’ before ‘int’
+gmake[1]: Leaving directory `/home/sam/cours/PDP/git_final/pdpSmithDr/build/CMakeFiles/CMakeTmp'
+gmake[1]: *** [CMakeFiles/cmTryCompileExec3568974529.dir/src.cxx.o] Error 1
+gmake: *** [cmTryCompileExec3568974529/fast] Error 2
 
 Source file was:
 
@@ -27,24 +23,68 @@ Source file was:
             return 0;
         }
     
+Performing C++ SOURCE FILE Test HAVE_BOOST_TR1_SHARED_PTR failed with the following output:
+Change Dir: /home/sam/cours/PDP/git_final/pdpSmithDr/build/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/gmake "cmTryCompileExec579026497/fast"
+/usr/bin/gmake -f CMakeFiles/cmTryCompileExec579026497.dir/build.make CMakeFiles/cmTryCompileExec579026497.dir/build
+gmake[1]: Entering directory `/home/sam/cours/PDP/git_final/pdpSmithDr/build/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/sam/cours/PDP/git_final/pdpSmithDr/build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building CXX object CMakeFiles/cmTryCompileExec579026497.dir/src.cxx.o
+/usr/bin/c++    -DHAVE_BOOST_TR1_SHARED_PTR   -o CMakeFiles/cmTryCompileExec579026497.dir/src.cxx.o -c /home/sam/cours/PDP/git_final/pdpSmithDr/build/CMakeFiles/CMakeTmp/src.cxx
+/home/sam/cours/PDP/git_final/pdpSmithDr/build/CMakeFiles/CMakeTmp/src.cxx:2:40: fatal error: boost/tr1/memory.hpp: No such file or directory
+compilation terminated.
+gmake[1]: *** [CMakeFiles/cmTryCompileExec579026497.dir/src.cxx.o] Error 1
+gmake[1]: Leaving directory `/home/sam/cours/PDP/git_final/pdpSmithDr/build/CMakeFiles/CMakeTmp'
+gmake: *** [cmTryCompileExec579026497/fast] Error 2
+
+Source file was:
+
+        #include <boost/tr1/memory.hpp>
+        int main() {
+            std::tr1::shared_ptr<int> ptr;
+            return 0;
+        }
+    
+Performing C++ SOURCE FILE Test HAVE_BOOST_SHARED_PTR failed with the following output:
+Change Dir: /home/sam/cours/PDP/git_final/pdpSmithDr/build/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/gmake "cmTryCompileExec24968677/fast"
+/usr/bin/gmake -f CMakeFiles/cmTryCompileExec24968677.dir/build.make CMakeFiles/cmTryCompileExec24968677.dir/build
+gmake[1]: Entering directory `/home/sam/cours/PDP/git_final/pdpSmithDr/build/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/sam/cours/PDP/git_final/pdpSmithDr/build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building CXX object CMakeFiles/cmTryCompileExec24968677.dir/src.cxx.o
+/usr/bin/c++    -DHAVE_BOOST_SHARED_PTR   -o CMakeFiles/cmTryCompileExec24968677.dir/src.cxx.o -c /home/sam/cours/PDP/git_final/pdpSmithDr/build/CMakeFiles/CMakeTmp/src.cxx
+/home/sam/cours/PDP/git_final/pdpSmithDr/build/CMakeFiles/CMakeTmp/src.cxx:2:40: fatal error: boost/shared_ptr.hpp: No such file or directory
+compilation terminated.
+gmake[1]: *** [CMakeFiles/cmTryCompileExec24968677.dir/src.cxx.o] Error 1
+gmake[1]: Leaving directory `/home/sam/cours/PDP/git_final/pdpSmithDr/build/CMakeFiles/CMakeTmp'
+gmake: *** [cmTryCompileExec24968677/fast] Error 2
+
+Source file was:
+
+        #include <boost/shared_ptr.hpp>
+        int main() {
+            boost::shared_ptr<int> ptr;
+            return 0;
+        }
+    
 Determining if the Q_WS_WIN exist failed with the following output:
-Change Dir: /autofs/netapp/account/cremi/sbassett/cours/PDP/final/pdpSmithDr/build/CMakeFiles/CMakeTmp
+Change Dir: /home/sam/cours/PDP/git_final/pdpSmithDr/build/CMakeFiles/CMakeTmp
 
-Run Build Command:/usr/bin/make "cmTryCompileExec2750198056/fast"
-/usr/bin/make -f CMakeFiles/cmTryCompileExec2750198056.dir/build.make CMakeFiles/cmTryCompileExec2750198056.dir/build
-make[1]: entrant dans le répertoire « /autofs/netapp/account/cremi/sbassett/cours/PDP/final/pdpSmithDr/build/CMakeFiles/CMakeTmp »
-/usr/bin/cmake -E cmake_progress_report /autofs/netapp/account/cremi/sbassett/cours/PDP/final/pdpSmithDr/build/CMakeFiles/CMakeTmp/CMakeFiles 1
-Building CXX object CMakeFiles/cmTryCompileExec2750198056.dir/CheckSymbolExists.cxx.o
-/usr/bin/c++    -I/usr/include/qt4    -o CMakeFiles/cmTryCompileExec2750198056.dir/CheckSymbolExists.cxx.o -c /autofs/netapp/account/cremi/sbassett/cours/PDP/final/pdpSmithDr/build/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx
-/autofs/netapp/account/cremi/sbassett/cours/PDP/final/pdpSmithDr/build/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx: In function ‘int main(int, char**)’:
-/autofs/netapp/account/cremi/sbassett/cours/PDP/final/pdpSmithDr/build/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx:8:19: error: ‘Q_WS_WIN’ was not declared in this scope
-   return ((int*)(&Q_WS_WIN))[argc];
-                   ^
-make[1]: *** [CMakeFiles/cmTryCompileExec2750198056.dir/CheckSymbolExists.cxx.o] Erreur 1
-make[1]: quittant le répertoire « /autofs/netapp/account/cremi/sbassett/cours/PDP/final/pdpSmithDr/build/CMakeFiles/CMakeTmp »
-make: *** [cmTryCompileExec2750198056/fast] Erreur 2
+Run Build Command:/usr/bin/gmake "cmTryCompileExec2634212568/fast"
+/usr/bin/gmake -f CMakeFiles/cmTryCompileExec2634212568.dir/build.make CMakeFiles/cmTryCompileExec2634212568.dir/build
+gmake[1]: Entering directory `/home/sam/cours/PDP/git_final/pdpSmithDr/build/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/sam/cours/PDP/git_final/pdpSmithDr/build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building CXX object CMakeFiles/cmTryCompileExec2634212568.dir/CheckSymbolExists.cxx.o
+/usr/bin/c++    -I/usr/local/Trolltech/Qt-4.8.5/include    -o CMakeFiles/cmTryCompileExec2634212568.dir/CheckSymbolExists.cxx.o -c /home/sam/cours/PDP/git_final/pdpSmithDr/build/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx
+/home/sam/cours/PDP/git_final/pdpSmithDr/build/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx: In function ‘int main(int, char**)’:
+/home/sam/cours/PDP/git_final/pdpSmithDr/build/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx:8:19: error: ‘Q_WS_WIN’ was not declared in this scope
+gmake[1]: *** [CMakeFiles/cmTryCompileExec2634212568.dir/CheckSymbolExists.cxx.o] Error 1
+gmake[1]: Leaving directory `/home/sam/cours/PDP/git_final/pdpSmithDr/build/CMakeFiles/CMakeTmp'
+gmake: *** [cmTryCompileExec2634212568/fast] Error 2
 
-File /autofs/netapp/account/cremi/sbassett/cours/PDP/final/pdpSmithDr/build/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx:
+File /home/sam/cours/PDP/git_final/pdpSmithDr/build/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx:
 /* */
 #include <QtCore/qglobal.h>
 
@@ -60,23 +100,21 @@ int main(int argc, char** argv)
 }
 
 Determining if the Q_WS_QWS exist failed with the following output:
-Change Dir: /autofs/netapp/account/cremi/sbassett/cours/PDP/final/pdpSmithDr/build/CMakeFiles/CMakeTmp
+Change Dir: /home/sam/cours/PDP/git_final/pdpSmithDr/build/CMakeFiles/CMakeTmp
 
-Run Build Command:/usr/bin/make "cmTryCompileExec4128278458/fast"
-/usr/bin/make -f CMakeFiles/cmTryCompileExec4128278458.dir/build.make CMakeFiles/cmTryCompileExec4128278458.dir/build
-make[1]: entrant dans le répertoire « /autofs/netapp/account/cremi/sbassett/cours/PDP/final/pdpSmithDr/build/CMakeFiles/CMakeTmp »
-/usr/bin/cmake -E cmake_progress_report /autofs/netapp/account/cremi/sbassett/cours/PDP/final/pdpSmithDr/build/CMakeFiles/CMakeTmp/CMakeFiles 1
-Building CXX object CMakeFiles/cmTryCompileExec4128278458.dir/CheckSymbolExists.cxx.o
-/usr/bin/c++    -I/usr/include/qt4    -o CMakeFiles/cmTryCompileExec4128278458.dir/CheckSymbolExists.cxx.o -c /autofs/netapp/account/cremi/sbassett/cours/PDP/final/pdpSmithDr/build/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx
-/autofs/netapp/account/cremi/sbassett/cours/PDP/final/pdpSmithDr/build/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx: In function ‘int main(int, char**)’:
-/autofs/netapp/account/cremi/sbassett/cours/PDP/final/pdpSmithDr/build/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx:8:19: error: ‘Q_WS_QWS’ was not declared in this scope
-   return ((int*)(&Q_WS_QWS))[argc];
-                   ^
-make[1]: quittant le répertoire « /autofs/netapp/account/cremi/sbassett/cours/PDP/final/pdpSmithDr/build/CMakeFiles/CMakeTmp »
-make[1]: *** [CMakeFiles/cmTryCompileExec4128278458.dir/CheckSymbolExists.cxx.o] Erreur 1
-make: *** [cmTryCompileExec4128278458/fast] Erreur 2
+Run Build Command:/usr/bin/gmake "cmTryCompileExec1008221829/fast"
+/usr/bin/gmake -f CMakeFiles/cmTryCompileExec1008221829.dir/build.make CMakeFiles/cmTryCompileExec1008221829.dir/build
+gmake[1]: Entering directory `/home/sam/cours/PDP/git_final/pdpSmithDr/build/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/sam/cours/PDP/git_final/pdpSmithDr/build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building CXX object CMakeFiles/cmTryCompileExec1008221829.dir/CheckSymbolExists.cxx.o
+/usr/bin/c++    -I/usr/local/Trolltech/Qt-4.8.5/include    -o CMakeFiles/cmTryCompileExec1008221829.dir/CheckSymbolExists.cxx.o -c /home/sam/cours/PDP/git_final/pdpSmithDr/build/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx
+/home/sam/cours/PDP/git_final/pdpSmithDr/build/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx: In function ‘int main(int, char**)’:
+/home/sam/cours/PDP/git_final/pdpSmithDr/build/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx:8:19: error: ‘Q_WS_QWS’ was not declared in this scope
+gmake[1]: *** [CMakeFiles/cmTryCompileExec1008221829.dir/CheckSymbolExists.cxx.o] Error 1
+gmake[1]: Leaving directory `/home/sam/cours/PDP/git_final/pdpSmithDr/build/CMakeFiles/CMakeTmp'
+gmake: *** [cmTryCompileExec1008221829/fast] Error 2
 
-File /autofs/netapp/account/cremi/sbassett/cours/PDP/final/pdpSmithDr/build/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx:
+File /home/sam/cours/PDP/git_final/pdpSmithDr/build/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx:
 /* */
 #include <QtCore/qglobal.h>
 
@@ -92,23 +130,21 @@ int main(int argc, char** argv)
 }
 
 Determining if the Q_WS_MAC exist failed with the following output:
-Change Dir: /autofs/netapp/account/cremi/sbassett/cours/PDP/final/pdpSmithDr/build/CMakeFiles/CMakeTmp
+Change Dir: /home/sam/cours/PDP/git_final/pdpSmithDr/build/CMakeFiles/CMakeTmp
 
-Run Build Command:/usr/bin/make "cmTryCompileExec3472066618/fast"
-/usr/bin/make -f CMakeFiles/cmTryCompileExec3472066618.dir/build.make CMakeFiles/cmTryCompileExec3472066618.dir/build
-make[1]: entrant dans le répertoire « /autofs/netapp/account/cremi/sbassett/cours/PDP/final/pdpSmithDr/build/CMakeFiles/CMakeTmp »
-/usr/bin/cmake -E cmake_progress_report /autofs/netapp/account/cremi/sbassett/cours/PDP/final/pdpSmithDr/build/CMakeFiles/CMakeTmp/CMakeFiles 1
-Building CXX object CMakeFiles/cmTryCompileExec3472066618.dir/CheckSymbolExists.cxx.o
-/usr/bin/c++    -I/usr/include/qt4    -o CMakeFiles/cmTryCompileExec3472066618.dir/CheckSymbolExists.cxx.o -c /autofs/netapp/account/cremi/sbassett/cours/PDP/final/pdpSmithDr/build/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx
-/autofs/netapp/account/cremi/sbassett/cours/PDP/final/pdpSmithDr/build/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx: In function ‘int main(int, char**)’:
-/autofs/netapp/account/cremi/sbassett/cours/PDP/final/pdpSmithDr/build/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx:8:19: error: ‘Q_WS_MAC’ was not declared in this scope
-   return ((int*)(&Q_WS_MAC))[argc];
-                   ^
-make[1]: *** [CMakeFiles/cmTryCompileExec3472066618.dir/CheckSymbolExists.cxx.o] Erreur 1
-make[1]: quittant le répertoire « /autofs/netapp/account/cremi/sbassett/cours/PDP/final/pdpSmithDr/build/CMakeFiles/CMakeTmp »
-make: *** [cmTryCompileExec3472066618/fast] Erreur 2
+Run Build Command:/usr/bin/gmake "cmTryCompileExec2418652808/fast"
+/usr/bin/gmake -f CMakeFiles/cmTryCompileExec2418652808.dir/build.make CMakeFiles/cmTryCompileExec2418652808.dir/build
+gmake[1]: Entering directory `/home/sam/cours/PDP/git_final/pdpSmithDr/build/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/sam/cours/PDP/git_final/pdpSmithDr/build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building CXX object CMakeFiles/cmTryCompileExec2418652808.dir/CheckSymbolExists.cxx.o
+/usr/bin/c++    -I/usr/local/Trolltech/Qt-4.8.5/include    -o CMakeFiles/cmTryCompileExec2418652808.dir/CheckSymbolExists.cxx.o -c /home/sam/cours/PDP/git_final/pdpSmithDr/build/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx
+/home/sam/cours/PDP/git_final/pdpSmithDr/build/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx: In function ‘int main(int, char**)’:
+/home/sam/cours/PDP/git_final/pdpSmithDr/build/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx:8:19: error: ‘Q_WS_MAC’ was not declared in this scope
+gmake[1]: *** [CMakeFiles/cmTryCompileExec2418652808.dir/CheckSymbolExists.cxx.o] Error 1
+gmake[1]: Leaving directory `/home/sam/cours/PDP/git_final/pdpSmithDr/build/CMakeFiles/CMakeTmp'
+gmake: *** [cmTryCompileExec2418652808/fast] Error 2
 
-File /autofs/netapp/account/cremi/sbassett/cours/PDP/final/pdpSmithDr/build/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx:
+File /home/sam/cours/PDP/git_final/pdpSmithDr/build/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx:
 /* */
 #include <QtCore/qglobal.h>
 

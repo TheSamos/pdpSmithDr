@@ -129,7 +129,7 @@ private:
 template<typename T> const std::string ImageLoaderQtPlugin<T>::m_name = "ImageLoaderQtPlugin";
 template<typename T> const sd::frontend::AlgorithmInfo ImageLoaderQtPlugin<T>::m_output = sd::frontend::make_info(sd::core::ObjectDescription::ImageView(sd::core::DataType_<T>()));
 //template<typename T> const sd::frontend::ParameterList ImageLoaderQtPlugin<T>::m_parameters = sd::frontend::make_parameter_list("filename", "");
-template<typename T> const std::string ImageLoaderQtPlugin<T>::m_parameters = "<parameters><parameter name=\"filename\" type=\"string\"><default></default><min></min><max></max><widget>ImageLoaderQtPlugin</widget></parameter></parameters>";
+template<typename T> const std::string ImageLoaderQtPlugin<T>::m_parameters = "<parameters><parameter name=\"filename\" type=\"string\"><widget>ImageLoaderQtPlugin</widget></parameter></parameters>";
 
 // Register our plugin
 extern "C"
