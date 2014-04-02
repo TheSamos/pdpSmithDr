@@ -101,6 +101,7 @@ SDRParameter *QtXMLParamParser::parseSimpleParameter(QDomElement param)
             std::cout << "Just added: " << m_element_names[i] << ", " << elements[m_element_names[i]].toStdString() << std::endl;
         }
     }
+    
     element = param.namedItem(QString::fromStdString("widget")).toElement();
     std::string widget = element.text().toStdString();
 

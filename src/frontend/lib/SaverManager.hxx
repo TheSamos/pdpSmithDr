@@ -22,50 +22,68 @@
 #define SD_FRONTEND_SAVER_MANAGER_HXX
 
 #include <utils/sdFileUtils.hpp>
+#include <map>
 
-namespace sd {
-  namespace frontend {
+namespace sd
+{
+namespace frontend
+{
 
-    inline SaverManager&
-    SaverManager::instance()
+inline SaverManager &
+SaverManager::instance()
+{
+    static SaverManager inst;
+    return inst;
+}
+
+template<class Input>
+bool
+saveFile(Input *input, const std::string &filename, bool binary)
+{
+    Query<Saver> proto = SaverManager::instance().availablePrototypes();
+    if (proto.empty())
+        return false;
+
+    // get prototypes according to file extension filters
+    auto predicate = [&filename](Saver * obj) -> bool
     {
-      static SaverManager inst;
-      return inst;
+        const std::string &fileExt = obj->fileExtensionFilters();
+        return !sd::utils::fileMatchesFilters(filename, fileExt);
+    };
+
+    proto.withoutPredicate(predicate);
+    if (proto.empty())
+        return false;
+
+    std::string bin_str = (binary == true) ? "true" : "false";
+    std::string bin_str_xml = "<parameter name=\"binary\" type=\"bool\"><value>" + bin_str + "</value></parameter>";
+
+    std::string filename_xml =  "<parameter name=\"filename\" type=\"string\"><value>" + filename + "</value></parameter>";
+
+    std::map<std::string, std::string> map = {{"filename", filename_xml}, {"binary", bin_str_xml}};
+
+    // try to call load function of each remaining prototype
+    for (auto it = proto.begin(); it != proto.end(); ++it)
+    {
+        // use transient connection
+        (*it)->setInputNodes(input);
+        std::cout << "saverManager: Before set Param" << std::endl;
+
+        //(*it)->setParams("filename", filename, "binary", binary);
+        (*it)->setXMLParams(map);
+
+        std::cout << "saverManager: After set Param" << std::endl;
+
+        bool successful = (*it)->save();
+        (*it)->disconnectInputNodes(input);
+        if (successful)
+            return true;
     }
 
-    template<class Input>
-    bool
-    saveFile(Input* input, const std::string& filename, bool binary)
-    {
-      Query<Saver> proto = SaverManager::instance().availablePrototypes();
-      if (proto.empty())
-	return false;
+    return false;
+}
 
-      // get prototypes according to file extension filters
-      auto predicate = [&filename](Saver* obj) -> bool {
-	const std::string& fileExt = obj->fileExtensionFilters();
-	return !sd::utils::fileMatchesFilters(filename, fileExt);
-      };
-
-      proto.withoutPredicate(predicate);
-      if (proto.empty())
-	return false;
-
-      // try to call load function of each remaining prototype
-      for (auto it = proto.begin(); it != proto.end(); ++it) {
-	// use transient connection
-	(*it)->setInputNodes(input);
-	//(*it)->setParams("filename", filename, "binary", binary);
-	bool successful = (*it)->save();
-	(*it)->disconnectInputNodes(input);
-	if (successful)
-	  return true;
-      }
-
-      return false;
-    }
-
-  }
+}
 }
 
 #endif /*!SD_FRONTEND_SAVER_MANAGER_HXX */

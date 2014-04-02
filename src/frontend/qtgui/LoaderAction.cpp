@@ -68,6 +68,9 @@ LoaderAction::configure()
 
         // add a selector for each parameter (int, float...)
         //m_dialog->addParameters(m_prototypes.first()->expectedParameters());
+
+        std::cout << "Loder parameters: " << m_prototypes.first()->getXMLString() << std::endl;
+        m_dialog->addParameters(m_prototypes.first()->getXMLString());
     }
 }
 
@@ -101,6 +104,7 @@ LoaderAction::parametersChanged()
 void
 LoaderAction::runLoader()
 {
+    std::cout << "IN run Loader !!" << std::endl;
     if (m_name.empty())
         return;
 
@@ -122,6 +126,7 @@ LoaderAction::runLoader()
         return;
     }
 
+    std::cout << "IN run Loader !!" << std::endl;
     if (m_firstCall)
         configure();
 
@@ -145,7 +150,7 @@ LoaderAction::process(bool preview)
         return;
 
     // get modifications made by the user
-    //auto parameters = m_dialog->getModifiedParameters();
+    auto parameters = m_dialog->getModifiedXMLParameters();
 
     frontend::Loader *loader = m_prototypes.create();
     if (!loader)
@@ -153,7 +158,7 @@ LoaderAction::process(bool preview)
         configurationError(tr("Unable to find loader"));
         return;
     }
-    //((frontend::Algorithm *) loader)->setParams(parameters);
+    ((frontend::Algorithm *) loader)->setXMLParams(parameters);
     bool successful = loader->run();
     if (!successful)
     {

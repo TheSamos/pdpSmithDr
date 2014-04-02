@@ -219,6 +219,7 @@ AlgorithmParameterizer::getModifiedXMLParameters()
                 std::string pName = (*itr)->getName();
                 std::cout << "Updating after name" << std::endl;
                 sd::libqt::SDRParameter *tmp_param = m_widgets[i][pName]->updateXMLParameter();
+                tmp_param->getName();
                 std::cout << "Updating after updateXMLParameter" << std::endl;
                 mapXml[pName] = valueGenerator.simpleXMLValue(tmp_param);
 

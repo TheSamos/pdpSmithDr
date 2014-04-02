@@ -25,7 +25,10 @@
 #include <frontend/lib/SaverManager.hpp>
 
 #include <frontend/lib/AlgorithmInfo.hpp>
-#include <frontend/lib/Parameter.hpp>
+
+#include <frontend/libqt/SDRParameter.hpp>
+#include <frontend/libqt/SimpleParameter.hpp>
+
 #include <PluginDefs.hpp>
 
 #include "ImageSaverQt.hpp"
@@ -110,19 +113,19 @@ public:
             return false;
         }
 
-        /*std::string filename = "";
-        sd::frontend::Parameter p;
-        this->getParams("filename", p);
-        if (p.isString())
-          filename = p.getAs<std::string>();
+        sd::libqt::SimpleStringParameter *p = 
+        static_cast<sd::libqt::SimpleStringParameter *>(this->getXMLParams("filename"));
+
+        std::string filename = p->getValue();
+
         if (filename.empty())
-          return false;*/
+          return false;
 
-        /*sd::io::ImageSaverQt<T> imageSaver;
-        bool successful = imageSaver.saveImage(image, filename);*/
+        sd::io::ImageSaverQt<T> imageSaver;
+        bool successful = imageSaver.saveImage(image, filename);
 
-        //return successful;
-        return true;
+        return successful;
+        
     }
 
 private:
@@ -135,14 +138,19 @@ template<typename T> const std::string ImageSaverQtPlugin<T>::m_name = "ImageSav
 template<typename T> const sd::frontend::AlgorithmInfo ImageSaverQtPlugin<T>::m_input = sd::frontend::make_info(sd::core::ObjectDescription::ImageView(sd::core::DataType_<T>(),
         2,
         sd::core::ObjectDescription::ANY_CARD)
+
+//<widget>ImageLoaderQtPlugin</widget>
                                                                                                                );
 //template<typename T> const sd::frontend::ParameterList ImageSaverQtPlugin<T>::m_parameters = sd::frontend::make_parameter_list("filename", "");
-template<typename T> const std::string ImageSaverQtPlugin<T>::m_parameters = "filename";
+//template<typename T> const std::string ImageSaverQtPlugin<T>::m_parameters = "filename";
+template<typename T> const std::string ImageSaverQtPlugin<T>::m_parameters = "<parameters><parameter name=\"filename\" type=\"string\"></parameter></parameters>";
+
 // Register our plugin
 extern "C"
 SMITHDR_PLUGIN_API
 void
 registerPlugin()
 {
+    //std::string parameters = "<parameters><parameter name=\"filename\" type=\"string\"></parameter></parameters>";
     sd::frontend::registerSaver(new ImageSaverQtPlugin<sd::UINT8>);
 }

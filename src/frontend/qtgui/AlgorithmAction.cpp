@@ -80,7 +80,9 @@ AlgorithmAction::configure()
 
         // add a selector for each parameter (int, float...)
         //m_dialog->addParameters(m_prototypes.first()->expectedParameters());
+        std::cout << "Loader parameters: " << m_prototypes.first()->getXMLString() << std::endl;
         m_dialog->addParameters(m_prototypes.first()->getXMLString());
+
     }
 }
 

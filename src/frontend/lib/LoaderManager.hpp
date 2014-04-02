@@ -49,7 +49,7 @@ namespace sd {
 
     void registerLoader(Loader* obj);
     //void registerLoader(Loader* obj, const ParameterList& parameters);
-    void registerLoader(Loader* obj, const std::string& parameters);
+    void registerLoader(Loader* obj, const std::string parameters);
 
     template<typename... Outputs>
     bool loadFile(const std::string& filename, Outputs& ...outputs);

@@ -25,6 +25,7 @@
 #include <frontend/lib/ParametrizationWidgetFactoryManager.hpp>
 
 #include <frontend/libqt/SDRParameter.hpp>
+#include <frontend/libqt/SimpleParameter.hpp>
 #include <PluginDefs.hpp>
 
 #include <SmithDRDefs.hpp>
@@ -50,6 +51,7 @@ namespace qt
 OpenFileDialog::OpenFileDialog(const QString &filename, QWidget *p)
     : QWidget(), m_button(0), m_parameterizer(p)
 {
+    std::cout << "filename when constructing OpenFileDialog: " << filename.toStdString() << std::endl;
     m_button = new QPushButton(filename);
     QObject::connect(m_button, SIGNAL(clicked()), this, SLOT(selectFile()));
 
@@ -94,20 +96,27 @@ public:
     virtual void
     build(QWidget *parameterizer)
     {
-        //std::string filename = m_p.getString();
-        /*m_widget = new sd::plugins::widgets::qt::OpenFileDialog(filename.c_str(), parameterizer);
+        std::cout << "filename when constructing OpenFileDialog: -------- " << std::endl;   
+        sd::libqt::SimpleStringParameter *p = static_cast<sd::libqt::SimpleStringParameter *>(m_p);
+        std::string filename = p->getValue();
+        m_widget = new sd::plugins::widgets::qt::OpenFileDialog(filename.c_str(), parameterizer);
         QObject::connect(m_widget, SIGNAL(update()), parameterizer, SIGNAL(parametersChanged()));
 
         // build the widget layout
         m_layout = new QHBoxLayout;
-        m_layout->addWidget(new QLabel(m_p.name().c_str()));
-        m_layout->addWidget(m_widget);*/
+        m_layout->addWidget(new QLabel(m_p->getName().c_str()));
+        m_layout->addWidget(m_widget);
     }
 
     virtual void
     updateParameter()
     {
-        //m_p = ((sd::plugins::widgets::qt::OpenFileDialog *) m_widget)->getFilename();
+      std::string filename = ((sd::plugins::widgets::qt::OpenFileDialog *) m_widget)->getFilename();
+      sd::libqt::SimpleStringParameter *p = static_cast<sd::libqt::SimpleStringParameter *>(m_p);
+      p->setValue(filename);
+
+      std::cout << "filename: " << filename << std::endl;
+
     }
 
 };

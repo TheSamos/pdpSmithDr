@@ -43,9 +43,10 @@ sd::frontend::registerLoader(Loader* obj, const ParameterList& parameters)
 }*/
 
 void
-sd::frontend::registerLoader(Loader* obj, const std::string& parameters)
+sd::frontend::registerLoader(Loader* obj, const std::string parameters)
 {
   obj->initialize(parameters);
+  std::cout << "param: " << parameters << std::endl;
   LoaderManager::instance().addObject(obj);
 }
 

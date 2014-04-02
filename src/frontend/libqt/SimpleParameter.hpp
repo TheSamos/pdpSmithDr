@@ -103,6 +103,8 @@ typedef SimpleParameter<int, Int> SimpleIntParameter;
 typedef SimpleParameter<double, Double> SimpleDoubleParameter;
 typedef SimpleParameter<float, Float> SimpleFloatParameter;
 typedef SimpleParameter<std::string, String> SimpleStringParameter;
+typedef SimpleParameter<bool, Bool> SimpleBoolParameter;
+
 
 }
 }

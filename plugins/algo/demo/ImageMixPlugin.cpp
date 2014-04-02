@@ -25,7 +25,7 @@
 #include <frontend/lib/AlgorithmManager.hpp>
 #include <frontend/lib/AlgorithmInfo.hpp>
 #include <frontend/libqt/SDRParameter.hpp>
-//#include <frontend/libqt/SimpleParameter.hpp>
+#include <frontend/libqt/SimpleParameter.hpp>
 #include <PluginDefs.hpp>
 #include <Types.hpp>
 
@@ -112,7 +112,11 @@ public:
     /*sd::frontend::Parameter p = this->getXMLParams("alpha");
     int alphai = p.getInteger();
     float alpha = (float)alphai;*/
-    float alpha = 0.5;
+    //float alpha = 0.5;
+
+    sd::libqt::SimpleFloatParameter *alpha_p = 
+        static_cast<sd::libqt::SimpleFloatParameter *>(this->getXMLParams("alpha"));
+    float alpha = alpha_p->getValue();
 
     std::cout << "alpha = " << alpha << std::endl;
     //float alpha = 0.5;
@@ -156,10 +160,10 @@ registerPlugin()
   //sd::frontend::ParameterList parameters;
   //parameters.push_back(sd::frontend::Parameter("alpha", 0.5, 0., 1.));
 
-  std::string parameters = "<parameters><parameter name=\"alpha\" type=\"int\"> \
-                                  <min>2</min> \
-                                  <default>10</default> \
-                                  <max>20</max> \
+  std::string parameters = "<parameters><parameter name=\"alpha\" type=\"float\"> \
+                                  <min>2.0</min> \
+                                  <default>10.0</default> \
+                                  <max>20.0</max> \
                             </parameter></parameters>";
 
   sd::frontend::registerAlgorithm(new ImageMixPlugin<sd::UINT8>, parameters);

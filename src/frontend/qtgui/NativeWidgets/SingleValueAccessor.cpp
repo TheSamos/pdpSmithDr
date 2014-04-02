@@ -28,85 +28,88 @@ NO_QT_WARNINGS()
 #include <QLineEdit>
 RESTORE_CONTEXT()
 
-namespace sd {
-  namespace qtgui {
-    namespace nativewidgets {
+namespace sd
+{
+namespace qtgui
+{
+namespace nativewidgets
+{
 
-      QWidget*
-      buildBooleanEditor(bool b, QWidget* parameterizer)
-      {
-	QCheckBox* cb = new QCheckBox();
-	cb->setChecked(b);
-	QObject::connect(cb, SIGNAL(stateChanged(int)),
-			 parameterizer, SIGNAL(parametersChanged()));
-	return cb;
-      }
+QWidget *
+buildBooleanEditor(bool b, QWidget *parameterizer)
+{
+    QCheckBox *cb = new QCheckBox();
+    cb->setChecked(b);
+    QObject::connect(cb, SIGNAL(stateChanged(int)),
+                     parameterizer, SIGNAL(parametersChanged()));
+    return cb;
+}
 
-      QWidget*
-      buildIntegerEditor(int value, int mini, int maxi, QWidget* parameterizer)
-      {
-	QSpinBox* spinBox = new QSpinBox;
-	spinBox->setRange(mini, maxi);
-	spinBox->setValue(value);
-	if (mini == -UNDEFINED_VAL || maxi == +UNDEFINED_VAL)
-	  spinBox->setSingleStep(1);
-	else
-	  spinBox->setSingleStep(std::max((maxi-mini)/20, 1));
-	QObject::connect(spinBox, SIGNAL(valueChanged(int)),
-			 parameterizer, SIGNAL(parametersChanged()));
-	return spinBox;
-      }
+QWidget *
+buildIntegerEditor(int value, int mini, int maxi, QWidget *parameterizer)
+{
+    QSpinBox *spinBox = new QSpinBox;
+    spinBox->setRange(mini, maxi);
+    spinBox->setValue(value);
+    if (mini == -UNDEFINED_VAL || maxi == +UNDEFINED_VAL)
+        spinBox->setSingleStep(1);
+    else
+        spinBox->setSingleStep(std::max((maxi - mini) / 20, 1));
+    QObject::connect(spinBox, SIGNAL(valueChanged(int)),
+                     parameterizer, SIGNAL(parametersChanged()));
+    return spinBox;
+}
 
-      QWidget*
-      buildFloatEditor(double value, double mini, double maxi, QWidget* parameterizer)
-      {
-	QDoubleSpinBox* spinBox = new QDoubleSpinBox;
-	spinBox->setRange(mini, maxi);
-	spinBox->setValue(value);
-	if (mini == -UNDEFINED_VAL || maxi == +UNDEFINED_VAL)
-	  spinBox->setSingleStep(1);
-	else
-	  spinBox->setSingleStep(std::max((maxi-mini)/20, 0.01));
-	spinBox->setDecimals(10);
-	QObject::connect(spinBox, SIGNAL(valueChanged(double)),
-			 parameterizer, SIGNAL(parametersChanged()));
-	return spinBox;
-      }
+QWidget *
+buildFloatEditor(double value, double mini, double maxi, QWidget *parameterizer)
+{
+    QDoubleSpinBox *spinBox = new QDoubleSpinBox;
+    spinBox->setRange(mini, maxi);
+    spinBox->setValue(value);
+    if (mini == -UNDEFINED_VAL || maxi == +UNDEFINED_VAL)
+        spinBox->setSingleStep(1);
+    else
+        spinBox->setSingleStep(std::max((maxi - mini) / 20, 0.01));
+    spinBox->setDecimals(10);
+    QObject::connect(spinBox, SIGNAL(valueChanged(double)),
+                     parameterizer, SIGNAL(parametersChanged()));
+    return spinBox;
+}
 
-      QWidget*
-      buildStringEditor(const std::string& value, QWidget* parameterizer)
-      {
-	QLineEdit* edit = new QLineEdit;
-	edit->setText(QString::fromStdString(value));
-	QObject::connect(edit, SIGNAL(textChanged(const QString&)),
-			 parameterizer, SIGNAL(parametersChanged()));
-	return edit;
-      }
+QWidget *
+buildStringEditor(const std::string &value, QWidget *parameterizer)
+{
+    QLineEdit *edit = new QLineEdit;
+    edit->setText(QString::fromStdString(value));
+    QObject::connect(edit, SIGNAL(textChanged(const QString &)),
+                     parameterizer, SIGNAL(parametersChanged()));
+    return edit;
+}
 
-      bool
-      booleanReader(QWidget* w)
-      {
-	return dynamic_cast<QCheckBox*>(w)->isChecked();
-      }
+bool
+booleanReader(QWidget *w)
+{
+    return dynamic_cast<QCheckBox *>(w)->isChecked();
+}
 
-      int
-      integralReader(QWidget* w)
-      {
-	return dynamic_cast<QSpinBox*>(w)->value();
-      }
+int
+integralReader(QWidget *w)
+{
+    return dynamic_cast<QSpinBox *>(w)->value();
+}
 
-      double
-      floatingPointReader(QWidget* w)
-      {
-	return dynamic_cast<QDoubleSpinBox*>(w)->value();
-      }
+double
+floatingPointReader(QWidget *w)
+{
+    return dynamic_cast<QDoubleSpinBox *>(w)->value();
+}
 
-      std::string
-      stringReader(QWidget* w)
-      {
-	return dynamic_cast<QLineEdit*>(w)->text().toStdString();
-      }
+std::string
+stringReader(QWidget *w)
+{
+    return dynamic_cast<QLineEdit *>(w)->text().toStdString();
+}
 
-    }
-  }
+}
+}
 }

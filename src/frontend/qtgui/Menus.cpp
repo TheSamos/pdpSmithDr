@@ -50,899 +50,945 @@ RESTORE_CONTEXT()
 #include "ViewConfigDialog.hpp"
 #include "GraphicViewsManager.hpp"
 
-namespace sd {
-  namespace qtgui {
+namespace sd
+{
+namespace qtgui
+{
 
-    Menus::Menus()
-      : m_fileMenu(0),
-	m_algorithmSelectionMenu(0),
-	m_blocksMenu(0),
-	m_graphicViewsMenu(0),
-	m_viewsMenu(0)
+Menus::Menus()
+    : m_fileMenu(0),
+      m_algorithmSelectionMenu(0),
+      m_blocksMenu(0),
+      m_graphicViewsMenu(0),
+      m_viewsMenu(0)
+{
+    populate();
+
+    viewCreationCallbackHandle = frontend::ViewManager::instance().registerViewCreationCallback(std::bind(&Menus::viewCreationCallback, this, std::placeholders::_1));
+    viewDeletionCallbackHandle = frontend::ViewManager::instance().registerViewDeletionCallback(std::bind(&Menus::viewDeletionCallback, this, std::placeholders::_1));
+    viewModificationCallbackHandle = frontend::ViewManager::instance().registerViewModificationCallback(std::bind(&Menus::viewModificationCallback, this, std::placeholders::_1));
+
+    connect(this, SIGNAL(enqueueViewCreationSlot(frontend::ViewInfo *)),
+            this, SLOT(viewCreationSlot(frontend::ViewInfo *)),
+            Qt::QueuedConnection);
+    connect(this, SIGNAL(enqueueViewDeletionSlot(frontend::ViewInfo *)),
+            this, SLOT(viewDeletionSlot(frontend::ViewInfo *)),
+            Qt::QueuedConnection);
+}
+
+Menus::~Menus()
+{
+    // Avoid unwanted behavior dependant on static object initialization order
+    frontend::ViewManager::instance().unregisterViewCreationCallback(viewCreationCallbackHandle);
+    frontend::ViewManager::instance().unregisterViewDeletionCallback(viewDeletionCallbackHandle);
+    frontend::ViewManager::instance().unregisterViewModificationCallback(viewModificationCallbackHandle);
+}
+
+void
+Menus::quit()
+{
+    MainWindow::instance().close();
+}
+
+QMenu *
+Menus::getFileMenu()
+{
+    if (!m_fileMenu)
     {
-      populate();
+        m_fileMenu = new QMenu(QObject::tr("&File"));
+        m_fileMenu->addAction(QObject::tr("Open file"), this, SLOT(openFile()), QKeySequence::Open);
 
-      viewCreationCallbackHandle = frontend::ViewManager::instance().registerViewCreationCallback(std::bind(&Menus::viewCreationCallback, this, std::placeholders::_1));
-      viewDeletionCallbackHandle = frontend::ViewManager::instance().registerViewDeletionCallback(std::bind(&Menus::viewDeletionCallback, this, std::placeholders::_1));
-      viewModificationCallbackHandle = frontend::ViewManager::instance().registerViewModificationCallback(std::bind(&Menus::viewModificationCallback, this, std::placeholders::_1));
+        m_fileMenu->addAction(QObject::tr("Open raw image"), this, SLOT(openRawImage()));
 
-      connect(this, SIGNAL(enqueueViewCreationSlot(frontend::ViewInfo*)),
-	      this, SLOT(viewCreationSlot(frontend::ViewInfo*)),
-	      Qt::QueuedConnection);
-      connect(this, SIGNAL(enqueueViewDeletionSlot(frontend::ViewInfo*)),
-	      this, SLOT(viewDeletionSlot(frontend::ViewInfo*)),
-	      Qt::QueuedConnection);
+        //m_fileMenu->addAction(QObject::tr("Save as"), this, SLOT(saveView()), QKeySequence::Save); // which view?
+
+        m_fileMenu->addSeparator();
+        m_fileMenu->addAction(QObject::tr("Quit"), this, SLOT(quit()), QKeySequence::Quit);
+
+    }
+    return m_fileMenu;
+}
+
+QMenu *
+Menus::getAlgorithmSelectionMenu()
+{
+    if (!m_algorithmSelectionMenu)
+        m_algorithmSelectionMenu = new QMenu(QObject::tr("&Algorithm"));
+    return m_algorithmSelectionMenu;
+}
+
+QMenu *
+Menus::getAlgorithmSelectionSubMenu(std::string path)
+{
+    QMenu *currentMenu = getAlgorithmSelectionMenu();
+
+    std::string subMenuPath = "";
+    size_t pos = path.find_first_of(':');
+    while (pos != std::string::npos)
+    {
+        std::string subMenuName = path.substr(0, pos);
+        if (!subMenuPath.empty())
+            subMenuPath += ":";
+        subMenuPath += subMenuName;
+        path = path.substr(pos + 1);
+        pos = path.find_first_of(':');
+
+        SubMenus::iterator it = m_algorithmSubMenus.find(subMenuPath);
+        if (it == m_algorithmSubMenus.end())
+        {
+            QMenu *subMenu = new QMenu(QObject::tr(subMenuName.c_str()), currentMenu);
+            currentMenu->addMenu(subMenu);
+            m_algorithmSubMenus[subMenuPath] = subMenu;
+        }
+        currentMenu = m_algorithmSubMenus[subMenuPath];
     }
 
-    Menus::~Menus()
+    return currentMenu;
+}
+
+QMenu *
+Menus::getViewsMenu()
+{
+    if (!m_viewsMenu)
+        m_viewsMenu = new QMenu(QObject::tr("&Views"));
+    return m_viewsMenu;
+}
+
+QMenu *
+Menus::getViewMenu(const frontend::ViewInfo *view)
+{
+    auto it = m_viewToMenu.find(const_cast<frontend::ViewInfo *>(view));
+    assert(it != m_viewToMenu.end() && "unable to find view");
+    return it->second;
+}
+
+void
+Menus::buildLayoutButton(const QString &name,
+                         graphicView::BlockWidget::LayoutType type,
+                         QGridLayout *layout, int row, int col,
+                         bool pressed)
+{
+    QToolButton *button = new QToolButton;
+    m_layoutButtonGroup->addButton(button);
+    button->setCheckable(true);
+    button->setStyleSheet("border: 0; background: none;");
+    button->setIcon(QIcon(QString(SD_ICON_PATH) + "/layouts/" + name + ".svg"));
+    layout->addWidget(button, row, col);
+    button->setProperty("SdLayoutType", type);
+    if (pressed)
     {
-      // Avoid unwanted behavior dependant on static object initialization order
-      frontend::ViewManager::instance().unregisterViewCreationCallback(viewCreationCallbackHandle);
-      frontend::ViewManager::instance().unregisterViewDeletionCallback(viewDeletionCallbackHandle);
-      frontend::ViewManager::instance().unregisterViewModificationCallback(viewModificationCallbackHandle);
+        button->setStyleSheet("border: 0; background: lightgray;");
+        button->setChecked(pressed);
+    }
+    connect(button, SIGNAL(released()), this, SLOT(layoutActivated()));
+    connect(button, SIGNAL(toggled(bool)), this, SLOT(layoutChanged(bool)));
+}
+
+void
+Menus::changeLayout(graphicView::BlockWidget::LayoutType type)
+{
+    QList<QAbstractButton *> buttons = m_layoutButtonGroup->buttons();
+    for (auto it = buttons.begin(); it != buttons.end(); ++it)
+    {
+        graphicView::BlockWidget::LayoutType buttonType = (graphicView::BlockWidget::LayoutType) (*it)->property("SdLayoutType").toInt();
+        if (buttonType == type)
+        {
+            (*it)->toggle();
+        }
+    }
+}
+
+void
+Menus::layoutChanged(bool)
+{
+    QToolButton *button = ((QToolButton *) sender());
+    if (button->isChecked())
+        button->setStyleSheet("border: 0; background: lightgray;");
+    else
+        button->setStyleSheet("border: 0; background: none;");
+}
+
+void
+Menus::layoutActivated()
+{
+    QToolButton *button = ((QToolButton *) sender());
+    graphicView::BlockWidget::LayoutType type = (graphicView::BlockWidget::LayoutType) button->property("SdLayoutType").toInt();
+    auto block = MainWindow::instance().currentBlock();
+    if (block)
+        block->changeLayout(type);
+}
+
+QMenu *
+Menus::getBlocksMenu()
+{
+    if (!m_blocksMenu)
+    {
+        m_blocksMenu = new QMenu(QObject::tr("&Block"));
+        QMenu *configMenu = new QMenu("Select layout");
+        m_blocksMenu->addMenu(configMenu);
+
+        m_layoutButtonGroup = new QButtonGroup;
+
+        QGridLayout *layout = new QGridLayout;
+        layout->setSpacing(2);
+        buildLayoutButton("layout1", graphicView::BlockWidget::BlockLayout1, layout, 0, 0);
+        buildLayoutButton("layout4", graphicView::BlockWidget::BlockLayout4, layout, 0, 1, true);
+        buildLayoutButton("layout2h", graphicView::BlockWidget::BlockLayout2h, layout, 0, 2);
+        buildLayoutButton("layout2v", graphicView::BlockWidget::BlockLayout2v, layout, 0, 3);
+        buildLayoutButton("layout1-2h", graphicView::BlockWidget::BlockLayout1_2h, layout, 1, 0);
+        buildLayoutButton("layout2-1h", graphicView::BlockWidget::BlockLayout2_1h, layout, 1, 1);
+        buildLayoutButton("layout1-2v", graphicView::BlockWidget::BlockLayout1_2v, layout, 1, 2);
+        buildLayoutButton("layout2-1v", graphicView::BlockWidget::BlockLayout2_1v, layout, 1, 3);
+
+        QWidget *w = new QWidget;
+        w->setLayout(layout);
+        QWidgetAction *qwa = new QWidgetAction(configMenu);
+        qwa->setDefaultWidget(w);
+        configMenu->addAction(qwa);
+
+        m_blocksMenu->addSeparator();
+
+        QAction *sshotAction = m_blocksMenu->addAction("Take &screenshot");
+        connect(sshotAction, SIGNAL(triggered()), this, SLOT(takeBlockScreenshot()));
+    }
+    return m_blocksMenu;
+}
+
+void
+Menus::initGraphicViewMenu(graphicView::BlockWidget *block)
+{
+    for (auto it = m_graphicViewToMenu.begin(); it != m_graphicViewToMenu.end(); ++it)
+    {
+        it->second->menuAction()->setVisible(false);
     }
 
-    void
-    Menus::quit()
+    auto graphicViews = block->getGraphicViews();
+    for (auto it = graphicViews.begin(); it != graphicViews.end(); ++it)
     {
-      MainWindow::instance().close();
+        auto menu = getGraphicViewMenu(*it);
+        menu->menuAction()->setVisible(true);
     }
+}
 
-    QMenu*
-    Menus::getFileMenu()
+QMenu *
+Menus::getGraphicViewsMenu()
+{
+    if (!m_graphicViewsMenu)
     {
-      if (!m_fileMenu) {
-	m_fileMenu = new QMenu(QObject::tr("&File"));
-	m_fileMenu->addAction(QObject::tr("Open file"), this, SLOT(openFile()), QKeySequence::Open);
-
-	m_fileMenu->addAction(QObject::tr("Open raw image"), this, SLOT(openRawImage()));
-
-	//m_fileMenu->addAction(QObject::tr("Save as"), this, SLOT(saveView()), QKeySequence::Save); // which view?
-
-	m_fileMenu->addSeparator();
-	m_fileMenu->addAction(QObject::tr("Quit"), this, SLOT(quit()), QKeySequence::Quit);
-
-      }
-      return m_fileMenu;
+        m_graphicViewsMenu = new QMenu(QObject::tr("&GraphicViews"));
     }
+    return m_graphicViewsMenu;
+}
 
-    QMenu*
-    Menus::getAlgorithmSelectionMenu()
-    {
-      if (!m_algorithmSelectionMenu)
-	m_algorithmSelectionMenu = new QMenu(QObject::tr("&Algorithm"));
-      return m_algorithmSelectionMenu;
-    }
+QMenu *
+Menus::getGraphicViewMenu(const graphicView::Widget *graphicView)
+{
+    auto it = m_graphicViewToMenu.find(const_cast<graphicView::Widget *>(graphicView));
+    assert(it != m_graphicViewToMenu.end() && "unable to find graphicView");
+    return it->second;
+}
 
-    QMenu*
-    Menus::getAlgorithmSelectionSubMenu(std::string path)
-    {
-      QMenu* currentMenu = getAlgorithmSelectionMenu();
+void
+Menus::graphicViewCreated(graphicView::Widget *graphicView)
+{
+    //graphicView::Scene* scene = graphicView->getScene();
+    QMenu *graphicViewMenu = new QMenu(graphicView->getName(), getGraphicViewsMenu());
+    getGraphicViewsMenu()->addMenu(graphicViewMenu);
+    m_graphicViewToMenu[graphicView] = graphicViewMenu;
 
-      std::string subMenuPath = "";
-      size_t pos = path.find_first_of(':');
-      while (pos != std::string::npos) {
-	std::string subMenuName = path.substr(0, pos);
-	if (!subMenuPath.empty())
-	  subMenuPath += ":";
-	subMenuPath += subMenuName;
-	path = path.substr(pos+1);
-	pos = path.find_first_of(':');
+    //= View Window stuff =//
+    /*
+    m_graphicViewToViewWindowMenu[scene] = graphicViewMenu->addMenu("View Window");
+    m_graphicViewToViewWindowGroup[scene] = new QActionGroup(m_graphicViewToViewWindowMenu[scene]);
 
-	SubMenus::iterator it = m_algorithmSubMenus.find(subMenuPath);
-	if (it == m_algorithmSubMenus.end()) {
-	  QMenu* subMenu = new QMenu(QObject::tr(subMenuName.c_str()), currentMenu);
-	  currentMenu->addMenu(subMenu);
-	  m_algorithmSubMenus[subMenuPath] = subMenu;
-	}
-	currentMenu = m_algorithmSubMenus[subMenuPath];
-      }
+    for (auto it = m_viewWindows.begin(), end = m_viewWindows.end(); it != end; ++it) {
+    QAction* action = m_graphicViewToViewWindowMenu[scene]->addAction((*it)->getName());
+    action->setCheckable(true);
+    if (*it == graphicView->getScene()->getViewWindow())
+      action->setChecked(true);
+    m_actionToGraphicView[action] = graphicView;
+    m_actionToViewWindow[action] = *it;
+    m_graphicViewToViewWindowGroup[scene]->addAction(action);
+    connect(action, SIGNAL(triggered()), this, SLOT(viewWindowSelected()));
+         }
 
-      return currentMenu;
-    }
+         m_graphicViewToViewSepAction[scene] = m_graphicViewToViewWindowMenu[scene]->addSeparator();
+         m_graphicViewToViewWindowGroup[scene]->addAction(m_graphicViewToViewSepAction[scene]);
 
-    QMenu*
-    Menus::getViewsMenu()
-    {
-      if (!m_viewsMenu)
-	m_viewsMenu = new QMenu(QObject::tr("&Views"));
-      return m_viewsMenu;
-    }
+         QAction* action = m_graphicViewToViewWindowMenu[scene]->addAction("New View Window");
+         m_graphicViewToViewWindowGroup[scene]->addAction(action);
+         m_actionToGraphicView[action] = graphicView;
+         action->setCheckable(false);
+         connect(action, SIGNAL(triggered()), this, SLOT(createAndAssignViewWindow()));
 
-    QMenu*
-    Menus::getViewMenu(const frontend::ViewInfo* view)
-    {
-      auto it = m_viewToMenu.find(const_cast<frontend::ViewInfo*>(view));
-      assert(it != m_viewToMenu.end() && "unable to find view");
-      return it->second;
-    }
+         connect(scene, SIGNAL(viewWindowSet(graphicView::ViewingWindow*)),
+          this, SLOT(viewWindowAssigned(graphicView::ViewingWindow*)));
+         */
 
-    void
-    Menus::buildLayoutButton(const QString& name,
-			     graphicView::BlockWidget::LayoutType type,
-			     QGridLayout* layout, int row, int col,
-			     bool pressed)
-    {
-      QToolButton* button = new QToolButton;
-      m_layoutButtonGroup->addButton(button);
-      button->setCheckable(true);
-      button->setStyleSheet("border: 0; background: none;");
-      button->setIcon(QIcon(QString(SD_ICON_PATH)+"/layouts/"+name + ".svg"));
-      layout->addWidget(button, row, col);
-      button->setProperty("SdLayoutType", type);
-      if (pressed) {
-	button->setStyleSheet("border: 0; background: lightgray;");
-	button->setChecked(pressed);
-      }
-      connect(button, SIGNAL(released()), this, SLOT(layoutActivated()));
-      connect(button, SIGNAL(toggled(bool)), this, SLOT(layoutChanged(bool)));
-    }
+    //= Slice Window stuff =//
+    /*
+    if (graphicView->getScene()->getType() == graphicView::Scene::ImageSceneType) {
+    m_graphicViewToSliceWindowMenu[scene] = graphicViewMenu->addMenu("Slice Window");
+    m_graphicViewToSliceWindowGroup[scene] = new QActionGroup(m_graphicViewToSliceWindowMenu[scene]);
 
-    void
-    Menus::changeLayout(graphicView::BlockWidget::LayoutType type)
-    {
-      QList<QAbstractButton*> buttons = m_layoutButtonGroup->buttons();
-      for (auto it = buttons.begin(); it != buttons.end(); ++it) {
-	graphicView::BlockWidget::LayoutType buttonType = (graphicView::BlockWidget::LayoutType) (*it)->property("SdLayoutType").toInt();
-	if (buttonType == type) {
-	  (*it)->toggle();
-	}
-      }
-    }
-
-    void
-    Menus::layoutChanged(bool)
-    {
-      QToolButton* button = ((QToolButton*) sender());
-      if (button->isChecked())
-	button->setStyleSheet("border: 0; background: lightgray;");
-      else
-	button->setStyleSheet("border: 0; background: none;");
-    }
-
-    void
-    Menus::layoutActivated()
-    {
-      QToolButton* button = ((QToolButton*) sender());
-      graphicView::BlockWidget::LayoutType type = (graphicView::BlockWidget::LayoutType) button->property("SdLayoutType").toInt();
-      auto block = MainWindow::instance().currentBlock();
-      if (block)
-	block->changeLayout(type);
-    }
-
-    QMenu*
-    Menus::getBlocksMenu()
-    {
-      if (!m_blocksMenu) {
-	m_blocksMenu = new QMenu(QObject::tr("&Block"));
-	QMenu* configMenu = new QMenu("Select layout");
-	m_blocksMenu->addMenu(configMenu);
-
-	m_layoutButtonGroup = new QButtonGroup;
-
-	QGridLayout* layout = new QGridLayout;
-	layout->setSpacing(2);
-	buildLayoutButton("layout1", graphicView::BlockWidget::BlockLayout1, layout, 0, 0);
-	buildLayoutButton("layout4", graphicView::BlockWidget::BlockLayout4, layout, 0, 1, true);
-	buildLayoutButton("layout2h", graphicView::BlockWidget::BlockLayout2h, layout, 0, 2);
-	buildLayoutButton("layout2v", graphicView::BlockWidget::BlockLayout2v, layout, 0, 3);
-	buildLayoutButton("layout1-2h", graphicView::BlockWidget::BlockLayout1_2h, layout, 1, 0);
-	buildLayoutButton("layout2-1h", graphicView::BlockWidget::BlockLayout2_1h, layout, 1, 1);
-	buildLayoutButton("layout1-2v", graphicView::BlockWidget::BlockLayout1_2v, layout, 1, 2);
-	buildLayoutButton("layout2-1v", graphicView::BlockWidget::BlockLayout2_1v, layout, 1, 3);
-
-	QWidget* w = new QWidget;
-	w->setLayout(layout);
-	QWidgetAction* qwa = new QWidgetAction(configMenu);
-	qwa->setDefaultWidget(w);
-	configMenu->addAction(qwa);
-
-	m_blocksMenu->addSeparator();
-
-	QAction* sshotAction = m_blocksMenu->addAction("Take &screenshot");
-	connect(sshotAction, SIGNAL(triggered()), this, SLOT(takeBlockScreenshot()));
-      }
-      return m_blocksMenu;
-    }
-
-    void
-    Menus::initGraphicViewMenu(graphicView::BlockWidget* block)
-    {
-      for (auto it = m_graphicViewToMenu.begin(); it != m_graphicViewToMenu.end(); ++it) {
-	it->second->menuAction()->setVisible(false);
-      }
-
-      auto graphicViews = block->getGraphicViews();
-      for (auto it = graphicViews.begin(); it != graphicViews.end(); ++it) {
-	auto menu = getGraphicViewMenu(*it);
-	menu->menuAction()->setVisible(true);
-      }
-    }
-
-    QMenu*
-    Menus::getGraphicViewsMenu()
-    {
-      if (!m_graphicViewsMenu) {
-	m_graphicViewsMenu = new QMenu(QObject::tr("&GraphicViews"));
-      }
-      return m_graphicViewsMenu;
-    }
-
-    QMenu*
-    Menus::getGraphicViewMenu(const graphicView::Widget* graphicView)
-    {
-      auto it = m_graphicViewToMenu.find(const_cast<graphicView::Widget*>(graphicView));
-      assert(it != m_graphicViewToMenu.end() && "unable to find graphicView");
-      return it->second;
-    }
-
-    void
-    Menus::graphicViewCreated(graphicView::Widget* graphicView)
-    {
-      //graphicView::Scene* scene = graphicView->getScene();
-      QMenu* graphicViewMenu = new QMenu(graphicView->getName(), getGraphicViewsMenu());
-      getGraphicViewsMenu()->addMenu(graphicViewMenu);
-      m_graphicViewToMenu[graphicView] = graphicViewMenu;
-
-      //= View Window stuff =//
-      /*
-      m_graphicViewToViewWindowMenu[scene] = graphicViewMenu->addMenu("View Window");
-      m_graphicViewToViewWindowGroup[scene] = new QActionGroup(m_graphicViewToViewWindowMenu[scene]);
-
-      for (auto it = m_viewWindows.begin(), end = m_viewWindows.end(); it != end; ++it) {
-	QAction* action = m_graphicViewToViewWindowMenu[scene]->addAction((*it)->getName());
-	action->setCheckable(true);
-	if (*it == graphicView->getScene()->getViewWindow())
-	  action->setChecked(true);
-	m_actionToGraphicView[action] = graphicView;
-	m_actionToViewWindow[action] = *it;
-	m_graphicViewToViewWindowGroup[scene]->addAction(action);
-	connect(action, SIGNAL(triggered()), this, SLOT(viewWindowSelected()));
-      }
-
-      m_graphicViewToViewSepAction[scene] = m_graphicViewToViewWindowMenu[scene]->addSeparator();
-      m_graphicViewToViewWindowGroup[scene]->addAction(m_graphicViewToViewSepAction[scene]);
-
-      QAction* action = m_graphicViewToViewWindowMenu[scene]->addAction("New View Window");
-      m_graphicViewToViewWindowGroup[scene]->addAction(action);
+    for (auto it = m_sliceWindows.begin(), end = m_sliceWindows.end(); it != end; ++it) {
+      action = m_graphicViewToSliceWindowMenu[scene]->addAction((*it)->getName());
+      action->setCheckable(true);
+      if (*it == ((graphicView::ImageScene*) graphicView->getScene())->getSliceWindow())
+        action->setChecked(true);
       m_actionToGraphicView[action] = graphicView;
-      action->setCheckable(false);
-      connect(action, SIGNAL(triggered()), this, SLOT(createAndAssignViewWindow()));
-
-      connect(scene, SIGNAL(viewWindowSet(graphicView::ViewingWindow*)),
-	      this, SLOT(viewWindowAssigned(graphicView::ViewingWindow*)));
-      */
-
-      //= Slice Window stuff =//
-      /*
-      if (graphicView->getScene()->getType() == graphicView::Scene::ImageSceneType) {
-	m_graphicViewToSliceWindowMenu[scene] = graphicViewMenu->addMenu("Slice Window");
-	m_graphicViewToSliceWindowGroup[scene] = new QActionGroup(m_graphicViewToSliceWindowMenu[scene]);
-
-	for (auto it = m_sliceWindows.begin(), end = m_sliceWindows.end(); it != end; ++it) {
-	  action = m_graphicViewToSliceWindowMenu[scene]->addAction((*it)->getName());
-	  action->setCheckable(true);
-	  if (*it == ((graphicView::ImageScene*) graphicView->getScene())->getSliceWindow())
-	    action->setChecked(true);
-	  m_actionToGraphicView[action] = graphicView;
-	  m_actionToSliceWindow[action] = *it;
-	  m_graphicViewToSliceWindowGroup[scene]->addAction(action);
-	  connect(action, SIGNAL(triggered()), this, SLOT(sliceWindowSelected()));
-	}
-
-	m_graphicViewToSliceSepAction[scene] = m_graphicViewToSliceWindowMenu[scene]->addSeparator();
-	m_graphicViewToSliceWindowGroup[scene]->addAction(m_graphicViewToSliceSepAction[scene]);
-
-	action = m_graphicViewToSliceWindowMenu[scene]->addAction("New Slice Window");
-	m_graphicViewToSliceWindowGroup[scene]->addAction(action);
-	m_actionToGraphicView[action] = graphicView;
-	action->setCheckable(false);
-	connect(action, SIGNAL(triggered()), this, SLOT(createAndAssignSliceWindow()));
-	connect(scene, SIGNAL(sliceWindowSet(graphicView::SliceWindow*)),
-		this, SLOT(sliceWindowAssigned(graphicView::SliceWindow*)));
-      }
-      */
-
-      //= Other stuff =//
-      graphicViewMenu->addSeparator();
-      QAction* sshotAction = graphicViewMenu->addAction("Take &screenshot");
-      m_actionToGraphicView[sshotAction] = graphicView;
-      connect(sshotAction, SIGNAL(triggered()), this, SLOT(takeScreenshot()));
+      m_actionToSliceWindow[action] = *it;
+      m_graphicViewToSliceWindowGroup[scene]->addAction(action);
+      connect(action, SIGNAL(triggered()), this, SLOT(sliceWindowSelected()));
     }
 
-    void
-    Menus::graphicViewDeleted(graphicView::Widget* graphicView)
+    m_graphicViewToSliceSepAction[scene] = m_graphicViewToSliceWindowMenu[scene]->addSeparator();
+    m_graphicViewToSliceWindowGroup[scene]->addAction(m_graphicViewToSliceSepAction[scene]);
+
+    action = m_graphicViewToSliceWindowMenu[scene]->addAction("New Slice Window");
+    m_graphicViewToSliceWindowGroup[scene]->addAction(action);
+    m_actionToGraphicView[action] = graphicView;
+    action->setCheckable(false);
+    connect(action, SIGNAL(triggered()), this, SLOT(createAndAssignSliceWindow()));
+    connect(scene, SIGNAL(sliceWindowSet(graphicView::SliceWindow*)),
+       this, SLOT(sliceWindowAssigned(graphicView::SliceWindow*)));
+         }
+         */
+
+    //= Other stuff =//
+    graphicViewMenu->addSeparator();
+    QAction *sshotAction = graphicViewMenu->addAction("Take &screenshot");
+    m_actionToGraphicView[sshotAction] = graphicView;
+    connect(sshotAction, SIGNAL(triggered()), this, SLOT(takeScreenshot()));
+}
+
+void
+Menus::graphicViewDeleted(graphicView::Widget *graphicView)
+{
+    // Require a 2 pass deletion of iterator because of iterator invalidation of std::map::erase
+    std::vector<decltype(m_actionToGraphicView.begin())> toDelete;
+    for (auto it = m_actionToGraphicView.begin(), end = m_actionToGraphicView.end(); it != end; ++it)
     {
-      // Require a 2 pass deletion of iterator because of iterator invalidation of std::map::erase
-      std::vector<decltype(m_actionToGraphicView.begin())> toDelete;
-      for (auto it = m_actionToGraphicView.begin(), end = m_actionToGraphicView.end(); it != end; ++it) {
-	if (it->second == graphicView) {
-	  delete it->first;
-	  toDelete.push_back(it);
-	}
-      }
-      for (auto it = toDelete.begin(), end = toDelete.end(); it != end; ++it) {
-	m_actionToGraphicView.erase(*it);
-      }
-
-      delete m_graphicViewToMenu[graphicView];
-      m_graphicViewToMenu.erase(graphicView);
-
-      graphicView::Scene* scene = graphicView->getScene();
-      m_graphicViewToViewSepAction.erase(scene);
-      m_graphicViewToViewWindowMenu.erase(scene);
-      m_graphicViewToViewWindowGroup.erase(scene);
-      m_graphicViewToSliceSepAction.erase(scene);
-      m_graphicViewToSliceWindowMenu.erase(scene);
-      m_graphicViewToSliceWindowGroup.erase(scene);
+        if (it->second == graphicView)
+        {
+            delete it->first;
+            toDelete.push_back(it);
+        }
+    }
+    for (auto it = toDelete.begin(), end = toDelete.end(); it != end; ++it)
+    {
+        m_actionToGraphicView.erase(*it);
     }
 
-    void
-    Menus::graphicViewChanged(graphicView::Widget* graphicView)
-    {
-      auto it = m_graphicViewToMenu.find(graphicView);
-      assert(it != m_graphicViewToMenu.end() && "unable to find graphicView");
-      it->second->setTitle(graphicView->getName());
-    }
+    delete m_graphicViewToMenu[graphicView];
+    m_graphicViewToMenu.erase(graphicView);
 
-    void
-    Menus::viewWindowCreated(graphicView::ViewingWindow* /*vw*/)
-    {
-      /*
-      for (auto it = m_graphicViewToViewWindowGroup.begin(), end = m_graphicViewToViewWindowGroup.end();
-	   it != end; ++it) {
-	QAction* action = new QAction(vw->getName(), m_graphicViewToViewWindowMenu[it->first]);
-	action->setCheckable(true);
+    graphicView::Scene *scene = graphicView->getScene();
+    m_graphicViewToViewSepAction.erase(scene);
+    m_graphicViewToViewWindowMenu.erase(scene);
+    m_graphicViewToViewWindowGroup.erase(scene);
+    m_graphicViewToSliceSepAction.erase(scene);
+    m_graphicViewToSliceWindowMenu.erase(scene);
+    m_graphicViewToSliceWindowGroup.erase(scene);
+}
 
-	m_actionToGraphicView[action] = &it->first->getWidget();
+void
+Menus::graphicViewChanged(graphicView::Widget *graphicView)
+{
+    auto it = m_graphicViewToMenu.find(graphicView);
+    assert(it != m_graphicViewToMenu.end() && "unable to find graphicView");
+    it->second->setTitle(graphicView->getName());
+}
 
-	m_actionToViewWindow[action] = vw;
-	m_graphicViewToViewWindowMenu[it->first]->insertAction(m_graphicViewToViewSepAction[it->first], action);
-	it->second->addAction(action);
+void
+Menus::viewWindowCreated(graphicView::ViewingWindow * /*vw*/)
+{
+    /*
+    for (auto it = m_graphicViewToViewWindowGroup.begin(), end = m_graphicViewToViewWindowGroup.end();
+     it != end; ++it) {
+    QAction* action = new QAction(vw->getName(), m_graphicViewToViewWindowMenu[it->first]);
+    action->setCheckable(true);
 
-	connect(action, SIGNAL(triggered()), this, SLOT(viewWindowSelected()));
+    m_actionToGraphicView[action] = &it->first->getWidget();
+
+    m_actionToViewWindow[action] = vw;
+    m_graphicViewToViewWindowMenu[it->first]->insertAction(m_graphicViewToViewSepAction[it->first], action);
+    it->second->addAction(action);
+
+    connect(action, SIGNAL(triggered()), this, SLOT(viewWindowSelected()));
+         }
+         m_viewWindows.insert(vw);
+         */
+}
+
+void
+Menus::viewWindowDeleted(graphicView::ViewingWindow * /*vw*/)
+{
+    /*
+    for (auto it1 = m_graphicViewToViewWindowMenu.begin(), end1 = m_graphicViewToViewWindowMenu.end();
+     it1 != end1; ++it1) {
+    QList<QAction*> actions = m_graphicViewToViewWindowMenu[it1->first]->actions();
+    QAction* action = 0;
+    for (auto it = actions.begin(), end = actions.end(); it != end; ++it) {
+      if ((*it)->text() == vw->getName()) {
+        action = *it;
+        action->setEnabled(false);
+        action->setVisible(false);
+        action->deleteLater();
+        m_actionToGraphicView.erase(action);
+        m_actionToViewWindow.erase(action);
+        break;
       }
-      m_viewWindows.insert(vw);
-      */
     }
+    m_graphicViewToViewWindowGroup[it1->first]->removeAction(action);
+         }
+         m_viewWindows.erase(vw);
+         */
+}
 
-    void
-    Menus::viewWindowDeleted(graphicView::ViewingWindow* /*vw*/)
-    {
-      /*
-      for (auto it1 = m_graphicViewToViewWindowMenu.begin(), end1 = m_graphicViewToViewWindowMenu.end();
-	   it1 != end1; ++it1) {
-	QList<QAction*> actions = m_graphicViewToViewWindowMenu[it1->first]->actions();
-	QAction* action = 0;
-	for (auto it = actions.begin(), end = actions.end(); it != end; ++it) {
-	  if ((*it)->text() == vw->getName()) {
-	    action = *it;
-	    action->setEnabled(false);
-	    action->setVisible(false);
-	    action->deleteLater();
-	    m_actionToGraphicView.erase(action);
-	    m_actionToViewWindow.erase(action);
-	    break;
-	  }
-	}
-	m_graphicViewToViewWindowGroup[it1->first]->removeAction(action);
+void
+Menus::sliceWindowCreated(graphicView::SliceWindow * /*sw*/)
+{
+    /*
+    for (auto it = m_graphicViewToSliceWindowGroup.begin(), end = m_graphicViewToSliceWindowGroup.end(); it != end; ++it) {
+    QAction* action = new QAction(sw->getName(), m_graphicViewToSliceWindowMenu[it->first]);
+    action->setCheckable(true);
+
+    m_actionToGraphicView[action] = &it->first->getWidget();
+
+    m_actionToSliceWindow[action] = sw;
+    m_graphicViewToSliceWindowMenu[it->first]->insertAction(m_graphicViewToSliceSepAction[it->first], action);
+    it->second->addAction(action);
+
+    connect(action, SIGNAL(triggered()), this, SLOT(sliceWindowSelected()));
+         }
+         m_sliceWindows.insert(sw);
+         */
+}
+
+void
+Menus::sliceWindowDeleted(graphicView::SliceWindow * /*sw*/)
+{
+    /*
+    for (auto it1 = m_graphicViewToSliceWindowMenu.begin(), end1 = m_graphicViewToSliceWindowMenu.end();
+     it1 != end1; ++it1) {
+    QList<QAction*> actions = m_graphicViewToSliceWindowMenu[it1->first]->actions();
+    QAction* action = 0;
+    for (auto it = actions.begin(), end = actions.end(); it != end; ++it) {
+      if ((*it)->text() == sw->getName()) {
+        action = *it;
+        action->setEnabled(false);
+        action->setVisible(false);
+        action->deleteLater();
+        m_actionToGraphicView.erase(action);
+        m_actionToSliceWindow.erase(action);
+        break;
       }
-      m_viewWindows.erase(vw);
-      */
     }
+    m_graphicViewToSliceWindowGroup[it1->first]->removeAction(action);
+         }
+         m_sliceWindows.erase(sw);
+         */
+}
 
-    void
-    Menus::sliceWindowCreated(graphicView::SliceWindow* /*sw*/)
+void
+Menus::populate()
+{
+    auto algorithms = frontend::getAlgorithms();
+    for (auto it = algorithms.begin(), itEnd = algorithms.end(); it != itEnd; ++it)
     {
-      /*
-      for (auto it = m_graphicViewToSliceWindowGroup.begin(), end = m_graphicViewToSliceWindowGroup.end(); it != end; ++it) {
-	QAction* action = new QAction(sw->getName(), m_graphicViewToSliceWindowMenu[it->first]);
-	action->setCheckable(true);
+        std::string path = (*it)->name();
+        size_t pos = path.find_last_of(':');
+        std::string name = (pos == std::string::npos ? path : path.substr(pos + 1));
 
-	m_actionToGraphicView[action] = &it->first->getWidget();
-
-	m_actionToSliceWindow[action] = sw;
-	m_graphicViewToSliceWindowMenu[it->first]->insertAction(m_graphicViewToSliceSepAction[it->first], action);
-	it->second->addAction(action);
-
-	connect(action, SIGNAL(triggered()), this, SLOT(sliceWindowSelected()));
-      }
-      m_sliceWindows.insert(sw);
-      */
-    }
-
-    void
-    Menus::sliceWindowDeleted(graphicView::SliceWindow* /*sw*/)
-    {
-      /*
-      for (auto it1 = m_graphicViewToSliceWindowMenu.begin(), end1 = m_graphicViewToSliceWindowMenu.end();
-	   it1 != end1; ++it1) {
-	QList<QAction*> actions = m_graphicViewToSliceWindowMenu[it1->first]->actions();
-	QAction* action = 0;
-	for (auto it = actions.begin(), end = actions.end(); it != end; ++it) {
-	  if ((*it)->text() == sw->getName()) {
-	    action = *it;
-	    action->setEnabled(false);
-	    action->setVisible(false);
-	    action->deleteLater();
-	    m_actionToGraphicView.erase(action);
-	    m_actionToSliceWindow.erase(action);
-	    break;
-	  }
-	}
-	m_graphicViewToSliceWindowGroup[it1->first]->removeAction(action);
-      }
-      m_sliceWindows.erase(sw);
-      */
-    }
-
-    void
-    Menus::populate()
-    {
-      auto algorithms = frontend::getAlgorithms();
-      for (auto it = algorithms.begin(), itEnd = algorithms.end(); it != itEnd; ++it) {
-      	std::string path = (*it)->name();
-      	size_t pos = path.find_last_of(':');
-      	std::string name = (pos == std::string::npos ? path : path.substr(pos+1));
-
-      	QMenu* subMenu = getAlgorithmSelectionSubMenu(path);
+        QMenu *subMenu = getAlgorithmSelectionSubMenu(path);
         std::cout << "Algo: " << name << std::endl;
-      	AlgorithmAction* action = new AlgorithmAction(name, path, subMenu);
+        AlgorithmAction *action = new AlgorithmAction(name, path, subMenu);
 
-        if(name.size() > 6)
-          if (name.substr(name.size()-6) == std::string("Plugin"))
-            action->setXMLParameterized(true);
-        
+        if (name.size() > 6)
+            if (name.substr(name.size() - 6) == std::string("Plugin"))
+                action->setXMLParameterized(true);
 
-      	subMenu->addAction(action);
-      	connect(action, SIGNAL(triggered()), action, SLOT(runAlgorithm()));
-      }
+
+        subMenu->addAction(action);
+        connect(action, SIGNAL(triggered()), action, SLOT(runAlgorithm()));
     }
+}
 
-    void
-    Menus::viewCreationCallback(frontend::ViewInfo* view)
+void
+Menus::viewCreationCallback(frontend::ViewInfo *view)
+{
+    enqueueViewCreationSlot(view);
+}
+
+void
+Menus::viewDeletionCallback(frontend::ViewInfo *view)
+{
+    enqueueViewDeletionSlot(view);
+}
+
+void
+Menus::viewModificationCallback(frontend::ViewInfo *view)
+{
+    m_viewToMenu[view]->setTitle(QString::fromStdString(view->getName()));
+}
+
+void
+Menus::viewCreationSlot(frontend::ViewInfo *view)
+{
+    QMenu *viewMenu = getViewsMenu()->addMenu(QString::fromStdString(view->getName()));
+    //viewMenu->setParent(getViewsMenu());
+    m_viewToMenu[view] = viewMenu;
+
+    //viewMenu->addMenu(getAlgorithmSelectionMenu());
+    //viewMenu->addSeparator();
+
+    /*
+    QMenu* sendToMenu = viewMenu->addMenu("Send to");
+    m_sendToMenuToView[sendToMenu] = view;
+    m_viewToSendToMenu[view] = sendToMenu;
+    connect(sendToMenu, SIGNAL(aboutToShow()), this, SLOT(aboutToShowSendTo()));
+    */
+
+    viewMenu->addSeparator();
+    QAction *saveAction = viewMenu->addAction("Save as...");
+    m_saveActionToView[saveAction] = view;
+    connect(saveAction, SIGNAL(triggered()), this, SLOT(saveView()));
+
+    viewMenu->addSeparator();
+    QAction *configAction = viewMenu->addAction("Configure");
+    m_configDeleteActionToView[configAction] = view;
+    connect(configAction, SIGNAL(triggered()), this, SLOT(configureView()));
+    QAction *deleteAction = viewMenu->addAction("Deletable");
+    deleteAction->setCheckable(true);
+    deleteAction->setChecked(false);
+    m_configDeleteActionToView[deleteAction] = view;
+    connect(deleteAction, SIGNAL(toggled(bool)), this, SLOT(setDeletableView(bool)));
+
+    auto block = GraphicViewsManager::instance().createBlockWidget(view);
+    MainWindow::instance().addBlock(block);
+
+    initGraphicViewMenu(MainWindow::instance().currentBlock());
+}
+
+void
+Menus::viewDeletionSlot(frontend::ViewInfo *view)
+{
+    delete m_viewToMenu[view];
+    m_viewToMenu.erase(view);
+    /*
+    QMenu* sendToMenu = m_viewToSendToMenu[view];
+    m_viewToSendToMenu.erase(view);
+    m_sendToMenuToView.erase(sendToMenu);
+    */
+
+    // Require a 2 pass deletion of iterator because of iterator invalidation of std::map::erase
+    std::vector<decltype(m_configDeleteActionToView.begin())> toDelete;
+    for (auto it = m_configDeleteActionToView.begin(), end = m_configDeleteActionToView.end(); it != end; ++it)
     {
-      enqueueViewCreationSlot(view);
+        if (it->second == view)
+            toDelete.push_back(it);
     }
-
-    void
-    Menus::viewDeletionCallback(frontend::ViewInfo* view)
+    for (auto it = toDelete.begin(), end = toDelete.end(); it != end; ++it)
     {
-      enqueueViewDeletionSlot(view);
+        m_configDeleteActionToView.erase(*it);
     }
 
-    void
-    Menus::viewModificationCallback(frontend::ViewInfo* view)
+    for (auto it = m_saveActionToView.begin(), end = m_saveActionToView.end(); it != end; ++it)
     {
-      m_viewToMenu[view]->setTitle(QString::fromStdString(view->getName()));
+        if (it->second == view)
+        {
+            m_saveActionToView.erase(it);
+            break;
+        }
     }
+}
 
-    void
-    Menus::viewCreationSlot(frontend::ViewInfo* view)
+void
+Menus::aboutToShowSendTo()
+{
+    QMenu *sendToMenu = (QMenu *)sender();
+    //frontend::ViewInfo* view = m_sendToMenuToView[sendToMenu];
+
+    // If menu was dismissed without any action selected, we need to
+    //  empty it before populating it anew
+    emptySendToMenu(sendToMenu);
+
+    /*
+    // Populate menu (entries are deleted in sendViewTo signal handler)
+    auto& graphicViewsBlocks = GraphicViewsManager::instance().getGraphicViewsBlocks();
+    for (auto it = graphicViewsBlocks.cbegin(), end = graphicViewsBlocks.cend(); it != end; ++it) {
+    QAction* action = sendToMenu->addAction((*it)->getName());
+    connect(action, SIGNAL(triggered()), this, SLOT(sendViewTo()));
+    m_sendToActionToView[action] = view;
+    m_sendToActionToIsBlock[action] = true;
+    m_sendToActionToGraphicViewBlock[action] = *it;
+
+    for (size_t i = 0; i < 4; ++i) {
+      graphicView::Widget* widget = (*it)->getWidget(i);
+      QAction* subaction = sendToMenu->addAction(widget->getName());
+      connect(subaction, SIGNAL(triggered()), this, SLOT(sendViewTo()));
+      m_sendToActionToView[subaction] = view;
+      m_sendToActionToIsBlock[subaction] = false;
+      m_sendToActionToGraphicView[subaction] = widget;
+    }
+         }
+         */
+}
+
+void
+Menus::emptySendToMenu(QMenu *menu)
+{
+    menu->clear();
+    m_sendToActionToView.clear();
+    m_sendToActionToIsBlock.clear();
+    m_sendToActionToGraphicView.clear();
+    m_sendToActionToGraphicViewBlock.clear();
+}
+
+namespace
+{
+
+void
+getExtensions(const std::string &extensions, const std::string &format,
+              QString &allSupported, QString &descrip)
+{
+    std::stringstream st(extensions);
+    std::string ext;
+    QString allExt;
+    while (st)
     {
-      QMenu* viewMenu = getViewsMenu()->addMenu(QString::fromStdString(view->getName()));
-      //viewMenu->setParent(getViewsMenu());
-      m_viewToMenu[view] = viewMenu;
-
-      //viewMenu->addMenu(getAlgorithmSelectionMenu());
-      //viewMenu->addSeparator();
-
-      /*
-      QMenu* sendToMenu = viewMenu->addMenu("Send to");
-      m_sendToMenuToView[sendToMenu] = view;
-      m_viewToSendToMenu[view] = sendToMenu;
-      connect(sendToMenu, SIGNAL(aboutToShow()), this, SLOT(aboutToShowSendTo()));
-      */
-
-      viewMenu->addSeparator();
-      QAction* saveAction = viewMenu->addAction("Save as...");
-      m_saveActionToView[saveAction] = view;
-      connect(saveAction, SIGNAL(triggered()), this, SLOT(saveView()));
-
-      viewMenu->addSeparator();
-      QAction* configAction = viewMenu->addAction("Configure");
-      m_configDeleteActionToView[configAction] = view;
-      connect(configAction, SIGNAL(triggered()), this, SLOT(configureView()));
-      QAction* deleteAction = viewMenu->addAction("Deletable");
-      deleteAction->setCheckable(true);
-      deleteAction->setChecked(false);
-      m_configDeleteActionToView[deleteAction] = view;
-      connect(deleteAction, SIGNAL(toggled(bool)), this, SLOT(setDeletableView(bool)));
-
-      auto block = GraphicViewsManager::instance().createBlockWidget(view);
-      MainWindow::instance().addBlock(block);
-
-      initGraphicViewMenu(MainWindow::instance().currentBlock());
+        ext = "";
+        std::getline(st, ext, ';');
+        if (!ext.empty())
+            allExt += (QString(ext.c_str()) + " ");
     }
 
-    void
-    Menus::viewDeletionSlot(frontend::ViewInfo* view)
+    descrip += (format.c_str() + QString(" (") + allExt + ");;");
+    allSupported += allExt;
+}
+
+static QString currentPath;
+
+QString
+selectOpenFileDialog()
+{
+    std::cout << "In selectOpenFileDialog ==========" << std::endl;
+    auto loaders = frontend::getLoaders();
+
+    QString allSupportedExts;
+    QString dialogDescStr;
+    for (auto it = loaders.begin(), itEnd = loaders.end(); it != itEnd; ++it)
     {
-      delete m_viewToMenu[view];
-      m_viewToMenu.erase(view);
-      /*
-      QMenu* sendToMenu = m_viewToSendToMenu[view];
-      m_viewToSendToMenu.erase(view);
-      m_sendToMenuToView.erase(sendToMenu);
-      */
-
-      // Require a 2 pass deletion of iterator because of iterator invalidation of std::map::erase
-      std::vector<decltype(m_configDeleteActionToView.begin())> toDelete;
-      for (auto it = m_configDeleteActionToView.begin(), end = m_configDeleteActionToView.end(); it != end; ++it) {
-	if (it->second == view)
-	  toDelete.push_back(it);
-      }
-      for (auto it = toDelete.begin(), end = toDelete.end(); it != end; ++it) {
-	m_configDeleteActionToView.erase(*it);
-      }
-
-      for (auto it = m_saveActionToView.begin(), end = m_saveActionToView.end(); it != end; ++it) {
-	if (it->second == view) {
-	  m_saveActionToView.erase(it);
-	  break;
-	}
-      }
+        std::string extensions = (*it)->fileExtensionFilters();
+        getExtensions(extensions, (*it)->formatName(), allSupportedExts, dialogDescStr);
     }
+    dialogDescStr = "All Supported (" + allSupportedExts + ");;" + dialogDescStr +
+                    "All Files (*.*);;";
 
-    void
-    Menus::aboutToShowSendTo()
+    currentPath = QFileDialog::getOpenFileName(&MainWindow::instance(),
+                  QObject::tr("Open file"),
+                  currentPath, dialogDescStr);
+    return currentPath;
+}
+
+QString
+selectSaveFileDialog(frontend::Saver::Type expectedType)
+{
+    QString dialogDescStr;
+    if (expectedType == frontend::Saver::Unknown)
     {
-      QMenu* sendToMenu = (QMenu*)sender();
-      //frontend::ViewInfo* view = m_sendToMenuToView[sendToMenu];
-
-      // If menu was dismissed without any action selected, we need to
-      //  empty it before populating it anew
-      emptySendToMenu(sendToMenu);
-
-      /*
-      // Populate menu (entries are deleted in sendViewTo signal handler)
-      auto& graphicViewsBlocks = GraphicViewsManager::instance().getGraphicViewsBlocks();
-      for (auto it = graphicViewsBlocks.cbegin(), end = graphicViewsBlocks.cend(); it != end; ++it) {
-	QAction* action = sendToMenu->addAction((*it)->getName());
-	connect(action, SIGNAL(triggered()), this, SLOT(sendViewTo()));
-	m_sendToActionToView[action] = view;
-	m_sendToActionToIsBlock[action] = true;
-	m_sendToActionToGraphicViewBlock[action] = *it;
-
-	for (size_t i = 0; i < 4; ++i) {
-	  graphicView::Widget* widget = (*it)->getWidget(i);
-	  QAction* subaction = sendToMenu->addAction(widget->getName());
-	  connect(subaction, SIGNAL(triggered()), this, SLOT(sendViewTo()));
-	  m_sendToActionToView[subaction] = view;
-	  m_sendToActionToIsBlock[subaction] = false;
-	  m_sendToActionToGraphicView[subaction] = widget;
-	}
-      }
-      */
+        dialogDescStr = "All Files (*.*);;";
     }
-
-    void
-    Menus::emptySendToMenu(QMenu* menu)
+    else
     {
-      menu->clear();
-      m_sendToActionToView.clear();
-      m_sendToActionToIsBlock.clear();
-      m_sendToActionToGraphicView.clear();
-      m_sendToActionToGraphicViewBlock.clear();
+        auto savers = frontend::getSavers();
+
+        QString allSupportedExts;
+        for (auto it = savers.begin(), itEnd = savers.end(); it != itEnd; ++it)
+        {
+            if ((*it)->saverType() != expectedType)
+            {
+                continue;
+            }
+            std::string extensions = (*it)->fileExtensionFilters();
+            getExtensions(extensions, (*it)->formatName(), allSupportedExts, dialogDescStr);
+        }
+        dialogDescStr = "All Supported (" + allSupportedExts + ");;" + dialogDescStr +
+                        "All Files (*.*);;";
     }
 
-    namespace {
+    currentPath = QFileDialog::getSaveFileName(&MainWindow::instance(),
+                  QObject::tr("Save file"),
+                  currentPath, dialogDescStr);
+    return currentPath;
+}
 
-      void
-      getExtensions(const std::string& extensions, const std::string& format,
-		    QString& allSupported, QString& descrip)
-      {
-	std::stringstream st(extensions);
-	std::string ext;
-	QString allExt;
-	while (st) {
-	  ext = "";
-	  std::getline(st, ext, ';');
-	  if (!ext.empty())
-	    allExt += (QString(ext.c_str()) + " ");
-	}
+}
 
-	descrip += (format.c_str() + QString(" (") + allExt + ");;");
-	allSupported += allExt;
-      }
-
-      static QString currentPath;
-
-      QString
-      selectOpenFileDialog()
-      {
-	auto loaders = frontend::getLoaders();
-
-	QString allSupportedExts;
-	QString dialogDescStr;
-	for (auto it = loaders.begin(), itEnd = loaders.end(); it != itEnd; ++it) {
-	  std::string extensions = (*it)->fileExtensionFilters();
-	  getExtensions(extensions, (*it)->formatName(), allSupportedExts, dialogDescStr);
-	}
-	dialogDescStr = "All Supported (" + allSupportedExts + ");;" + dialogDescStr +
-	  "All Files (*.*);;";
-
-	currentPath = QFileDialog::getOpenFileName(&MainWindow::instance(),
-						   QObject::tr("Open file"),
-						   currentPath, dialogDescStr);
-	return currentPath;
-      }
-
-      QString
-      selectSaveFileDialog(frontend::Saver::Type expectedType)
-      {
-	QString dialogDescStr;
-	if (expectedType == frontend::Saver::Unknown) {
-	  dialogDescStr = "All Files (*.*);;";
-	}
-	else {
-	  auto savers = frontend::getSavers();
-
-	  QString allSupportedExts;
-	  for (auto it = savers.begin(), itEnd = savers.end(); it != itEnd; ++it) {
-	    if ((*it)->saverType() != expectedType) {
-	      continue;
-	    }
-	    std::string extensions = (*it)->fileExtensionFilters();
-	    getExtensions(extensions, (*it)->formatName(), allSupportedExts, dialogDescStr);
-	  }
-	  dialogDescStr = "All Supported (" + allSupportedExts + ");;" + dialogDescStr +
-	    "All Files (*.*);;";
-	}
-
-	currentPath = QFileDialog::getSaveFileName(&MainWindow::instance(),
-						   QObject::tr("Save file"),
-						   currentPath, dialogDescStr);
-	return currentPath;
-      }
-
-    }
-
-    void
-    Menus::saveView(const frontend::ViewInfo* view)
+void
+Menus::saveView(const frontend::ViewInfo *view)
+{
+    switch (view->getViewType())
     {
-      switch (view->getViewType()) {
-      case frontend::ViewInfo::MeshType:
-	saveMesh(((frontend::MeshInfo*)view)->meshPtr.get());
-	break;
-      case frontend::ViewInfo::ImageType:
-	saveImage(((frontend::ImageInfo*)view)->imagePtr.get());
-	break;
-      case frontend::ViewInfo::UndefinedType:
-      default:
-	assert(!"Should never get here!");
-      }
+    case frontend::ViewInfo::MeshType:
+        saveMesh(((frontend::MeshInfo *)view)->meshPtr.get());
+        break;
+    case frontend::ViewInfo::ImageType:
+        saveImage(((frontend::ImageInfo *)view)->imagePtr.get());
+        break;
+    case frontend::ViewInfo::UndefinedType:
+    default:
+        assert(!"Should never get here!");
     }
+}
 
-    namespace {
+namespace
+{
 
-      void
-      checkErrorSave(bool ok, const std::string& err)
-      {
-	if (ok) {
-	  if (!err.empty()) {
-	    QMessageBox::warning(&MainWindow::instance(),
-				 QObject::tr("Warning saving the file"),
-				 QString::fromStdString(err));
-	  }
-	}
-	else {
-	  if (!err.empty()) {
-	    QMessageBox::critical(&MainWindow::instance(),
-				  QObject::tr("Error saving the file"),
-				  QString::fromStdString(err));
-	  }
-	  else {
-	    QMessageBox::critical(&MainWindow::instance(),
-				  QObject::tr("Error saving the file"),
-				  "<Unknown error>");
-	  }
-	}
-      }
-
-      void
-      checkErrorOpen(bool ok, const std::string& err)
-      {
-	if (ok) {
-	  if (!err.empty()) {
-	    QMessageBox::warning(&MainWindow::instance(),
-				 QObject::tr("Warning opening the file"),
-				 QString::fromStdString(err));
-	  }
-	}
-	else {
-	  if (!err.empty()) {
-	    QMessageBox::critical(&MainWindow::instance(),
-				  QObject::tr("Error opening the file"),
-				  QString::fromStdString(err));
-	  }
-	  else {
-	    QMessageBox::critical(&MainWindow::instance(),
-				  QObject::tr("Error opening the file"),
-				  "<Unknown error>");
-	  }
-	}
-      }
-
-    }
-
-    void
-    Menus::saveMesh(const core::MeshView* mesh)
+void
+checkErrorSave(bool ok, const std::string &err)
+{
+    if (ok)
     {
-      QString filepath = selectSaveFileDialog(frontend::Saver::MeshSaver);
-      if (filepath.size() == 0)
-	return;
-
-      std::string err;
-      bool ok = frontend::saveFile((core::MeshView*) mesh, filepath.toStdString());
-
-      checkErrorSave(ok, err);
+        if (!err.empty())
+        {
+            QMessageBox::warning(&MainWindow::instance(),
+                                 QObject::tr("Warning saving the file"),
+                                 QString::fromStdString(err));
+        }
     }
-
-    void
-    Menus::saveImage(const core::ImageView* image)
+    else
     {
-      QString filepath = selectSaveFileDialog(frontend::Saver::ImageSaver);
-      if (filepath.size() == 0)
-	return;
-
-      std::string err;
-      bool ok = frontend::saveFile((core::ImageView*) image, filepath.toStdString());
-
-      checkErrorSave(ok, err);
+        if (!err.empty())
+        {
+            QMessageBox::critical(&MainWindow::instance(),
+                                  QObject::tr("Error saving the file"),
+                                  QString::fromStdString(err));
+        }
+        else
+        {
+            QMessageBox::critical(&MainWindow::instance(),
+                                  QObject::tr("Error saving the file"),
+                                  "<Unknown error>");
+        }
     }
+}
 
-    void
-    Menus::saveImage(const QImage& image)
+void
+checkErrorOpen(bool ok, const std::string &err)
+{
+    if (ok)
     {
-      QString filepath = selectSaveFileDialog(frontend::Saver::Unknown);
-      if (filepath.size() == 0)
-	return;
-      bool ok = image.save(filepath);
-      std::string err;
-      if (!ok)
-	err = "Qt error: unable to save file";
-
-      checkErrorSave(ok, err);
+        if (!err.empty())
+        {
+            QMessageBox::warning(&MainWindow::instance(),
+                                 QObject::tr("Warning opening the file"),
+                                 QString::fromStdString(err));
+        }
     }
-
-    void
-    Menus::openFile()
+    else
     {
-      QString filepath = selectOpenFileDialog();
-      if (filepath.size() == 0)
-	return;
-
-      std::string err;
-      bool ok = frontend::ViewManager::instance().createView(filepath.toStdString(), err);
-
-      checkErrorOpen(ok, err);
+        if (!err.empty())
+        {
+            QMessageBox::critical(&MainWindow::instance(),
+                                  QObject::tr("Error opening the file"),
+                                  QString::fromStdString(err));
+        }
+        else
+        {
+            QMessageBox::critical(&MainWindow::instance(),
+                                  QObject::tr("Error opening the file"),
+                                  "<Unknown error>");
+        }
     }
+}
 
-    void
-    Menus::openRawImage()
+}
+
+void
+Menus::saveMesh(const core::MeshView *mesh)
+{
+    QString filepath = selectSaveFileDialog(frontend::Saver::MeshSaver);
+    if (filepath.size() == 0)
+        return;
+
+    std::string err;
+    bool ok = frontend::saveFile((core::MeshView *) mesh, filepath.toStdString());
+
+    checkErrorSave(ok, err);
+}
+
+void
+Menus::saveImage(const core::ImageView *image)
+{
+    QString filepath = selectSaveFileDialog(frontend::Saver::ImageSaver);
+    if (filepath.size() == 0)
+        return;
+
+    std::string err;
+    bool ok = frontend::saveFile((core::ImageView *) image, filepath.toStdString());
+
+    checkErrorSave(ok, err);
+}
+
+void
+Menus::saveImage(const QImage &image)
+{
+    QString filepath = selectSaveFileDialog(frontend::Saver::Unknown);
+    if (filepath.size() == 0)
+        return;
+    bool ok = image.save(filepath);
+    std::string err;
+    if (!ok)
+        err = "Qt error: unable to save file";
+
+    checkErrorSave(ok, err);
+}
+
+void
+Menus::openFile()
+{
+    QString filepath = selectOpenFileDialog();
+    if (filepath.size() == 0)
+        return;
+
+    std::string err;
+    bool ok = frontend::ViewManager::instance().createView(filepath.toStdString(), err);
+
+    checkErrorOpen(ok, err);
+}
+
+void
+Menus::openRawImage()
+{
+    LoaderAction *action = new LoaderAction("LoaderRawImagePlugin", m_fileMenu);
+    action->runLoader();
+}
+
+void
+Menus::createAndAssignViewWindow()
+{
+    /*
+    QAction* s = (QAction*)sender();
+    graphicView::ViewingWindowPtr vw = graphicView::ViewingWindowManager::instance().getNewWindow();
+    m_actionToGraphicView[s]->getScene()->setViewWindow(vw);
+    */
+}
+
+void
+Menus::viewWindowSelected()
+{
+    /*
+    QAction* s = (QAction*)sender();
+    m_actionToGraphicView[s]->getScene()->setViewWindow(m_actionToViewWindow[s]);
+    */
+}
+
+void
+Menus::viewWindowAssigned(graphicView::ViewingWindow *window)
+{
+    graphicView::Scene *scene = (graphicView::Scene *)sender();
+    const auto &actions = m_graphicViewToViewWindowMenu[scene]->actions();
+    for (auto it = actions.begin(), end = actions.end(); it != end; ++it)
     {
-      LoaderAction* action = new LoaderAction("LoaderRawImagePlugin", m_fileMenu);
-      action->runLoader();
+        if ((*it)->text() == window->getName())
+        {
+            (*it)->setChecked(true);
+        }
     }
+}
 
-    void
-    Menus::createAndAssignViewWindow()
+void
+Menus::createAndAssignSliceWindow()
+{
+    QAction *s = (QAction *)sender();
+    graphicView::SliceWindowPtr sw = graphicView::SliceWindowManager::instance().getNewWindow();
+    ((graphicView::ImageScene *) m_actionToGraphicView[s]->getScene())->setSliceWindow(sw);
+}
+
+void
+Menus::sliceWindowSelected()
+{
+    QAction *s = (QAction *)sender();
+    ((graphicView::ImageScene *) m_actionToGraphicView[s]->getScene())->setSliceWindow(m_actionToSliceWindow[s]);
+}
+
+void
+Menus::sliceWindowAssigned(graphicView::SliceWindow *window)
+{
+    graphicView::Scene *scene = (graphicView::Scene *)sender();
+    const auto &actions = m_graphicViewToSliceWindowMenu[scene]->actions();
+    for (auto it = actions.begin(), end = actions.end(); it != end; ++it)
     {
-      /*
-      QAction* s = (QAction*)sender();
-      graphicView::ViewingWindowPtr vw = graphicView::ViewingWindowManager::instance().getNewWindow();
-      m_actionToGraphicView[s]->getScene()->setViewWindow(vw);
-      */
+        if ((*it)->text() == window->getName())
+        {
+            (*it)->setChecked(true);
+        }
     }
+}
 
-    void
-    Menus::viewWindowSelected()
+void
+Menus::saveView()
+{
+    QAction *action = (QAction *)sender();
+    frontend::ViewInfo *view = m_saveActionToView[action];
+    saveView(view);
+}
+
+void
+Menus::sendViewTo()
+{
+    QAction *action = (QAction *) sender();
+    frontend::ViewInfo *view = m_sendToActionToView[action];
+
+    // Send to...
+    if (m_sendToActionToIsBlock[action])
     {
-      /*
-      QAction* s = (QAction*)sender();
-      m_actionToGraphicView[s]->getScene()->setViewWindow(m_actionToViewWindow[s]);
-      */
+        m_sendToActionToGraphicViewBlock[action]->setView(view);
     }
-
-    void
-    Menus::viewWindowAssigned(graphicView::ViewingWindow* window)
+    else
     {
-      graphicView::Scene* scene = (graphicView::Scene*)sender();
-      const auto& actions = m_graphicViewToViewWindowMenu[scene]->actions();
-      for (auto it = actions.begin(), end = actions.end(); it != end; ++it) {
-	if ((*it)->text() == window->getName()) {
-	  (*it)->setChecked(true);
-	}
-      }
+        m_sendToActionToGraphicView[action]->setView(view);
     }
 
-    void
-    Menus::createAndAssignSliceWindow()
-    {
-      QAction* s = (QAction*)sender();
-      graphicView::SliceWindowPtr sw = graphicView::SliceWindowManager::instance().getNewWindow();
-      ((graphicView::ImageScene*) m_actionToGraphicView[s]->getScene())->setSliceWindow(sw);
-    }
+    // ... and delete menu entries
+    emptySendToMenu(m_viewToSendToMenu[view]);
+}
 
-    void
-    Menus::sliceWindowSelected()
-    {
-      QAction* s = (QAction*)sender();
-      ((graphicView::ImageScene*) m_actionToGraphicView[s]->getScene())->setSliceWindow(m_actionToSliceWindow[s]);
-    }
+void
+Menus::configureView()
+{
+    QAction *action = (QAction *) sender();
+    frontend::ViewInfo *view = m_configDeleteActionToView[action];
 
-    void
-    Menus::sliceWindowAssigned(graphicView::SliceWindow* window)
-    {
-      graphicView::Scene* scene = (graphicView::Scene*)sender();
-      const auto& actions = m_graphicViewToSliceWindowMenu[scene]->actions();
-      for (auto it = actions.begin(), end = actions.end(); it != end; ++it) {
-	if ((*it)->text() == window->getName()) {
-	  (*it)->setChecked(true);
-	}
-      }
-    }
+    std::unique_ptr<ViewConfigDialog> dialog(createViewConfigDialog(view, &MainWindow::instance()));
+    dialog->exec();
+}
 
-    void
-    Menus::saveView()
-    {
-      QAction* action = (QAction*)sender();
-      frontend::ViewInfo* view = m_saveActionToView[action];
-      saveView(view);
-    }
+void
+Menus::setDeletableView(bool mark)
+{
+    QAction *action = (QAction *) sender();
+    frontend::ViewInfo *view = m_configDeleteActionToView[action];
+    MainWindow::instance().getGraph()->setDeletable(view, mark);
+}
 
-    void
-    Menus::sendViewTo()
-    {
-      QAction* action = (QAction*) sender();
-      frontend::ViewInfo* view = m_sendToActionToView[action];
+void
+Menus::takeScreenshot()
+{
+    QAction *action = (QAction *) sender();
+    graphicView::Widget *graphicView = m_actionToGraphicView[action];
+    graphicView->takeScreenshot();
+}
 
-      // Send to...
-      if (m_sendToActionToIsBlock[action]) {
-	m_sendToActionToGraphicViewBlock[action]->setView(view);
-      }
-      else {
-	m_sendToActionToGraphicView[action]->setView(view);
-      }
+void
+Menus::takeBlockScreenshot()
+{
+    auto block = MainWindow::instance().currentBlock();
+    if (block)
+        block->takeScreenshot();
+}
 
-      // ... and delete menu entries
-      emptySendToMenu(m_viewToSendToMenu[view]);
-    }
-
-    void
-    Menus::configureView()
-    {
-      QAction* action = (QAction*) sender();
-      frontend::ViewInfo* view = m_configDeleteActionToView[action];
-
-      std::unique_ptr<ViewConfigDialog> dialog(createViewConfigDialog(view, &MainWindow::instance()));
-      dialog->exec();
-    }
-
-    void
-    Menus::setDeletableView(bool mark)
-    {
-      QAction* action = (QAction*) sender();
-      frontend::ViewInfo* view = m_configDeleteActionToView[action];
-      MainWindow::instance().getGraph()->setDeletable(view, mark);
-    }
-
-    void
-    Menus::takeScreenshot()
-    {
-      QAction* action = (QAction*) sender();
-      graphicView::Widget* graphicView = m_actionToGraphicView[action];
-      graphicView->takeScreenshot();
-    }
-
-    void
-    Menus::takeBlockScreenshot()
-    {
-      auto block = MainWindow::instance().currentBlock();
-      if (block)
-	block->takeScreenshot();
-    }
-
-  }
+}
 }

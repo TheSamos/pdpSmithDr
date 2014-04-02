@@ -25,12 +25,9 @@
 #include <core/ViewNode.hpp>
 #include <core/Clonable.hpp>
 #include "AlgorithmInfo.hpp"
-//#include "Parameter.hpp"
 #include "TypesInfo.hpp"
 
 #include <frontend/libqt/SDRParameter.hpp>
-
-
 
 #include <vector>
 #include <string>

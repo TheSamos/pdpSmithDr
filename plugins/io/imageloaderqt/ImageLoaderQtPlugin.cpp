@@ -22,10 +22,11 @@
 #include <core/image/ImageView_.hpp>
 #include <frontend/lib/Loader.hpp>
 #include <frontend/lib/LoaderManager.hpp>
-
 #include <frontend/lib/AlgorithmInfo.hpp>
-//#include <frontend/lib/Parameter.hpp>
+
 #include <frontend/libqt/SDRParameter.hpp>
+#include <frontend/libqt/SimpleParameter.hpp>
+
 #include <PluginDefs.hpp>
 #include <Types.hpp>
 #include <utils/sdTypeUtils.hpp>
@@ -47,7 +48,7 @@ class ImageLoaderQtPlugin : public sd::frontend::Loader
 public:
 
     ImageLoaderQtPlugin()
-        : sd::frontend::Loader(m_name, m_output, m_parameters)
+        : sd::frontend::Loader(m_name, m_output/*, m_parameters*/)
     {}
 
     virtual ~ImageLoaderQtPlugin()
@@ -102,11 +103,18 @@ public:
     virtual bool
     load()
     {
-        /*std::string filename = "";
-        sd::frontend::Parameter p;
-        this->getXMLParams("filename", p);
-        if (p.isString())
-          filename = p.getAs<std::string>();
+
+        std::cout << "Before Load" << std::endl;
+        std::string filename = "";
+        //sd::frontend::Parameter p;
+        sd::libqt::SimpleStringParameter *p = 
+        static_cast<sd::libqt::SimpleStringParameter *>(this->getXMLParams("filename"));
+
+        std::cout << "Before getValue" << std::endl;
+        filename = p->getValue();
+
+        std::cout << "In Load: filename, " << filename << std::endl;
+
         if (filename.empty())
           return false;
 
@@ -114,8 +122,10 @@ public:
         sd::core::ImageView_<T>* img = loader.loadImage(filename);
         if (!img)
           return false;
+        
 
-        img->addParent(this);*/
+        img->addParent(this);
+        std::cout << "added the parent" << std::endl;
 
         return true;
     }
@@ -123,19 +133,20 @@ public:
 private:
     static const std::string m_name;
     static const sd::frontend::AlgorithmInfo m_output;
-    static const std::string m_parameters;
+    //static const std::string m_parameters;
 };
 
 template<typename T> const std::string ImageLoaderQtPlugin<T>::m_name = "ImageLoaderQtPlugin";
 template<typename T> const sd::frontend::AlgorithmInfo ImageLoaderQtPlugin<T>::m_output = sd::frontend::make_info(sd::core::ObjectDescription::ImageView(sd::core::DataType_<T>()));
 //template<typename T> const sd::frontend::ParameterList ImageLoaderQtPlugin<T>::m_parameters = sd::frontend::make_parameter_list("filename", "");
-template<typename T> const std::string ImageLoaderQtPlugin<T>::m_parameters = "<parameters><parameter name=\"filename\" type=\"string\"><widget>ImageLoaderQtPlugin</widget></parameter></parameters>";
-
+//template<typename T> const std::string ImageLoaderQtPlugin<T>::m_parameters = "<parameters><parameter name=\"filename\" type=\"string\"></parameter></parameters>";
+//<widget>ImageLoaderQtPlugin</widget>
 // Register our plugin
 extern "C"
 SMITHDR_PLUGIN_API
 void
 registerPlugin()
 {
-    sd::frontend::registerLoader(new ImageLoaderQtPlugin<sd::UINT8>());
+    std::string parameters = "<parameters><parameter name=\"filename\" type=\"string\"></parameter></parameters>";
+    sd::frontend::registerLoader(new ImageLoaderQtPlugin<sd::UINT8>(), parameters);
 }

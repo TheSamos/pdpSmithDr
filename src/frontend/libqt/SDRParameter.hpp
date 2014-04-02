@@ -10,7 +10,7 @@ namespace sd {
   namespace libqt {
 
 enum Type {Simple, Complex, Undefined_};
-enum DataType {Int=0, Double, Float, String, Undefined};
+enum DataType {Int=0, Double, Float, String, Bool, Undefined};
 
 
 class SDRParameter
@@ -24,7 +24,8 @@ public:
         {Int, "int"},
         {Double, "double"},
         {Float, "float"},
-        {String, "string"}, 
+        {String, "string"},
+        {Bool, "bool"},
         {Undefined, "undefined"}
     };
 

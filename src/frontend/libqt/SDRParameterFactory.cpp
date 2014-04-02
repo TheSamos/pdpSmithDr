@@ -1,74 +1,103 @@
 #include "SDRParameterFactory.hpp"
 #include "SimpleParameter.hpp"
 
-namespace sd {
-  
-  namespace libqt {
+namespace sd
+{
+
+namespace libqt
+{
 
 
-  	SDRParameter* SDRParameterFactory::create(std::string type, std::string name, 
-  		std::map<std::string, QString> map, std::string widget)
-  	{
+SDRParameter *SDRParameterFactory::create(std::string type, std::string name,
+        std::map<std::string, QString> map, std::string widget)
+{
 
-  		if(type == "string")
-  		{
-  			SimpleStringParameter *p = new SimpleStringParameter();
+    if (type == "string")
+    {
+        SimpleStringParameter *p = new SimpleStringParameter();
 
-  			for (auto it=map.begin(); it!=map.end(); ++it)
-  			{
-        		p->setAttributFromName(it->first, it->second.toStdString());
-			} 
+        for (auto it = map.begin(); it != map.end(); ++it)
+        {
+            p->setAttributFromName(it->first, it->second.toStdString());
+        }
 
-			p->setName(name);
-			p->setWidgetName(widget);
+        p->setName(name);
+        p->setWidgetName(widget);
 
-			return p;
-  			
-  		}
-  		else if(type == "int")
-  		{
-  			SimpleIntParameter *p = new SimpleIntParameter();
+        return p;
 
-  			for (auto it=map.begin(); it!=map.end(); ++it)
-  			{
-        		p->setAttributFromName(it->first, it->second.toInt());
-        		std::cout << "setting: " << it->first << ", " <<  it->second.toInt() << std::endl;
-			}
+    }
+    else if (type == "int")
+    {
+        SimpleIntParameter *p = new SimpleIntParameter();
 
-			p->setName(name);
-			p->setWidgetName(widget);  
+        for (auto it = map.begin(); it != map.end(); ++it)
+        {
+            p->setAttributFromName(it->first, it->second.toInt());
+            std::cout << "setting: " << it->first << ", " <<  it->second.toInt() << std::endl;
+        }
 
-			return p;
+        p->setName(name);
+        p->setWidgetName(widget);
 
-  		}
-  		else if(type == "double")
-  		{
-  			SimpleDoubleParameter *p = new SimpleDoubleParameter();
+        return p;
 
-  			for (auto it=map.begin(); it!=map.end(); ++it)
-  			{
-        		p->setAttributFromName(it->first, it->second.toDouble());
-			}  
+    }
+    else if (type == "double")
+    {
+        SimpleDoubleParameter *p = new SimpleDoubleParameter();
 
-			p->setName(name);
-			p->setWidgetName(widget);
+        for (auto it = map.begin(); it != map.end(); ++it)
+        {
+            p->setAttributFromName(it->first, it->second.toDouble());
+        }
 
-			return p;
+        p->setName(name);
+        p->setWidgetName(widget);
 
-  		}
-  		else if(type == "bool")
-  		{
+        return p;
 
-  		}
-  		else
-  		{
-  			std::cout << "Param Factory: unknown type: " << type << std::endl;
-  		}
+    }
+    else if (type == "float")
+    {
+      SimpleFloatParameter *p = new SimpleFloatParameter();
 
-  		return nullptr;
-  	}
+        for (auto it = map.begin(); it != map.end(); ++it)
+        {
+            p->setAttributFromName(it->first, it->second.toFloat());
+        }
+
+        p->setName(name);
+        p->setWidgetName(widget);
+        std::cout << "Parsed float" << std::endl;
+
+        return p;
+    }
+    else if (type == "bool")
+    {
+      SimpleBoolParameter *p = new SimpleBoolParameter();
+
+        for (auto it = map.begin(); it != map.end(); ++it)
+        {
+            bool b = (it->second.toStdString() == "true") ? true : false;
+            p->setAttributFromName(it->first, b);
+        }
+
+        p->setName(name);
+        p->setWidgetName(widget);
+        std::cout << "Parsed float" << std::endl;
+
+        return p;
+    }
+    else
+    {
+        std::cout << "Param Factory: unknown type: " << type << std::endl;
+    }
+
+    return nullptr;
+}
 
 
-	}
+}
 
 }

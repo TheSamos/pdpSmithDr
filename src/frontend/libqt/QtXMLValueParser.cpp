@@ -36,57 +36,53 @@ int QtXMLValueParser::initialize()
 SDRParameter* QtXMLValueParser::parseSimpleParameter()
 {
 
-    SDRParameter* pfake = new SimpleIntParameter(6);
     std::cout << "parsing value" << std::endl;
+
     QDomElement param_root = m_qdoc.firstChildElement("parameter");
     std::string name = param_root.attributeNode("name").value().toStdString();
     std::string type = param_root.attributeNode("type").value().toStdString();
 
-    if(type == "int"){
-        int value;
-        QDomElement param_elem = param_root.firstChildElement();
+    QDomElement val_element = param_root.namedItem(QString::fromStdString("value")).toElement();
 
-        value = param_elem.text().toFloat();
+    SDRParameter *param;
 
-        SDRParameter* p = new SimpleIntParameter(value);
-        //p = value;
-        return p;
-
+    if(type == "string")
+    {
+        std::string value = val_element.text().toStdString();
+        param = new SimpleStringParameter(value);
+    }
+    else if(type == "int")
+    {
+        int value = val_element.text().toInt();
+        param = new SimpleIntParameter(value);
+    }
+    else if(type == "double")
+    {
+        double value = val_element.text().toDouble();
+        param = new SimpleDoubleParameter(value);
+    }
+    else if(type == "float")
+    {
+        float value = val_element.text().toFloat();
+        param = new SimpleFloatParameter(value);
+    }
+    else if(type == "bool")
+    {
+        bool value = (val_element.text().toStdString() == "true") ? true : false;
+        param = new SimpleFloatParameter(value);
+    }
+    else
+    {
+        std::cout << "Error: QtXMLValueParser, value of unknow type." << std::endl;
+        return nullptr;
     }
 
-        if(type == "float"){
-        float value;
-        QDomElement param_elem = param_root.firstChildElement();
+    param->setName(name);
 
-        value = param_elem.text().toFloat();
+    std::cout << "Created Parameter: " << std::endl;
+    param->print();
 
-        SDRParameter* p = new SimpleFloatParameter(value);
-        //p = value;
-        return p;
-
-    }
-
-
-        /*if(type == "boolean"){
-            std::string value;
-            QDomElement param_elem = param_root.firstChildElement();
-
-            value = param_elem.text().toStdString();
-            if(value == "true"){
-                std::cout << "it's true" << std::endl;
-                frontend::Parameter p(name, true);
-                return p;
-        }
-            else{
-                frontend::Parameter p(name, false);
-                return p;
-            }
-
-
-
-    }*/
-
-    return pfake;
+    return param;
 
 }
 

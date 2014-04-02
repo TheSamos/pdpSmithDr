@@ -22,40 +22,59 @@
 #define SD_FRONTEND_LOADER_MANAGER_HXX
 
 #include <utils/sdFileUtils.hpp>
+#include <map>
 
-namespace sd {
-  
-  namespace frontend {
+namespace sd
+{
 
-    inline LoaderManager&
-    LoaderManager::instance() {
-      static LoaderManager inst;
-      return inst;
+namespace frontend
+{
+
+inline LoaderManager &
+LoaderManager::instance()
+{
+    static LoaderManager inst;
+    return inst;
+}
+
+template<typename... Outputs>
+bool
+loadFile(const std::string &filename, Outputs &...outputs)
+{
+    Query<Loader> proto = detectLoaders(filename);
+    if (proto.empty())
+        return false;
+
+    std::string filename_xml =  "<parameter name=\"filename\" type=\"string\"><value>" + filename + "</value></parameter>";
+    std::map<std::string, std::string> map = {{"filename", filename_xml}};
+
+    // try to call load function of each remaining prototype
+    for (auto it = proto.begin(); it != proto.end(); ++it)
+    {
+        std::cout << "Before set Param" << std::endl;
+        (*it)->setXMLParams(map);
+        std::cout << "after set Param" << std::endl;
+
+        bool successful = (*it)->load();
+        std::cout << "After load" << std::endl;
+
+        if (successful)
+        {
+            (*it)->getOutputs(outputs...);
+            (*it)->disconnectOutputNodes();
+
+            std::cout << "before return true" << std::endl;
+
+
+            return true;
+        }
     }
-    
-    template<typename... Outputs>
-    bool
-    loadFile(const std::string& filename, Outputs& ...outputs) {
-      Query<Loader> proto = detectLoaders(filename);
-      if (proto.empty())
-	return false;
 
-      // try to call load function of each remaining prototype
-      for (auto it = proto.begin(); it != proto.end(); ++it) {
-	//(*it)->setParams("filename", filename);
-	bool successful = (*it)->load();
-	if (successful) {
-	  (*it)->getOutputs(outputs...);
-	  (*it)->disconnectOutputNodes();
-	  return true;
-	}
-      }
-      
-      return false;
-    }
-    
-  }
-  
+    return false;
+}
+
+}
+
 }
 
 #endif /* ! SD_FRONTEND_LOADER_MANAGER_HXX */

@@ -29,6 +29,7 @@
 #include <core/ViewDAG.hpp>
 
 #include <frontend/libqt/QtXMLValueParser.hpp>
+#include <frontend/libqt/SimpleParameter.hpp>
 
 sd::core::ViewDAG sd::frontend::Algorithm::m_dag;
 
@@ -179,15 +180,18 @@ Algorithm::setXMLParams(std::map<std::string, std::string> new_params)
 sd::libqt::SDRParameter *
 Algorithm::getXMLParams(std::string name)
 {
-    /*std::string stringXml = m_xml_parameters[name];
-    sd::libqt::QtXMLValueParser valueParser(stringXml);
-    std::cout << "222222222222" << std::endl;
-    frontend::Parameter p = valueParser.parseSimpleParameter();
-    std::cout << "icicicicicicci" << std::endl;
-    int alpha = p.getInteger();
-    std::cout << "alpha222 = " << alpha << std::endl;
-    return p;*/
-    return nullptr;
+    std::string parameter = m_xml_parameters[name];
+    std::cout << "getXMLParams: parameter: " << parameter << std::endl;
+    sd::libqt::QtXMLValueParser valueParser(parameter);
+
+    std::cout << "getXMLParams: parameter: " << parameter << std::endl;
+    
+    sd::libqt::SDRParameter *p = valueParser.parseSimpleParameter();
+    
+    if(p == nullptr)
+      std::cout << "nullptr in getXMLParams (Algorithm)" << std::endl;
+
+    return p;
 }
 
 

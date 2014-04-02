@@ -52,6 +52,8 @@ namespace sd {
   virtual sd::libqt::SDRParameter* updateXMLParameter();
 
 
+
+
       };
 
     }
