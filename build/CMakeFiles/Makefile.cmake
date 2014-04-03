@@ -116,6 +116,7 @@ SET(CMAKE_DEPEND_INFO_FILES
   "src/frontend/qtgui/CMakeFiles/SmithDR.dir/DependInfo.cmake"
   "plugins/algo/CMakeFiles/AlgoExamplePlugin.dir/DependInfo.cmake"
   "plugins/algo/CMakeFiles/ImageMixPlugin.dir/DependInfo.cmake"
+  "plugins/algo/CMakeFiles/SeuillagePlugin.dir/DependInfo.cmake"
   "plugins/io/CMakeFiles/ImageLoaderQtPlugin.dir/DependInfo.cmake"
   "plugins/io/CMakeFiles/ImageSaverQtPlugin.dir/DependInfo.cmake"
   "plugins/widgets/Qt/CMakeFiles/OpenFileButtonPlugin.dir/DependInfo.cmake"

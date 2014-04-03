@@ -64,6 +64,7 @@ SDRParameter* QtXMLValueParser::parseSimpleParameter()
     else if(type == "float")
     {
         float value = val_element.text().toFloat();
+        std::cout << "In value parser: " << value << std::endl;
         param = new SimpleFloatParameter(value);
     }
     else if(type == "bool")

@@ -601,11 +601,11 @@ src/frontend/qtgui/CMakeFiles/SmithDR.dir/all: src/core/CMakeFiles/sdcore.dir/al
 src/frontend/qtgui/CMakeFiles/SmithDR.dir/all: src/imageprocessing/CMakeFiles/sdimageprocessing.dir/all
 src/frontend/qtgui/CMakeFiles/SmithDR.dir/all: src/meshprocessing/CMakeFiles/sdmeshprocessing.dir/all
 src/frontend/qtgui/CMakeFiles/SmithDR.dir/all: src/frontend/lib/CMakeFiles/sdfrontendlib.dir/all
-src/frontend/qtgui/CMakeFiles/SmithDR.dir/all: src/CMakeFiles/smithdr.dir/all
 src/frontend/qtgui/CMakeFiles/SmithDR.dir/all: src/frontend/libqt/CMakeFiles/sdfrontendlibqt.dir/all
+src/frontend/qtgui/CMakeFiles/SmithDR.dir/all: src/CMakeFiles/smithdr.dir/all
 	$(MAKE) -f src/frontend/qtgui/CMakeFiles/SmithDR.dir/build.make src/frontend/qtgui/CMakeFiles/SmithDR.dir/depend
 	$(MAKE) -f src/frontend/qtgui/CMakeFiles/SmithDR.dir/build.make src/frontend/qtgui/CMakeFiles/SmithDR.dir/build
-	$(CMAKE_COMMAND) -E cmake_progress_report /autofs/netapp/account/cremi/sbassett/cours/PDP/final/pdpSmithDr/build/CMakeFiles  6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68 69 70
+	$(CMAKE_COMMAND) -E cmake_progress_report /autofs/netapp/account/cremi/sbassett/cours/PDP/final/pdpSmithDr/build/CMakeFiles  7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68 69 70
 	@echo "Built target SmithDR"
 .PHONY : src/frontend/qtgui/CMakeFiles/SmithDR.dir/all
 
@@ -615,7 +615,7 @@ all: src/frontend/qtgui/CMakeFiles/SmithDR.dir/all
 
 # Build rule for subdir invocation for target.
 src/frontend/qtgui/CMakeFiles/SmithDR.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /autofs/netapp/account/cremi/sbassett/cours/PDP/final/pdpSmithDr/build/CMakeFiles 95
+	$(CMAKE_COMMAND) -E cmake_progress_start /autofs/netapp/account/cremi/sbassett/cours/PDP/final/pdpSmithDr/build/CMakeFiles 94
 	$(MAKE) -f CMakeFiles/Makefile2 src/frontend/qtgui/CMakeFiles/SmithDR.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /autofs/netapp/account/cremi/sbassett/cours/PDP/final/pdpSmithDr/build/CMakeFiles 0
 .PHONY : src/frontend/qtgui/CMakeFiles/SmithDR.dir/rule
@@ -660,11 +660,13 @@ plugins/preinstall: plugins/widgets/preinstall
 # Convenience name for "all" pass in the directory.
 plugins/algo/all: plugins/algo/CMakeFiles/AlgoExamplePlugin.dir/all
 plugins/algo/all: plugins/algo/CMakeFiles/ImageMixPlugin.dir/all
+plugins/algo/all: plugins/algo/CMakeFiles/SeuillagePlugin.dir/all
 .PHONY : plugins/algo/all
 
 # Convenience name for "clean" pass in the directory.
 plugins/algo/clean: plugins/algo/CMakeFiles/AlgoExamplePlugin.dir/clean
 plugins/algo/clean: plugins/algo/CMakeFiles/ImageMixPlugin.dir/clean
+plugins/algo/clean: plugins/algo/CMakeFiles/SeuillagePlugin.dir/clean
 .PHONY : plugins/algo/clean
 
 # Convenience name for "preinstall" pass in the directory.
@@ -680,8 +682,8 @@ plugins/algo/CMakeFiles/AlgoExamplePlugin.dir/all: src/core/CMakeFiles/sdcore.di
 plugins/algo/CMakeFiles/AlgoExamplePlugin.dir/all: src/imageprocessing/CMakeFiles/sdimageprocessing.dir/all
 plugins/algo/CMakeFiles/AlgoExamplePlugin.dir/all: src/meshprocessing/CMakeFiles/sdmeshprocessing.dir/all
 plugins/algo/CMakeFiles/AlgoExamplePlugin.dir/all: src/frontend/lib/CMakeFiles/sdfrontendlib.dir/all
-plugins/algo/CMakeFiles/AlgoExamplePlugin.dir/all: src/CMakeFiles/smithdr.dir/all
 plugins/algo/CMakeFiles/AlgoExamplePlugin.dir/all: src/frontend/libqt/CMakeFiles/sdfrontendlibqt.dir/all
+plugins/algo/CMakeFiles/AlgoExamplePlugin.dir/all: src/CMakeFiles/smithdr.dir/all
 	$(MAKE) -f plugins/algo/CMakeFiles/AlgoExamplePlugin.dir/build.make plugins/algo/CMakeFiles/AlgoExamplePlugin.dir/depend
 	$(MAKE) -f plugins/algo/CMakeFiles/AlgoExamplePlugin.dir/build.make plugins/algo/CMakeFiles/AlgoExamplePlugin.dir/build
 	$(CMAKE_COMMAND) -E cmake_progress_report /autofs/netapp/account/cremi/sbassett/cours/PDP/final/pdpSmithDr/build/CMakeFiles 
@@ -721,8 +723,8 @@ plugins/algo/CMakeFiles/ImageMixPlugin.dir/all: src/core/CMakeFiles/sdcore.dir/a
 plugins/algo/CMakeFiles/ImageMixPlugin.dir/all: src/imageprocessing/CMakeFiles/sdimageprocessing.dir/all
 plugins/algo/CMakeFiles/ImageMixPlugin.dir/all: src/meshprocessing/CMakeFiles/sdmeshprocessing.dir/all
 plugins/algo/CMakeFiles/ImageMixPlugin.dir/all: src/frontend/lib/CMakeFiles/sdfrontendlib.dir/all
-plugins/algo/CMakeFiles/ImageMixPlugin.dir/all: src/CMakeFiles/smithdr.dir/all
 plugins/algo/CMakeFiles/ImageMixPlugin.dir/all: src/frontend/libqt/CMakeFiles/sdfrontendlibqt.dir/all
+plugins/algo/CMakeFiles/ImageMixPlugin.dir/all: src/CMakeFiles/smithdr.dir/all
 	$(MAKE) -f plugins/algo/CMakeFiles/ImageMixPlugin.dir/build.make plugins/algo/CMakeFiles/ImageMixPlugin.dir/depend
 	$(MAKE) -f plugins/algo/CMakeFiles/ImageMixPlugin.dir/build.make plugins/algo/CMakeFiles/ImageMixPlugin.dir/build
 	$(CMAKE_COMMAND) -E cmake_progress_report /autofs/netapp/account/cremi/sbassett/cours/PDP/final/pdpSmithDr/build/CMakeFiles  2
@@ -754,6 +756,47 @@ clean: plugins/algo/CMakeFiles/ImageMixPlugin.dir/clean
 .PHONY : clean
 
 #=============================================================================
+# Target rules for target plugins/algo/CMakeFiles/SeuillagePlugin.dir
+
+# All Build rule for target.
+plugins/algo/CMakeFiles/SeuillagePlugin.dir/all: src/utils/CMakeFiles/sdutils.dir/all
+plugins/algo/CMakeFiles/SeuillagePlugin.dir/all: src/core/CMakeFiles/sdcore.dir/all
+plugins/algo/CMakeFiles/SeuillagePlugin.dir/all: src/imageprocessing/CMakeFiles/sdimageprocessing.dir/all
+plugins/algo/CMakeFiles/SeuillagePlugin.dir/all: src/meshprocessing/CMakeFiles/sdmeshprocessing.dir/all
+plugins/algo/CMakeFiles/SeuillagePlugin.dir/all: src/frontend/lib/CMakeFiles/sdfrontendlib.dir/all
+plugins/algo/CMakeFiles/SeuillagePlugin.dir/all: src/frontend/libqt/CMakeFiles/sdfrontendlibqt.dir/all
+plugins/algo/CMakeFiles/SeuillagePlugin.dir/all: src/CMakeFiles/smithdr.dir/all
+	$(MAKE) -f plugins/algo/CMakeFiles/SeuillagePlugin.dir/build.make plugins/algo/CMakeFiles/SeuillagePlugin.dir/depend
+	$(MAKE) -f plugins/algo/CMakeFiles/SeuillagePlugin.dir/build.make plugins/algo/CMakeFiles/SeuillagePlugin.dir/build
+	$(CMAKE_COMMAND) -E cmake_progress_report /autofs/netapp/account/cremi/sbassett/cours/PDP/final/pdpSmithDr/build/CMakeFiles  6
+	@echo "Built target SeuillagePlugin"
+.PHONY : plugins/algo/CMakeFiles/SeuillagePlugin.dir/all
+
+# Include target in all.
+all: plugins/algo/CMakeFiles/SeuillagePlugin.dir/all
+.PHONY : all
+
+# Build rule for subdir invocation for target.
+plugins/algo/CMakeFiles/SeuillagePlugin.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /autofs/netapp/account/cremi/sbassett/cours/PDP/final/pdpSmithDr/build/CMakeFiles 31
+	$(MAKE) -f CMakeFiles/Makefile2 plugins/algo/CMakeFiles/SeuillagePlugin.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /autofs/netapp/account/cremi/sbassett/cours/PDP/final/pdpSmithDr/build/CMakeFiles 0
+.PHONY : plugins/algo/CMakeFiles/SeuillagePlugin.dir/rule
+
+# Convenience name for target.
+SeuillagePlugin: plugins/algo/CMakeFiles/SeuillagePlugin.dir/rule
+.PHONY : SeuillagePlugin
+
+# clean rule for target.
+plugins/algo/CMakeFiles/SeuillagePlugin.dir/clean:
+	$(MAKE) -f plugins/algo/CMakeFiles/SeuillagePlugin.dir/build.make plugins/algo/CMakeFiles/SeuillagePlugin.dir/clean
+.PHONY : plugins/algo/CMakeFiles/SeuillagePlugin.dir/clean
+
+# clean rule for target.
+clean: plugins/algo/CMakeFiles/SeuillagePlugin.dir/clean
+.PHONY : clean
+
+#=============================================================================
 # Directory level rules for directory plugins/io
 
 # Convenience name for "all" pass in the directory.
@@ -779,8 +822,8 @@ plugins/io/CMakeFiles/ImageLoaderQtPlugin.dir/all: src/core/CMakeFiles/sdcore.di
 plugins/io/CMakeFiles/ImageLoaderQtPlugin.dir/all: src/imageprocessing/CMakeFiles/sdimageprocessing.dir/all
 plugins/io/CMakeFiles/ImageLoaderQtPlugin.dir/all: src/meshprocessing/CMakeFiles/sdmeshprocessing.dir/all
 plugins/io/CMakeFiles/ImageLoaderQtPlugin.dir/all: src/frontend/lib/CMakeFiles/sdfrontendlib.dir/all
-plugins/io/CMakeFiles/ImageLoaderQtPlugin.dir/all: src/CMakeFiles/smithdr.dir/all
 plugins/io/CMakeFiles/ImageLoaderQtPlugin.dir/all: src/frontend/libqt/CMakeFiles/sdfrontendlibqt.dir/all
+plugins/io/CMakeFiles/ImageLoaderQtPlugin.dir/all: src/CMakeFiles/smithdr.dir/all
 	$(MAKE) -f plugins/io/CMakeFiles/ImageLoaderQtPlugin.dir/build.make plugins/io/CMakeFiles/ImageLoaderQtPlugin.dir/depend
 	$(MAKE) -f plugins/io/CMakeFiles/ImageLoaderQtPlugin.dir/build.make plugins/io/CMakeFiles/ImageLoaderQtPlugin.dir/build
 	$(CMAKE_COMMAND) -E cmake_progress_report /autofs/netapp/account/cremi/sbassett/cours/PDP/final/pdpSmithDr/build/CMakeFiles  1
@@ -820,8 +863,8 @@ plugins/io/CMakeFiles/ImageSaverQtPlugin.dir/all: src/core/CMakeFiles/sdcore.dir
 plugins/io/CMakeFiles/ImageSaverQtPlugin.dir/all: src/imageprocessing/CMakeFiles/sdimageprocessing.dir/all
 plugins/io/CMakeFiles/ImageSaverQtPlugin.dir/all: src/meshprocessing/CMakeFiles/sdmeshprocessing.dir/all
 plugins/io/CMakeFiles/ImageSaverQtPlugin.dir/all: src/frontend/lib/CMakeFiles/sdfrontendlib.dir/all
-plugins/io/CMakeFiles/ImageSaverQtPlugin.dir/all: src/CMakeFiles/smithdr.dir/all
 plugins/io/CMakeFiles/ImageSaverQtPlugin.dir/all: src/frontend/libqt/CMakeFiles/sdfrontendlibqt.dir/all
+plugins/io/CMakeFiles/ImageSaverQtPlugin.dir/all: src/CMakeFiles/smithdr.dir/all
 	$(MAKE) -f plugins/io/CMakeFiles/ImageSaverQtPlugin.dir/build.make plugins/io/CMakeFiles/ImageSaverQtPlugin.dir/depend
 	$(MAKE) -f plugins/io/CMakeFiles/ImageSaverQtPlugin.dir/build.make plugins/io/CMakeFiles/ImageSaverQtPlugin.dir/build
 	$(CMAKE_COMMAND) -E cmake_progress_report /autofs/netapp/account/cremi/sbassett/cours/PDP/final/pdpSmithDr/build/CMakeFiles 
@@ -893,8 +936,8 @@ plugins/widgets/Qt/CMakeFiles/OpenFileButtonPlugin.dir/all: src/core/CMakeFiles/
 plugins/widgets/Qt/CMakeFiles/OpenFileButtonPlugin.dir/all: src/imageprocessing/CMakeFiles/sdimageprocessing.dir/all
 plugins/widgets/Qt/CMakeFiles/OpenFileButtonPlugin.dir/all: src/meshprocessing/CMakeFiles/sdmeshprocessing.dir/all
 plugins/widgets/Qt/CMakeFiles/OpenFileButtonPlugin.dir/all: src/frontend/lib/CMakeFiles/sdfrontendlib.dir/all
-plugins/widgets/Qt/CMakeFiles/OpenFileButtonPlugin.dir/all: src/CMakeFiles/smithdr.dir/all
 plugins/widgets/Qt/CMakeFiles/OpenFileButtonPlugin.dir/all: src/frontend/libqt/CMakeFiles/sdfrontendlibqt.dir/all
+plugins/widgets/Qt/CMakeFiles/OpenFileButtonPlugin.dir/all: src/CMakeFiles/smithdr.dir/all
 	$(MAKE) -f plugins/widgets/Qt/CMakeFiles/OpenFileButtonPlugin.dir/build.make plugins/widgets/Qt/CMakeFiles/OpenFileButtonPlugin.dir/depend
 	$(MAKE) -f plugins/widgets/Qt/CMakeFiles/OpenFileButtonPlugin.dir/build.make plugins/widgets/Qt/CMakeFiles/OpenFileButtonPlugin.dir/build
 	$(CMAKE_COMMAND) -E cmake_progress_report /autofs/netapp/account/cremi/sbassett/cours/PDP/final/pdpSmithDr/build/CMakeFiles  3 4
@@ -934,8 +977,8 @@ plugins/widgets/Qt/CMakeFiles/QtWidgetExamplePlugin.dir/all: src/core/CMakeFiles
 plugins/widgets/Qt/CMakeFiles/QtWidgetExamplePlugin.dir/all: src/imageprocessing/CMakeFiles/sdimageprocessing.dir/all
 plugins/widgets/Qt/CMakeFiles/QtWidgetExamplePlugin.dir/all: src/meshprocessing/CMakeFiles/sdmeshprocessing.dir/all
 plugins/widgets/Qt/CMakeFiles/QtWidgetExamplePlugin.dir/all: src/frontend/lib/CMakeFiles/sdfrontendlib.dir/all
-plugins/widgets/Qt/CMakeFiles/QtWidgetExamplePlugin.dir/all: src/CMakeFiles/smithdr.dir/all
 plugins/widgets/Qt/CMakeFiles/QtWidgetExamplePlugin.dir/all: src/frontend/libqt/CMakeFiles/sdfrontendlibqt.dir/all
+plugins/widgets/Qt/CMakeFiles/QtWidgetExamplePlugin.dir/all: src/CMakeFiles/smithdr.dir/all
 	$(MAKE) -f plugins/widgets/Qt/CMakeFiles/QtWidgetExamplePlugin.dir/build.make plugins/widgets/Qt/CMakeFiles/QtWidgetExamplePlugin.dir/depend
 	$(MAKE) -f plugins/widgets/Qt/CMakeFiles/QtWidgetExamplePlugin.dir/build.make plugins/widgets/Qt/CMakeFiles/QtWidgetExamplePlugin.dir/build
 	$(CMAKE_COMMAND) -E cmake_progress_report /autofs/netapp/account/cremi/sbassett/cours/PDP/final/pdpSmithDr/build/CMakeFiles  5

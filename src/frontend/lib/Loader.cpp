@@ -30,7 +30,8 @@
 sd::frontend::Loader::Loader(const std::string& loaderName,
            const sd::frontend::AlgorithmInfo& out,
            const std::string& parameters)
-  : BlackBoxAlgorithm(loaderName, out, AlgorithmInfo(), parameters){
+  : BlackBoxAlgorithm(loaderName, out, AlgorithmInfo(), parameters)
+  {
   setGhostView();
 }
 

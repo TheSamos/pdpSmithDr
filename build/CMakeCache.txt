@@ -833,6 +833,9 @@ SMITHDR_TESTS:BOOL=OFF
 //Generate verbose makefiles
 SMITHDR_VERBOSE:BOOL=OFF
 
+//Dependencies for the target
+SeuillagePlugin_LIB_DEPENDS:STATIC=general;smithdr;general;/usr/lib/x86_64-linux-gnu/libfftw3.so;
+
 //Value Computed by CMake
 SmithDR_BINARY_DIR:STATIC=/autofs/netapp/account/cremi/sbassett/cours/PDP/final/pdpSmithDr/build/src/frontend/qtgui
 

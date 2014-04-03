@@ -4,6 +4,7 @@
 /autofs/netapp/account/cremi/sbassett/cours/PDP/final/pdpSmithDr/build/plugins/io/CMakeFiles/ImageSaverQtPlugin.dir
 /autofs/netapp/account/cremi/sbassett/cours/PDP/final/pdpSmithDr/build/plugins/widgets/Qt/CMakeFiles/OpenFileButtonPlugin.dir
 /autofs/netapp/account/cremi/sbassett/cours/PDP/final/pdpSmithDr/build/plugins/widgets/Qt/CMakeFiles/QtWidgetExamplePlugin.dir
+/autofs/netapp/account/cremi/sbassett/cours/PDP/final/pdpSmithDr/build/plugins/algo/CMakeFiles/SeuillagePlugin.dir
 /autofs/netapp/account/cremi/sbassett/cours/PDP/final/pdpSmithDr/build/src/frontend/qtgui/CMakeFiles/SmithDR.dir
 /autofs/netapp/account/cremi/sbassett/cours/PDP/final/pdpSmithDr/build/src/core/CMakeFiles/sdcore.dir
 /autofs/netapp/account/cremi/sbassett/cours/PDP/final/pdpSmithDr/build/src/frontend/lib/CMakeFiles/sdfrontendlib.dir

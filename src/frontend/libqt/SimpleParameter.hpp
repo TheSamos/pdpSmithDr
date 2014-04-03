@@ -87,7 +87,7 @@ public:
     void print()
     {
         std::cout << "[Parameter:(" << dataTypeToString() << ") " << m_name << ", min: " << m_min << ", max: " << m_max;
-        std::cout << ", default: " << m_default_val << ", widget: " << m_widget_name << "]" << std::endl;
+        std::cout << ", default: " << m_default_val << ", value: " << m_value << ", widget: " << m_widget_name << "]" << std::endl;
     }
 
 private:

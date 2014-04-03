@@ -161,9 +161,9 @@ registerPlugin()
   //parameters.push_back(sd::frontend::Parameter("alpha", 0.5, 0., 1.));
 
   std::string parameters = "<parameters><parameter name=\"alpha\" type=\"float\"> \
-                                  <min>2.0</min> \
-                                  <default>10.0</default> \
-                                  <max>20.0</max> \
+                                  <min>0.0</min> \
+                                  <default>0.5</default> \
+                                  <max>1.0</max> \
                             </parameter></parameters>";
 
   sd::frontend::registerAlgorithm(new ImageMixPlugin<sd::UINT8>, parameters);
