@@ -75,6 +75,7 @@ SDRParameter *SDRParameterFactory::create(std::string type, std::string name,
     }
     else if (type == "bool")
     {
+
       SimpleBoolParameter *p = new SimpleBoolParameter();
 
         for (auto it = map.begin(); it != map.end(); ++it)
@@ -85,7 +86,7 @@ SDRParameter *SDRParameterFactory::create(std::string type, std::string name,
 
         p->setName(name);
         p->setWidgetName(widget);
-        std::cout << "Parsed float" << std::endl;
+        
 
         return p;
     }

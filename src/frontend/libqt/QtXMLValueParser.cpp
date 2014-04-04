@@ -70,7 +70,7 @@ SDRParameter* QtXMLValueParser::parseSimpleParameter()
     else if(type == "bool")
     {
         bool value = (val_element.text().toStdString() == "true") ? true : false;
-        param = new SimpleFloatParameter(value);
+        param = new SimpleBoolParameter(value);
     }
     else
     {

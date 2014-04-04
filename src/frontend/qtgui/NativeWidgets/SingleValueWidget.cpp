@@ -46,18 +46,26 @@ namespace
 QWidget *
 buildEditor(sd::libqt::SDRParameter *p, QWidget *parameterizer)
 {
-    /*if (p.getDataType() == {
-      return buildBooleanEditor(p.getAs<bool>(), parameterizer);
-    }
-    else*/
     std::string name = p->getName();
+    if (p->getDataType() == sd::libqt::Bool) {
+      sd::libqt::SimpleBoolParameter *param = static_cast<sd::libqt::SimpleBoolParameter *>(p);
+      return buildBooleanEditor(param->getDefault(), parameterizer);
+    }
+    else
+    
     if (p->getDataType() == sd::libqt::Int)
     {
+        int mini, maxi;
         sd::libqt::SimpleIntParameter *param = static_cast<sd::libqt::SimpleIntParameter *>(p);
         std::cout << "building sinlgevalue int ------  " << std::endl;
-
-        int mini = param->getMin();
-        int maxi = param->getMax();
+        if(param->isMinDefined() && param->isMaxDefined()){
+          mini = param->getMin();
+          maxi = param->getMax();
+      }
+      else{
+        mini = -UNDEFINED_VAL;
+        maxi = UNDEFINED_VAL;
+      }
         return buildIntegerEditor(param->getDefault(), mini, maxi, parameterizer);
     }
     else if (p->getDataType() == sd::libqt::Float)
@@ -120,44 +128,36 @@ sd::libqt::SDRParameter *
 SingleValueWidget::updateXMLParameter()
 {
 
-    /*if (m_p.isBoolean())
-    {
-        m_p = booleanReader(m_widget);
-        return m_p;
-    }
-    else if (m_p.isInteger())
-    {
-        m_p = integralReader(m_widget);
-        return m_p;
-    }
-    else */if (m_p->getDataType() == sd::libqt::Float)
+if (m_p->getDataType() == sd::libqt::Float)
     {
     	sd::libqt::SimpleFloatParameter *p = static_cast<sd::libqt::SimpleFloatParameter *>(m_p);
     	p->setValue(floatingPointReader(m_widget));
-      std::cout << "SingleWidgetWidget: ";
       m_p->print();
         return m_p;
     }
+    else if(m_p->getDataType() == sd::libqt::Bool){
+      sd::libqt::SimpleBoolParameter *p = static_cast<sd::libqt::SimpleBoolParameter *>(m_p);
+      p->setValue(booleanReader(m_widget));
+      m_p->print();
+        return m_p;
+    }
+
+
     else if(m_p->getDataType() == sd::libqt::String)
     {
-    	/*sd::libqt::SimpleStringParameter *p = static_cast<sd::libqt::SimpleStringParameter *>(m_p);
-    	p->setValue(floatingPointReader(m_widget));*/
+    	sd::libqt::SimpleStringParameter *p = static_cast<sd::libqt::SimpleStringParameter *>(m_p);
+    	p->setValue(stringReader(m_widget));
+       m_p->print();
         return m_p;
     }
     else if(m_p->getDataType() == sd::libqt::Int)
     {
       sd::libqt::SimpleIntParameter *p = static_cast<sd::libqt::SimpleIntParameter *>(m_p);
       p->setValue(integralReader(m_widget));
-      std::cout << "SingleWidgetWidget: ";
       m_p->print();
         return m_p;
     }
-    /*
-    else if (m_p.isString())
-    {
-        m_p = stringReader(m_widget);
-        return m_p;
-    }*/
+
     else
     {
       std::cout << "SingleValueWidget: Unknown type." << std::endl;

@@ -21,7 +21,7 @@
 #include <core/ViewNode.hpp>
 #include <core/image/ImageView.hpp>
 #include <core/image/Image.hpp>
-#include <frontend/lib/ComputedImageViewAlgorithm.hpp>
+#include <frontend/lib/AccessImageViewAlgorithm.hpp>
 #include <frontend/lib/AlgorithmManager.hpp>
 #include <frontend/lib/AlgorithmInfo.hpp>
 #include <frontend/libqt/SDRParameter.hpp>
@@ -34,15 +34,13 @@
 #include <iostream>
 
 template<typename T>
-class ImageMixPlugin
-  : public sd::frontend::ComputedImageViewAlgorithm<T>
-{
+class ImageAccessMixPlugin : public sd::frontend::AccessImageViewAlgorithm<T> {
 
 public:
 
-  ImageMixPlugin() : sd::frontend::ComputedImageViewAlgorithm<T>(m_name, m_input) {}
+  ImageAccessMixPlugin() : sd::frontend::AccessImageViewAlgorithm<T>(m_name, m_input) {}
 
-  virtual ~ImageMixPlugin() {
+  virtual ~ImageAccessMixPlugin() {
 #ifdef DEBUG
     std::cout << "~" << m_name << std::endl;
 #endif
@@ -52,10 +50,20 @@ public:
     return m_name;
   }
 
-  virtual ImageMixPlugin* clone() {
-    return new ImageMixPlugin;
+  virtual ImageAccessMixPlugin* clone() {
+    return new ImageAccessMixPlugin;
   }
 
+  virtual const sd::core::Pixel<T> getAt(const sd::Point& p) const {
+    sd::core::Pixel<T> p1(m_image1->getAt(p));
+    p1.unlink();
+    assert(p1 == m_image1->getAt(p));
+    const sd::core::Pixel<T> p2(m_image2->getAt(p));
+    for (unsigned int i=0; i<p1.nbChannels(); ++i)
+      p1.setAt(i, round((double)m_alpha * (double)p1[i] + (double)(1-m_alpha) * (double)p2[i]));
+    return p1;
+  }
+  
   virtual bool run() {
 #ifdef DEBUG
     std::cout << "Running " << m_name << ": \n";
@@ -68,76 +76,66 @@ public:
       return false;
     }
 
-    sd::core::ImageView_<T>* image1 = static_cast<sd::core::ImageView_<T>*>(parents[0]);
-    sd::core::ImageView_<T>* image2 = static_cast<sd::core::ImageView_<T>*>(parents[1]);
+    m_image1 = static_cast<sd::core::ImageView_<T>*>(parents[0]);
+    m_image2 = static_cast<sd::core::ImageView_<T>*>(parents[1]);
+    
 #ifdef DEBUG
-    std::cout << "\tWorking with image1: " << image1->name() << std::endl;
-    std::cout << "\tWorking with image2: " << image2->name() << std::endl;
+    std::cout << "\tWorking with image1: " << m_image1->name() << std::endl;
+    std::cout << "\tWorking with image2: " << m_image2->name() << std::endl;
 
-    std::cout << image1->size() << std::endl;
-    std::cout << image2->size() << std::endl;
+    std::cout << m_image1->size() << std::endl;
+    std::cout << m_image2->size() << std::endl;
 
-    std::cout << image1->information() << std::endl;
-    std::cout << image2->information() << std::endl;
+    std::cout << m_image1->information() << std::endl;
+    std::cout << m_image2->information() << std::endl;
 #endif
 
-    if (image1->information() != image2->information()) {
+    if (m_image1->information() != m_image2->information()) {
 #ifdef DEBUG
       std::cout << "Incompatible images! Abort!\n";
 #endif
       return false;
     }
 
-    if (image1->channelType() != sd::core::DataType_<T>()) {
+    if (m_image1->channelType() != sd::core::DataType_<T>()) {
 #ifdef DEBUG
-      std::cout << "Bad image type! Abort!\n" << image1->channelType().toString() << " != " << sd::core::DataType_<T>().toString() <<std::endl;
+      std::cout << "Bad image type! Abort!\n" << m_image1->channelType().toString() << " != " << sd::core::DataType_<T>().toString() <<std::endl;
 #endif
       return false;
     }
 
-    if (image1->channelType() != image2->channelType()) {
+    if (m_image1->channelType() != m_image2->channelType()) {
 #ifdef DEBUG
       std::cout << "Incompatible image types! Abort!\n";
 #endif
       return false;
     }
 
-    sd::Size sz = image1->size();
-    this->init(image1->information());
-    const unsigned int nbChannels = image1->nbChannels();
-    T* resultData = this->getData();
-    std::fill(resultData, resultData+sz.dataSize(), 0);
-    this->setMinMax(0, std::max(image1->getMax(), image2->getMax()));
+    sd::frontend::AccessImageViewAlgorithm<T>::init(m_image1->information());
 
 
-    sd::libqt::SimpleFloatParameter *alpha_p = 
-        static_cast<sd::libqt::SimpleFloatParameter *>(this->getXMLParams("alpha"));
-    float alpha = alpha_p->getValue();
+    sd::libqt::SimpleFloatParameter *alpha_p = static_cast<sd::libqt::SimpleFloatParameter *>(this->getXMLParams("alpha"));
+    m_alpha = alpha_p->getValue();
 
 #ifdef DEBUG
-    std::cout << "\talpha=" << alpha << std::endl;
+    std::cout << "\talpha=" << m_alpha << std::endl;
 #endif
-
-    // here compute result...
-    auto it1 = image1->begin();
-    auto it2 = image2->begin();
-    auto endR = this->end();
-    for (auto itR = this->begin(); itR != endR; ++itR, ++it1, ++it2) {
-      for (unsigned int i=0; i<nbChannels; ++i)
-	itR(i) = alpha * it1(i) + (1.-alpha) * it2(i);
-    }
-
     return true;
-}
+  }
 
 private:
+  
+  sd::core::ImageView_<T>* m_image1;
+  sd::core::ImageView_<T>* m_image2;
+  float m_alpha;
+  
   static const std::string m_name;
   static const sd::frontend::AlgorithmInfo m_input;
   static const sd::frontend::AlgorithmInfo m_output;
 };
 
-template<typename T> const std::string ImageMixPlugin<T>::m_name = "Demonstration:ImageMixPlugin";
-template<typename T> const sd::frontend::AlgorithmInfo ImageMixPlugin<T>::m_input
+template<typename T> const std::string ImageAccessMixPlugin<T>::m_name = "Demonstration:ImageAccessMixPlugin";
+template<typename T> const sd::frontend::AlgorithmInfo ImageAccessMixPlugin<T>::m_input
 = sd::frontend::make_info(sd::core::ObjectDescription::ImageView(sd::core::DataType_<T>(),
 								 sd::core::ObjectDescription::ANY_CARD,
 								 sd::core::ObjectDescription::ANY_CARD),
@@ -151,18 +149,16 @@ SMITHDR_PLUGIN_API
 void
 registerPlugin()
 {
-
-
   std::string parameters = "<parameters><parameter name=\"alpha\" type=\"float\"> \
                                   <min>0.0</min> \
                                   <default>0.5</default> \
                                   <max>1.0</max> \
                             </parameter></parameters>";
 
-  sd::frontend::registerAlgorithm(new ImageMixPlugin<sd::UINT8>, parameters);
-  sd::frontend::registerAlgorithm(new ImageMixPlugin<sd::INT8>, parameters);
-  sd::frontend::registerAlgorithm(new ImageMixPlugin<sd::UINT16>, parameters);
-  sd::frontend::registerAlgorithm(new ImageMixPlugin<sd::INT16>, parameters);
-  sd::frontend::registerAlgorithm(new ImageMixPlugin<float>, parameters);
-  sd::frontend::registerAlgorithm(new ImageMixPlugin<double>, parameters);
+  sd::frontend::registerAlgorithm(new ImageAccessMixPlugin<sd::UINT8>, parameters);
+  sd::frontend::registerAlgorithm(new ImageAccessMixPlugin<sd::INT8>, parameters);
+  sd::frontend::registerAlgorithm(new ImageAccessMixPlugin<sd::UINT16>, parameters);
+  sd::frontend::registerAlgorithm(new ImageAccessMixPlugin<sd::INT16>, parameters);
+  sd::frontend::registerAlgorithm(new ImageAccessMixPlugin<float>, parameters);
+  sd::frontend::registerAlgorithm(new ImageAccessMixPlugin<double>, parameters);
 }

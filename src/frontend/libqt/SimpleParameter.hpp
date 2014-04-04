@@ -31,21 +31,35 @@ public:
         m_min = min;
         m_max = max;
         m_default_val = default_val;
+        m_MinDefined = true;
+        m_MaxDefined = true;
 
         m_type = sd::libqt::Simple;
     }
 
     SimpleParameter(std::string name, T min, T max, T default_val)
     {
+        m_MinDefined = true;
+        m_MaxDefined = true;
         m_name = name;
         m_min = min;
         m_max = max;
         m_default_val = default_val;
     }
 
+        SimpleParameter(std::string name, T default_val)
+    {
+        m_name = name;
+        m_MinDefined = false;
+        m_MaxDefined = false;
+        m_default_val = default_val;
+    }
+
     SimpleParameter(T value)
     {
         m_value = value;
+        m_MinDefined = false;
+        m_MaxDefined = false;
     }
 
     SimpleParameter() {}
@@ -56,7 +70,13 @@ public:
 
     T getValue() { return m_value; }
     
+    bool isMinDefined(){
+        return m_MinDefined;
+    }
 
+    bool isMaxDefined(){
+        return m_MaxDefined;
+    }
     void setMin(T min) { m_min = min; }
     void setMax(T max) { m_max = max; }
     void setDefault(T default_val) { m_default_val = default_val; }
@@ -65,10 +85,14 @@ public:
 
     void setAttributFromName(std::string name, T value)
     {
-        if(name == "max")
+        if(name == "max"){
             m_max = value;
-        else if(name == "min")
+            m_MaxDefined = true;
+        }
+        else if(name == "min"){
             m_min = value;
+            m_MinDefined = true;
+        }
         else if(name == "default")
             m_default_val = value;
         else if(name == "name")
@@ -94,8 +118,9 @@ private:
     T m_min;
     T m_max;
     T m_default_val;
-
     T m_value;
+    bool m_MinDefined;
+    bool m_MaxDefined;
 
 };
 
