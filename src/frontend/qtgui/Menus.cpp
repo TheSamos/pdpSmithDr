@@ -673,7 +673,6 @@ static QString currentPath;
 QString
 selectOpenFileDialog()
 {
-    std::cout << "In selectOpenFileDialog ==========" << std::endl;
     auto loaders = frontend::getLoaders();
 
     QString allSupportedExts;

@@ -127,11 +127,11 @@ AlgorithmParameterizer::AlgorithmParameterizer(const std::string& xml_parameters
     : QTabWidget(parent), /*m_parameters(),*/ m_widgets()
     {
 
-      std::cout << "Before parsing" << std::endl;
+      //std::cout << "Before parsing" << std::endl;
 
       sd::libqt::QtXMLParamParser defaultParamParser(xml_parameters);
       sd::libqt::ParameterList p = defaultParamParser.getParameterList();
-      std::cout << "Before parsing" << p[0]->getName() << std::endl;
+      //std::cout << "Before parsing" << p[0]->getName() << std::endl;
 
 
 
@@ -168,9 +168,6 @@ AlgorithmParameterizer::buildListWidget(size_t listNo)
     {
         sd::libqt::SDRParameter *p = *it;
         std::string pName = p->getName();
-
-        std::cout << pName << std::endl;
-        std::cout << "pName:" << pName << std::endl;
 
         WidgetList &wList = m_widgets[listNo];
         if (wList[pName])
@@ -217,13 +214,8 @@ AlgorithmParameterizer::getModifiedXMLParameters()
             {
                 std::string pName = (*itr)->getName();
                 sd::libqt::SDRParameter *tmp_param = m_widgets[i][pName]->updateXMLParameter();
-                tmp_param->getName();
-                std::cout << "AlgorithmParameterizer: ";
-                tmp_param->print();
-                std::cout << "Updating after updateXMLParameter" << std::endl;
-                mapXml[pName] = valueGenerator.simpleXMLValue(tmp_param);
 
-                std::cout << "Param return " << mapXml[pName] << std::endl;
+                mapXml[pName] = valueGenerator.simpleXMLValue(tmp_param);
             }
         }
     }

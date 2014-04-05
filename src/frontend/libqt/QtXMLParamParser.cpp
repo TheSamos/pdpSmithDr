@@ -80,7 +80,7 @@ sd::libqt::ParameterList QtXMLParamParser::getParameterList()
 
 }
 
-void QtXMLParamParser::getParameter(std::string name) {}
+//void QtXMLParamParser::getParameter(std::string name) {}
 
 
 SDRParameter *QtXMLParamParser::parseSimpleParameter(QDomElement param)
@@ -98,19 +98,19 @@ SDRParameter *QtXMLParamParser::parseSimpleParameter(QDomElement param)
         if(!element.isNull())
         {
             elements[m_element_names[i]] = element.text();
-            std::cout << "Just added: " << m_element_names[i] << ", " << elements[m_element_names[i]].toStdString() << std::endl;
+            //std::cout << "Just added: " << m_element_names[i] << ", " << elements[m_element_names[i]].toStdString() << std::endl;
         }
     }
     
     element = param.namedItem(QString::fromStdString("widget")).toElement();
     std::string widget = element.text().toStdString();
 
-    std::cout << "Parameter type: " << elements["type"].toStdString() << std::endl;
+    //std::cout << "Parameter type: " << elements["type"].toStdString() << std::endl;
 
     SDRParameterFactory paramFactory;
     SDRParameter *p = paramFactory.create(type, name, elements, widget);
 
-    std::cout << "Printing simple parameter !!" << std::endl;
+    std::cout << "Parsed simple parameter: ";
     p->print();
 
     return p;

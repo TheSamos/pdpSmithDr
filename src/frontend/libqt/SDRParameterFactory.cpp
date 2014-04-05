@@ -34,7 +34,7 @@ SDRParameter *SDRParameterFactory::create(std::string type, std::string name,
         for (auto it = map.begin(); it != map.end(); ++it)
         {
             p->setAttributFromName(it->first, it->second.toInt());
-            std::cout << "setting: " << it->first << ", " <<  it->second.toInt() << std::endl;
+            //std::cout << "setting: " << it->first << ", " <<  it->second.toInt() << std::endl;
         }
 
         p->setName(name);
@@ -69,7 +69,7 @@ SDRParameter *SDRParameterFactory::create(std::string type, std::string name,
 
         p->setName(name);
         p->setWidgetName(widget);
-        std::cout << "Parsed float" << std::endl;
+        //std::cout << "Parsed float" << std::endl;
 
         return p;
     }

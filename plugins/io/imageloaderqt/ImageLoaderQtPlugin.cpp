@@ -104,16 +104,11 @@ public:
     load()
     {
 
-        std::cout << "Before Load" << std::endl;
         std::string filename = "";
-        //sd::frontend::Parameter p;
         sd::libqt::SimpleStringParameter *p = 
         static_cast<sd::libqt::SimpleStringParameter *>(this->getXMLParams("filename"));
 
-        std::cout << "Before getValue" << std::endl;
         filename = p->getValue();
-
-        std::cout << "In Load: filename, " << filename << std::endl;
 
         if (filename.empty())
           return false;
@@ -125,7 +120,6 @@ public:
         
 
         img->addParent(this);
-        std::cout << "added the parent" << std::endl;
 
         return true;
     }

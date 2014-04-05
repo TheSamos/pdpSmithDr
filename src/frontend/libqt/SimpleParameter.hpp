@@ -33,6 +33,7 @@ public:
         m_default_val = default_val;
         m_MinDefined = true;
         m_MaxDefined = true;
+        m_DefaultDefined = true;
 
         m_type = sd::libqt::Simple;
     }
@@ -45,6 +46,7 @@ public:
         m_min = min;
         m_max = max;
         m_default_val = default_val;
+        m_DefaultDefined = true;
     }
 
         SimpleParameter(std::string name, T default_val)
@@ -53,6 +55,7 @@ public:
         m_MinDefined = false;
         m_MaxDefined = false;
         m_default_val = default_val;
+        m_DefaultDefined = true;
     }
 
     SimpleParameter(T value)
@@ -60,6 +63,7 @@ public:
         m_value = value;
         m_MinDefined = false;
         m_MaxDefined = false;
+        m_DefaultDefined = false;
     }
 
     SimpleParameter() {}
@@ -94,7 +98,10 @@ public:
             m_MinDefined = true;
         }
         else if(name == "default")
+        {
             m_default_val = value;
+            m_DefaultDefined = true;
+        }
         else if(name == "name")
             m_name = value;
         else if(name == "value")
@@ -110,8 +117,20 @@ public:
 
     void print()
     {
-        std::cout << "[Parameter:(" << dataTypeToString() << ") " << m_name << ", min: " << m_min << ", max: " << m_max;
-        std::cout << ", default: " << m_default_val << ", value: " << m_value << ", widget: " << m_widget_name << "]" << std::endl;
+        std::cout << "[Parameter:(" << dataTypeToString() << ") " << m_name;
+        if(m_MinDefined)
+            std::cout << ", min: " << m_min;
+        if(m_MaxDefined)
+            std::cout << ", max: " << m_max;
+        if(m_DefaultDefined)
+            std::cout << ", default: " << m_default_val;
+
+        std::cout << ", value: " <<  m_value;
+
+        if(m_widget_name != "")
+            std::cout << ", widget: " << m_widget_name;
+
+        std::cout << "]" << std::endl;
     }
 
 private:
@@ -121,6 +140,7 @@ private:
     T m_value;
     bool m_MinDefined;
     bool m_MaxDefined;
+    bool m_DefaultDefined;
 
 };
 

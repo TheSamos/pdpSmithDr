@@ -51,7 +51,6 @@ namespace qt
 OpenFileDialog::OpenFileDialog(const QString &filename, QWidget *p)
     : QWidget(), m_button(0), m_parameterizer(p)
 {
-    std::cout << "filename when constructing OpenFileDialog: " << filename.toStdString() << std::endl;
     m_button = new QPushButton(filename);
     QObject::connect(m_button, SIGNAL(clicked()), this, SLOT(selectFile()));
 

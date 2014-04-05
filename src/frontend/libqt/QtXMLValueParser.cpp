@@ -80,7 +80,7 @@ SDRParameter* QtXMLValueParser::parseSimpleParameter()
 
     param->setName(name);
 
-    std::cout << "Created Parameter: " << std::endl;
+    std::cout << "ValueGenerator created : ";
     param->print();
 
     return param;

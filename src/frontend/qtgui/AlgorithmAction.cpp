@@ -80,7 +80,6 @@ AlgorithmAction::configure()
 
         // add a selector for each parameter (int, float...)
         //m_dialog->addParameters(m_prototypes.first()->expectedParameters());
-        std::cout << "Loader parameters: " << m_prototypes.first()->getXMLString() << std::endl;
         m_dialog->addParameters(m_prototypes.first()->getXMLString());
 
     }
@@ -176,15 +175,11 @@ AlgorithmAction::process(bool preview)
     // get modifications made by the user
     if (m_xml_parameterized == false)
     {
-        std::cout << "Without XML" << std::endl;
         //parameters = m_dialog->getModifiedParameters();
     }
     else
-    {
-        std::cout << "With XML" << std::endl;
         xml_parameters = m_dialog->getModifiedXMLParameters();
-        std::cout << "With XML" << std::endl;
-    }
+    
 
     if (!configurationComplete())
         return;
@@ -203,12 +198,10 @@ AlgorithmAction::process(bool preview)
 
         if (m_xml_parameterized == false)
         {
-            std::cout << "setParam" << std::endl;
             //algoPtr->setParams(parameters);
         }
         else
         {
-            std::cout << "setXMLParam" << std::endl;
             algoPtr->setXMLParams(xml_parameters);
         }
 
@@ -252,8 +245,6 @@ AlgorithmAction::process(bool preview)
         frontend::ViewInfoPtr firstView = m_inputViews[0];
         frontend::Algorithm *algoPtr = NULL;
 
-        std::cout << "In else" << std::endl;
-
         const unsigned int nbAlgos = m_dialog->getCurrentAvailableAlgos().size();
 
         for (unsigned int i = 0; i < nbAlgos && !algoPtr; ++i)
@@ -264,12 +255,10 @@ AlgorithmAction::process(bool preview)
             //algoPtr->setParams(parameters);
             if (m_xml_parameterized == false)
             {
-                std::cout << "setParam" << std::endl;
                 //algoPtr->setParams(parameters);
             }
             else
             {
-                std::cout << "setXMLParam" << std::endl;
                 algoPtr->setXMLParams(xml_parameters);
             }
 

@@ -172,17 +172,17 @@ void
 Algorithm::setXMLParams(std::map<std::string, std::string> new_params)
 {
     m_xml_parameters = new_params;
-    std::cout << "Setting params_xml" << std::endl;
+    //std::cout << "Setting params_xml" << std::endl;
 }
 
 sd::libqt::SDRParameter *
 Algorithm::getXMLParams(std::string name)
 {
     std::string parameter = m_xml_parameters[name];
-    std::cout << "getXMLParams: parameter: " << parameter << std::endl;
+    //std::cout << "getXMLParams: parameter: " << parameter << std::endl;
     sd::libqt::QtXMLValueParser valueParser(parameter);
 
-    std::cout << "getXMLParams: parameter: " << parameter << std::endl;
+    //std::cout << "getXMLParams: parameter: " << parameter << std::endl;
     
     sd::libqt::SDRParameter *p = valueParser.parseSimpleParameter();
     

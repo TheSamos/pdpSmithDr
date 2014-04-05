@@ -29,7 +29,7 @@ public:
     ~QtXMLParamParser();
 
     sd::libqt::ParameterList getParameterList();
-    void getParameter(std::string name);
+    //void getParameter(std::string name);
 
     SDRParameter* parseSimpleParameter(QDomElement simple_param);
     //frontend::Parameter *parseComplexParameter(QDomElement complex_param);

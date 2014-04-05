@@ -67,12 +67,9 @@ saveFile(Input *input, const std::string &filename, bool binary)
     {
         // use transient connection
         (*it)->setInputNodes(input);
-        std::cout << "saverManager: Before set Param" << std::endl;
 
         //(*it)->setParams("filename", filename, "binary", binary);
         (*it)->setXMLParams(map);
-
-        std::cout << "saverManager: After set Param" << std::endl;
 
         bool successful = (*it)->save();
         (*it)->disconnectInputNodes(input);

@@ -460,7 +460,6 @@ AlgorithmConfiguratorDialog::getModifiedXMLParameters()
                                              m_inputs[i].second[j]->currentText().toStdString()));
         }*/
     //result.push_back(pl);
-    std::cout << "in the getModifiedXMLParameters" << std::endl;
     return m_parameterizer->getModifiedXMLParameters();
 }
 

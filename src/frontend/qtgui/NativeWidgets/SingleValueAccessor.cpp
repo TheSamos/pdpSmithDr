@@ -91,28 +91,28 @@ buildStringEditor(const std::string &value, QWidget *parameterizer)
 bool
 booleanReader(QWidget *w)
 {
-    std::cout << "booleanReader value: " << dynamic_cast<QCheckBox *>(w)->isChecked() << std::endl;
+    //std::cout << "booleanReader value: " << dynamic_cast<QCheckBox *>(w)->isChecked() << std::endl;
     return dynamic_cast<QCheckBox *>(w)->isChecked();
 }
 
 int
 integralReader(QWidget *w)
 {
-  std::cout << "integral Readervalue: " << dynamic_cast<QSpinBox *>(w)->value() << std::endl;
+  //std::cout << "integral Readervalue: " << dynamic_cast<QSpinBox *>(w)->value() << std::endl;
     return dynamic_cast<QSpinBox *>(w)->value();
 }
 
 double
 floatingPointReader(QWidget *w)
 {
-    std::cout << "floatingPointReader value: " << dynamic_cast<QDoubleSpinBox *>(w)->value() << std::endl;
+    //std::cout << "floatingPointReader value: " << dynamic_cast<QDoubleSpinBox *>(w)->value() << std::endl;
     return dynamic_cast<QDoubleSpinBox *>(w)->value();
 }
 
 std::string
 stringReader(QWidget *w)
 {
-  std::cout << "stringReader value: " << dynamic_cast<QLineEdit *>(w)->text().toStdString() << std::endl;
+  //std::cout << "stringReader value: " << dynamic_cast<QLineEdit *>(w)->text().toStdString() << std::endl;
     return dynamic_cast<QLineEdit *>(w)->text().toStdString();
 }
 

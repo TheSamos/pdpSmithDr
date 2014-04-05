@@ -109,10 +109,7 @@ public:
     T* resultData = this->getData();
     std::fill(resultData, resultData+sz.dataSize(), 0);
     //this->setMinMax(0, std::max(image1->getMax(), image2->getMax()));
-    
-    /*sd::frontend::Parameter p;
-    this->getParams("seuil", p);
-    int seuil = p.getInteger();*/
+
     sd::libqt::SimpleIntParameter *p = static_cast<sd::libqt::SimpleIntParameter *>(this->getXMLParams("seuil"));
     int seuil = p->getValue();
 
@@ -130,7 +127,7 @@ public:
          itR(i) = 0;
        }
        else
-          itR(i) = 255;
+          itR(i) = (char)255;
     }
   }
 

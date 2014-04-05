@@ -47,6 +47,7 @@ QWidget *
 buildEditor(sd::libqt::SDRParameter *p, QWidget *parameterizer)
 {
     std::string name = p->getName();
+
     if (p->getDataType() == sd::libqt::Bool) {
       sd::libqt::SimpleBoolParameter *param = static_cast<sd::libqt::SimpleBoolParameter *>(p);
       return buildBooleanEditor(param->getDefault(), parameterizer);
@@ -57,7 +58,7 @@ buildEditor(sd::libqt::SDRParameter *p, QWidget *parameterizer)
     {
         int mini, maxi;
         sd::libqt::SimpleIntParameter *param = static_cast<sd::libqt::SimpleIntParameter *>(p);
-        std::cout << "building sinlgevalue int ------  " << std::endl;
+        //std::cout << "building sinlgevalue int ------  " << std::endl;
         if(param->isMinDefined() && param->isMaxDefined()){
           mini = param->getMin();
           maxi = param->getMax();
@@ -71,7 +72,7 @@ buildEditor(sd::libqt::SDRParameter *p, QWidget *parameterizer)
     else if (p->getDataType() == sd::libqt::Float)
     {
         sd::libqt::SimpleFloatParameter *param = static_cast<sd::libqt::SimpleFloatParameter *>(p);
-        std::cout << "building sinlgevalue float " << std::endl;
+        //std::cout << "building sinlgevalue float " << std::endl;
         float mini = param->getMin();
         float maxi = param->getMax();
         return buildFloatEditor(param->getDefault(), mini, maxi, parameterizer);
@@ -132,13 +133,11 @@ if (m_p->getDataType() == sd::libqt::Float)
     {
     	sd::libqt::SimpleFloatParameter *p = static_cast<sd::libqt::SimpleFloatParameter *>(m_p);
     	p->setValue(floatingPointReader(m_widget));
-      m_p->print();
         return m_p;
     }
     else if(m_p->getDataType() == sd::libqt::Bool){
       sd::libqt::SimpleBoolParameter *p = static_cast<sd::libqt::SimpleBoolParameter *>(m_p);
       p->setValue(booleanReader(m_widget));
-      m_p->print();
         return m_p;
     }
 
@@ -147,14 +146,12 @@ if (m_p->getDataType() == sd::libqt::Float)
     {
     	sd::libqt::SimpleStringParameter *p = static_cast<sd::libqt::SimpleStringParameter *>(m_p);
     	p->setValue(stringReader(m_widget));
-       m_p->print();
         return m_p;
     }
     else if(m_p->getDataType() == sd::libqt::Int)
     {
       sd::libqt::SimpleIntParameter *p = static_cast<sd::libqt::SimpleIntParameter *>(m_p);
       p->setValue(integralReader(m_widget));
-      m_p->print();
         return m_p;
     }
 
@@ -163,6 +160,7 @@ if (m_p->getDataType() == sd::libqt::Float)
       std::cout << "SingleValueWidget: Unknown type." << std::endl;
         assert(!"Should never get here!");
     }
+    return nullptr;
 }
 
 }
